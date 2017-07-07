@@ -22,7 +22,7 @@
 <meta property="og:url" content="http://code.kolly.com/2017/07/07/利用df和du命令查看系统内存占用/index.html">
 <meta property="og:site_name" content="Kolly Code">
 <meta property="og:description" content="当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。 df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。 du可以查看文件及文件夹的大小。 两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。  做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，不断有文件在备份，如果长时间不管">
-<meta property="og:updated_time" content="2017-07-07T03:39:41.619Z">
+<meta property="og:updated_time" content="2017-07-07T03:41:54.794Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="利用linux的df和du命令查看文件和目录的内存占用">
 <meta name="twitter:description" content="当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。 df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。 du可以查看文件及文件夹的大小。 两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。  做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，不断有文件在备份，如果长时间不管">
@@ -332,13 +332,9 @@
 <li><p>执行du命令</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos data]$ du --max-depth=1 -h</div><div class="line">15G	./jweb_static</div><div class="line">108G	./jweblog</div><div class="line">8.2M	./news</div><div class="line">1.3G	./japplog</div><div class="line">16K	./lost+found</div><div class="line">7.7M	./backup</div><div class="line">595M	./varlog</div><div class="line">1.1G	./pyweb_log</div><div class="line">125G	.</div></pre></td></tr></table></figure>
 <p><strong>du</strong>命令可以查询文件或文件夹的磁盘使用空间</p>
-<ul>
-<li><p>参数<code>-h</code>表示使用「Human-readable」的输出，也就是在档案系统大小使用 GB、MB 等易读的格式</p>
-</li>
-<li><p>参数<code>--max-depth</code>指定深入目录的层数,这是个极为有用的参数,如果当前目录下文件和文件夹很多，使用不带参数du的命令，会循环列出所有文件和文件夹所使用的空间。这对查看究竟是那个地方过大是不利的</p>
+<p>参数<code>-h</code>表示使用「Human-readable」的输出，也就是在档案系统大小使用 GB、MB 等易读的格式</p>
+<p>参数<code>--max-depth</code>指定深入目录的层数,这是个极为有用的参数,如果当前目录下文件和文件夹很多，使用不带参数du的命令，会循环列出所有文件和文件夹所使用的空间。这对查看究竟是那个地方过大是不利的</p>
 <p>可以看到的是<code>jweblog</code>这个目录有108G个G，沃德天，赶紧进去看看~</p>
-</li>
-</ul>
 </li>
 <li><p>进入<code>jweblog</code>目录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos data]$ cd jweblog/</div></pre></td></tr></table></figure>
@@ -359,7 +355,7 @@
         <p><span>本文标题:</span><a href="/2017/07/07/利用df和du命令查看系统内存占用/">利用linux的df和du命令查看文件和目录的内存占用</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">kolly</a></p>
         <p><span>发布时间:</span>2017-07-07, 10:21:06</p>
-        <p><span>最后更新:</span>2017-07-07, 11:39:41</p>
+        <p><span>最后更新:</span>2017-07-07, 11:41:54</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2017/07/07/利用df和du命令查看系统内存占用/" title="利用linux的df和du命令查看文件和目录的内存占用">http://code.kolly.com/2017/07/07/利用df和du命令查看系统内存占用/</a>
             <span class="copy-path" data-clipboard-text="原文: http://code.kolly.com/2017/07/07/利用df和du命令查看系统内存占用/　　作者: kolly" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
