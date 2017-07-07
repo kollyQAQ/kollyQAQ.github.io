@@ -14,19 +14,18 @@
 <meta name="author" content="kolly" />
 
 
-    
-    
 
-
-<meta name="description" content="记录kolly的代码日常">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Kolly Code">
-<meta property="og:url" content="http://code.kolly.com/index.html">
+<meta name="description" content="12345概述：	当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。    df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。    du可以查看文件及文件夹的大小。    两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。 做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，">
+<meta name="keywords" content="linux命令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用linux的df和du命令查看文件和目录的内存占用">
+<meta property="og:url" content="http://code.kolly.com/2017/07/07/利用df和du命令查看系统内存占用/index.html">
 <meta property="og:site_name" content="Kolly Code">
-<meta property="og:description" content="记录kolly的代码日常">
+<meta property="og:description" content="12345概述：	当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。    df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。    du可以查看文件及文件夹的大小。    两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。 做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，">
+<meta property="og:updated_time" content="2017-07-07T03:26:35.675Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kolly Code">
-<meta name="twitter:description" content="记录kolly的代码日常">
+<meta name="twitter:title" content="利用linux的df和du命令查看文件和目录的内存占用">
+<meta name="twitter:description" content="12345概述：	当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。    df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。    du可以查看文件及文件夹的大小。    两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。 做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -54,13 +53,11 @@
 <link rel="stylesheet" href="/css/style.css">
 
 
-    <style> .article { opacity: 0;} </style>
-
 
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Kolly Code</title>
+<title>利用linux的df和du命令查看文件和目录的内存占用 | Kolly Code</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -69,8 +66,8 @@
     var yiliaConfig = {
         fancybox: true,
         animate: true,
-        isHome: true,
-        isPost: false,
+        isHome: false,
+        isPost: true,
         isArchive: false,
         isTag: false,
         isCategory: false,
@@ -264,9 +261,7 @@
     </div>
     <link class="menu-list" tags="Tags" friends="Friends" about="About Me"/>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-利用df和du命令查看系统内存占用" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-利用df和du命令查看系统内存占用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2017/07/07/利用df和du命令查看系统内存占用/" class="article-date">
@@ -284,12 +279,27 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/07/利用df和du命令查看系统内存占用/">利用linux的df和du命令查看文件和目录的内存占用</a>
+    <h1 class="article-title" itemprop="name">
+      利用linux的df和du命令查看文件和目录的内存占用
     </h1>
   
 
       </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux命令/">linux命令</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -337,164 +347,85 @@
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux命令/">linux命令</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
   
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-通过rsync+inotify实现多服务器数据的实时同步" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/07/06/通过rsync+inotify实现多服务器数据的实时同步/" class="article-date">
-      <time datetime="2017-07-06T02:31:19.518Z" itemprop="datePublished">2017-07-06</time>
-</a>
-
-
+    
+    <div class="copyright">
+        <p><span>Title:</span><a href="/2017/07/07/利用df和du命令查看系统内存占用/">利用linux的df和du命令查看文件和目录的内存占用</a></p>
+        <p><span>Author:</span><a href="/" title="Back to Homepage">kolly</a></p>
+        <p><span>Created:</span>2017-07-07, 10:21:06</p>
+        <p><span>Updated:</span>2017-07-07, 11:26:35</p>
+        <p>
+            <span>Full URL:</span><a class="post-url" href="/2017/07/07/利用df和du命令查看系统内存占用/" title="利用linux的df和du命令查看文件和目录的内存占用">http://code.kolly.com/2017/07/07/利用df和du命令查看系统内存占用/</a>
+            <span class="copy-path" data-clipboard-text="From http://code.kolly.com/2017/07/07/利用df和du命令查看系统内存占用/　　By kolly" title="Copy Article&#39;s Link &amp; Author"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>License:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"CC BY-NC-SA 4.0"</a> Keep Link &amp; Author if Distribute.
+        </p>
     </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+
+
+
+    <nav id="article-nav">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/06/通过rsync+inotify实现多服务器数据的实时同步/">通过rsync+inotify实现多服务器数据的实时同步</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>[TOC]</p>
-<h3 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h3><p>公司有八台nginx服务器用来做静态文件服务器和后台的请求转发，所以当需要修改nginx配置文件或者部署静态文件的时候，需要在八台机器上做完全相同的操作，比较繁琐。</p>
-<h3 id="最终目的"><a href="#最终目的" class="headerlink" title="最终目的"></a>最终目的</h3><p>对其中某一个机器的某些文件夹做监控，只要内容有发生修改，其余机器马上同步这些修改到自己的机器上</p>
-<h3 id="实现工具"><a href="#实现工具" class="headerlink" title="实现工具"></a>实现工具</h3><p>rsync inotify</p>
-<h3 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h3><ol>
-<li><p>主服务器安装rsync</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum install rsync</div></pre></td></tr></table></figure>
-</li>
-<li><p>​</p>
-</li>
-</ol>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/">nginx</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-纪念自己的博客搭建成功" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/07/05/纪念自己的博客搭建成功/" class="article-date">
-      <time datetime="2017-07-05T12:44:52.471Z" itemprop="datePublished">2017-07-05</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/05/纪念自己的博客搭建成功/">纪念自己的博客搭建成功</a>
-    </h1>
-  
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/07/06/通过rsync+inotify实现多服务器数据的实时同步/">
+                    通过rsync+inotify实现多服务器数据的实时同步
+                </a>
+            </div>
+        
+    </nav>
 
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h3 id="纪念自己的博客搭建成功"><a href="#纪念自己的博客搭建成功" class="headerlink" title="纪念自己的博客搭建成功"></a>纪念自己的博客搭建成功</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hello word</div></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/生活点滴/">生活点滴</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/工作/">工作</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
   
 </article>
 
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#第一步-使用df命令"><span class="toc-number">1.</span> <span class="toc-text">第一步 使用df命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第二步-使用du命令"><span class="toc-number">2.</span> <span class="toc-text">第二步 使用du命令</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="Hide"  title="Show or Hide Table of Contents">
+
+    <script>
+        yiliaConfig.toc = ["Hide", "Show", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"利用linux的df和du命令查看文件和目录的内存占用　| Kolly Code　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
 
 
 
@@ -502,9 +433,33 @@
 
 
 
+    
 
-  
-  
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="Back to Homepage"><i class="fa fa-home"></i></a>
+        
+
+        <a title="Mini Archives"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/07/06/通过rsync+inotify实现多服务器数据的实时同步/" title="Next: 通过rsync+inotify实现多服务器数据的实时同步">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/利用df和du命令查看系统内存占用/">利用linux的df和du命令查看文件和目录的内存占用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/通过rsync+inotify实现多服务器数据的实时同步/">通过rsync+inotify实现多服务器数据的实时同步</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/05/纪念自己的博客搭建成功/">纪念自己的博客搭建成功</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
 </div>
       <footer id="footer">
     <div class="outer">
