@@ -15,17 +15,17 @@
 
 
 
-<meta name="description" content="12345概述：	当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。    df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。    du可以查看文件及文件夹的大小。    两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。 做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，">
+<meta name="description" content="当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。 df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。 du可以查看文件及文件夹的大小。 两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。  做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，不断有文件在备份，如果长时间不管">
 <meta name="keywords" content="linux命令">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用linux的df和du命令查看文件和目录的内存占用">
 <meta property="og:url" content="http://code.kolly.com/2017/07/07/利用df和du命令查看系统内存占用/index.html">
 <meta property="og:site_name" content="Kolly Code">
-<meta property="og:description" content="12345概述：	当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。    df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。    du可以查看文件及文件夹的大小。    两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。 做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，">
-<meta property="og:updated_time" content="2017-07-07T03:26:35.675Z">
+<meta property="og:description" content="当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。 df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。 du可以查看文件及文件夹的大小。 两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。  做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，不断有文件在备份，如果长时间不管">
+<meta property="og:updated_time" content="2017-07-07T03:39:41.619Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="利用linux的df和du命令查看文件和目录的内存占用">
-<meta name="twitter:description" content="12345概述：	当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。    df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。    du可以查看文件及文件夹的大小。    两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。 做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，">
+<meta name="twitter:description" content="当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。 df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。 du可以查看文件及文件夹的大小。 两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。  做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，不断有文件在备份，如果长时间不管">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -139,13 +139,13 @@
                 <div class="tips-box hide">
                     <div class="tips-arrow"></div>
                     <ul class="tips-inner">
-                        <li>Menu</li>
-                        <li>Tags</li>
+                        <li>菜单</li>
+                        <li>标签</li>
                         
-                        <li>Friends</li>
+                        <li>友情链接</li>
                         
                         
-                        <li>About Me</li>
+                        <li>关于我</li>
                         
                     </ul>
                 </div>
@@ -259,7 +259,7 @@
             </nav>
         </header>                
     </div>
-    <link class="menu-list" tags="Tags" friends="Friends" about="About Me"/>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
       <div class="body-wrap"><article id="post-利用df和du命令查看系统内存占用" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -305,13 +305,18 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">概述：</div><div class="line">	当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。</div><div class="line">    df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。</div><div class="line">    du可以查看文件及文件夹的大小。</div><div class="line">    两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。</div></pre></td></tr></table></figure>
+        <blockquote>
+<p>当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。</p>
+<p>df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。</p>
+<p>du可以查看文件及文件夹的大小。</p>
+<p>两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。</p>
+</blockquote>
 <p>做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，不断有文件在备份，如果长时间不管的话，总有一天会占用满。</p>
 <p>题主有一天在发布java项目的时候，就发现提示</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">No space left on device</div></pre></td></tr></table></figure>
 <p>因为题主的发布脚本中有一段逻辑是把之前的jar包先备份到/data/backup目录，执行之一步的时候发现磁盘空间不足，于是报错，版本发布失败。</p>
 <p>遇到这种问题，解决思路很简单嘛，磁盘满了删除没用的东西咯，没错，但是怎样能最快找到那些占用磁盘很大又已经没用的文件或者文件夹呢，这就是今天的课题了。<strong>利用linux的df和du命令查看文件和目录的内存占用</strong></p>
-<h4 id="第一步-使用df命令"><a href="#第一步-使用df命令" class="headerlink" title="第一步 使用df命令"></a>第一步 使用df命令</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos ~]$ df -h</div><div class="line">Filesystem           	  Size      Used Available Use% Mounted on</div><div class="line">/dev/vda1              8254240   3710232   4124716  48% /</div><div class="line">/dev/vdb1             30962748  21870140   7519728  75% /usr/local</div><div class="line">/dev/vdb2             20641788   1672712  17920480   9% /home</div><div class="line">/dev/vdb4            138303008 131277884         0 100% /data</div></pre></td></tr></table></figure>
+<h3 id="第一步-使用df命令"><a href="#第一步-使用df命令" class="headerlink" title="第一步 使用df命令"></a>第一步 使用df命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos ~]$ df -h</div><div class="line">Filesystem           	  Size      Used Available Use% Mounted on</div><div class="line">/dev/vda1              8254240   3710232   4124716  48% /</div><div class="line">/dev/vdb1             30962748  21870140   7519728  75% /usr/local</div><div class="line">/dev/vdb2             20641788   1672712  17920480   9% /home</div><div class="line">/dev/vdb4            138303008 131277884         0 100% /data</div></pre></td></tr></table></figure>
 <p><strong>df</strong>命令可以显示目前所有文件系统的可用空间及使用情形</p>
 <ul>
 <li>参数<code>-h</code>表示使用「Human-readable」的输出，也就是在档案系统大小使用 GB、MB 等易读的格式。</li>
@@ -320,12 +325,12 @@
 </ul>
 <p>可以看到<code>/data</code>这个目录磁盘已经到了100%，所以在想要往/data/backup目录写文件时系统发出<code>No space left on device</code>的警告。</p>
 <p>那么接下来的目的很简单，清理/data目录，找出占用磁盘空间大而且没用的文件或者目录，delete！</p>
-<h4 id="第二步-使用du命令"><a href="#第二步-使用du命令" class="headerlink" title="第二步 使用du命令"></a>第二步 使用du命令</h4><ol>
+<h3 id="第二步-使用du命令"><a href="#第二步-使用du命令" class="headerlink" title="第二步 使用du命令"></a>第二步 使用du命令</h3><ol>
 <li><p>进入<code>data</code>目录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos jweblog]$ cd /data</div></pre></td></tr></table></figure>
 </li>
 <li><p>执行du命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos data]$ du --max-depth=1 -h</div><div class="line">15G		./jweb_static</div><div class="line">108G	./jweblog</div><div class="line">8.2M	./news</div><div class="line">1.3G	./japplog</div><div class="line">16K		./lost+found</div><div class="line">7.7M	./backup</div><div class="line">595M	./varlog</div><div class="line">1.1G	./pyweb_log</div><div class="line">125G	.</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos data]$ du --max-depth=1 -h</div><div class="line">15G	./jweb_static</div><div class="line">108G	./jweblog</div><div class="line">8.2M	./news</div><div class="line">1.3G	./japplog</div><div class="line">16K	./lost+found</div><div class="line">7.7M	./backup</div><div class="line">595M	./varlog</div><div class="line">1.1G	./pyweb_log</div><div class="line">125G	.</div></pre></td></tr></table></figure>
 <p><strong>du</strong>命令可以查询文件或文件夹的磁盘使用空间</p>
 <ul>
 <li><p>参数<code>-h</code>表示使用「Human-readable」的输出，也就是在档案系统大小使用 GB、MB 等易读的格式</p>
@@ -339,7 +344,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos data]$ cd jweblog/</div></pre></td></tr></table></figure>
 </li>
 <li><p>继续执行du命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos jweblog]$ du --max-depth=1 -h</div><div class="line">32K		./jweb_mbox_acs</div><div class="line">4.0K	./jweb_cz_gmaster</div><div class="line">732K	./jweb_coomix_scibo</div><div class="line">15G		./jweb_game_farm</div><div class="line">23G		./jweb_open_manager</div><div class="line">404M	./jweb_mbox_app</div><div class="line">8.2M	./jweb_ak_backend</div><div class="line">14M		./jweb_wifishare_manager</div><div class="line">23M		./jweb_yzj_open</div><div class="line">4.3G	./jweb_akgame_third</div><div class="line">4.2G	./jweb_mpos_wxuser_auth_ak</div><div class="line">654M	./jweb_mbox_wifi_svr</div><div class="line">608K	./jweb_qqy_wx_auth</div><div class="line">970M	./jweb_wb_gmwx</div><div class="line">8.3G	./jweb_mpos_wxuser_auth</div><div class="line">4.2G	./jweb_bc_bottle</div><div class="line">160K	./jweb_mbox_wifi_wx_svr</div><div class="line">132K	./jweb_wb_gmaster</div><div class="line">1.1G	./jweb_mpos_kmkuser_auth</div><div class="line">4.0K	./default</div><div class="line">35G		./jweb_promotion_manager</div><div class="line">12G		./jweb_mpos_wxuser_auth_cn</div><div class="line">108G	.</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos jweblog]$ du --max-depth=1 -h</div><div class="line">32K	./jweb_mbox_acs</div><div class="line">4.0K	./jweb_cz_gmaster</div><div class="line">732K	./jweb_coomix_scibo</div><div class="line">15G	./jweb_game_farm</div><div class="line">23G	./jweb_open_manager</div><div class="line">404M	./jweb_mbox_app</div><div class="line">8.2M	./jweb_ak_backend</div><div class="line">14M	./jweb_wifishare_manager</div><div class="line">23M	./jweb_yzj_open</div><div class="line">4.3G	./jweb_akgame_third</div><div class="line">4.2G	./jweb_mpos_wxuser_auth_ak</div><div class="line">654M	./jweb_mbox_wifi_svr</div><div class="line">608K	./jweb_qqy_wx_auth</div><div class="line">970M	./jweb_wb_gmwx</div><div class="line">8.3G	./jweb_mpos_wxuser_auth</div><div class="line">4.2G	./jweb_bc_bottle</div><div class="line">160K	./jweb_mbox_wifi_wx_svr</div><div class="line">132K	./jweb_wb_gmaster</div><div class="line">1.1G	./jweb_mpos_kmkuser_auth</div><div class="line">4.0K	./default</div><div class="line">35G	./jweb_promotion_manager</div><div class="line">12G	./jweb_mpos_wxuser_auth_cn</div><div class="line">108G	.</div></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>到此应该就可以破案了，这里是各个工程的日志，看看哪些日志没用的删掉就可以啦~</p>
@@ -351,17 +356,17 @@
   
     
     <div class="copyright">
-        <p><span>Title:</span><a href="/2017/07/07/利用df和du命令查看系统内存占用/">利用linux的df和du命令查看文件和目录的内存占用</a></p>
-        <p><span>Author:</span><a href="/" title="Back to Homepage">kolly</a></p>
-        <p><span>Created:</span>2017-07-07, 10:21:06</p>
-        <p><span>Updated:</span>2017-07-07, 11:26:35</p>
+        <p><span>本文标题:</span><a href="/2017/07/07/利用df和du命令查看系统内存占用/">利用linux的df和du命令查看文件和目录的内存占用</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">kolly</a></p>
+        <p><span>发布时间:</span>2017-07-07, 10:21:06</p>
+        <p><span>最后更新:</span>2017-07-07, 11:39:41</p>
         <p>
-            <span>Full URL:</span><a class="post-url" href="/2017/07/07/利用df和du命令查看系统内存占用/" title="利用linux的df和du命令查看文件和目录的内存占用">http://code.kolly.com/2017/07/07/利用df和du命令查看系统内存占用/</a>
-            <span class="copy-path" data-clipboard-text="From http://code.kolly.com/2017/07/07/利用df和du命令查看系统内存占用/　　By kolly" title="Copy Article&#39;s Link &amp; Author"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/07/07/利用df和du命令查看系统内存占用/" title="利用linux的df和du命令查看文件和目录的内存占用">http://code.kolly.com/2017/07/07/利用df和du命令查看系统内存占用/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://code.kolly.com/2017/07/07/利用df和du命令查看系统内存占用/　　作者: kolly" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
-            <span>License:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"CC BY-NC-SA 4.0"</a> Keep Link &amp; Author if Distribute.
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
         </p>
     </div>
 
@@ -382,9 +387,9 @@
 </article>
 
     <div id="toc" class="toc-article">
-        <strong class="toc-title">Contents</strong>
+        <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#第一步-使用df命令"><span class="toc-number">1.</span> <span class="toc-text">第一步 使用df命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第二步-使用du命令"><span class="toc-number">2.</span> <span class="toc-text">第二步 使用du命令</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一步-使用df命令"><span class="toc-number">1.</span> <span class="toc-text">第一步 使用df命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二步-使用du命令"><span class="toc-number">2.</span> <span class="toc-text">第二步 使用du命令</span></a></li></ol>
         
     </div>
     <style>
@@ -398,10 +403,10 @@
         }
     </style>
 
-    <input type="button" id="tocButton" value="Hide"  title="Show or Hide Table of Contents">
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
     <script>
-        yiliaConfig.toc = ["Hide", "Show", !!"false"];
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
     </script>
 
 
@@ -440,13 +445,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/" title="Back to Homepage"><i class="fa fa-home"></i></a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
-        <a title="Mini Archives"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/07/06/通过rsync+inotify实现多服务器数据的实时同步/" title="Next: 通过rsync+inotify实现多服务器数据的实时同步">
+            <a href="/2017/07/06/通过rsync+inotify实现多服务器数据的实时同步/" title="下一篇: 通过rsync+inotify实现多服务器数据的实时同步">
                 <i class="fa fa-angle-right"></i>
             </a>
         
@@ -469,14 +474,14 @@
                 2016-2017 kolly
             </div>
             <div class="footer-right">
-                <a href="http://hexo.io/" target="_blank" title="A fast, simple &amp; powerful blog framework">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="Another simple and elegant theme for Hexo  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
             </div>
         </div>
         
             <div class="visit">
                 
                     <span id="busuanzi_container_site_pv" style='display:none'>
-                        <span id="site-visit" title="Site Visitors"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
                         </span>
                     </span>
                 
@@ -485,7 +490,7 @@
                 
                 
                     <span id="busuanzi_container_page_pv" style='display:none'>
-                        <span id="page-visit"  title="Page Hits"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
                         </span>
                     </span>
                 
@@ -518,9 +523,9 @@
 
 
 <div class="scroll" id="scroll">
-    <a href="#" title="Back to Top"><i class="fa fa-arrow-up"></i></a>
-    <a href="#comments" onclick="load$hide();" title="Comments"><i class="fa fa-comments-o"></i></a>
-    <a href="#footer" title="Go to Bottom"><i class="fa fa-arrow-down"></i></a>
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
 </div>
 <script>
     // Open in New Window
