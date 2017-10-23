@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="kolly" />
+
+
+
+<meta name="description" content="编程规约命名风格 常量命名全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长  正例： MAX_STOCK_COUNT 反例： MAX_COUNT    常量定义 不允许任何魔法值（即未经定义的常量） 直接出现在代码中  反例： String key = “Id#taobao_” + tradeId; cache.put(key, value);    如果变量值仅在一个范围内变化，">
+<meta name="keywords" content="JAVA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里巴巴JAVA开发手册笔记">
+<meta property="og:url" content="http://code.kolly.com/2017/10/23/阿里巴巴java规范笔记/index.html">
+<meta property="og:site_name" content="Kolly Code">
+<meta property="og:description" content="编程规约命名风格 常量命名全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长  正例： MAX_STOCK_COUNT 反例： MAX_COUNT    常量定义 不允许任何魔法值（即未经定义的常量） 直接出现在代码中  反例： String key = “Id#taobao_” + tradeId; cache.put(key, value);    如果变量值仅在一个范围内变化，">
+<meta property="og:image" content="c:/Users/kolly/Pictures/123.png">
+<meta property="og:updated_time" content="2017-10-23T12:35:53.912Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="阿里巴巴JAVA开发手册笔记">
+<meta name="twitter:description" content="编程规约命名风格 常量命名全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长  正例： MAX_STOCK_COUNT 反例： MAX_COUNT    常量定义 不允许任何魔法值（即未经定义的常量） 直接出现在代码中  反例： String key = “Id#taobao_” + tradeId; cache.put(key, value);    如果变量值仅在一个范围内变化，">
+<meta name="twitter:image" content="c:/Users/kolly/Pictures/123.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Kolly Code" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>阿里巴巴JAVA开发手册笔记 | Kolly Code</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">kolly</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">记录kolly的代码日常</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:123@123.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/">IDEA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MARKDOWN/">MARKDOWN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux命令/">linux命令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于前端</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">kolly</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">kolly</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">记录kolly的代码日常</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:123@123.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="#" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-阿里巴巴java规范笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/23/阿里巴巴java规范笔记/" class="article-date">
+      <time datetime="2017-10-23T12:35:51.369Z" itemprop="datePublished">2017-10-23</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      阿里巴巴JAVA开发手册笔记
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/编程规范/">编程规范</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="编程规约"><a href="#编程规约" class="headerlink" title="编程规约"></a>编程规约</h3><h4 id="命名风格"><a href="#命名风格" class="headerlink" title="命名风格"></a>命名风格</h4><ul>
+<li>常量命名全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长 <ul>
+<li>正例： MAX_STOCK_COUNT</li>
+<li>反例： MAX_COUNT</li>
+</ul>
+</li>
+</ul>
+<h4 id="常量定义"><a href="#常量定义" class="headerlink" title="常量定义"></a>常量定义</h4><ul>
+<li>不允许任何魔法值（即未经定义的常量） 直接出现在代码中 <ul>
+<li>反例： String key = “Id#taobao_” + tradeId; cache.put(key, value); </li>
+</ul>
+</li>
+<li>如果变量值仅在一个范围内变化，且带有名称之外的延伸属性， 定义为枚举类。下面正例中的数字就是延伸信息，表示星期几。 <ul>
+<li>正例： public Enum { MONDAY(1), TUESDAY(2), WEDNESDAY(3), THURSDAY(4), FRIDAY(5), SATURDAY(6),SUNDAY(7);} </li>
+</ul>
+</li>
+</ul>
+<h4 id="代码格式"><a href="#代码格式" class="headerlink" title="代码格式"></a>代码格式</h4><ul>
+<li>IDE 的 text file encoding 设置为 UTF-8; IDE 中文件的换行符使用 Unix 格式，不要使用 Windows 格式</li>
+</ul>
+<h4 id="OOP-规约"><a href="#OOP-规约" class="headerlink" title="OOP 规约"></a>OOP 规约</h4><ul>
+<li>避免通过一个类的对象引用访问此类的静态变量或静态方法，无谓增加编译器解析成本，直接用类名来访问即可 </li>
+<li>所有的覆写方法，必须加@Override 注解 <ul>
+<li>getObject()与 get0bject()的问题。一个是字母的 O，一个是数字的 0，加@Override可以准确判断是否覆盖成功。另外，如果在抽象类中对方法签名进行修改，其实现类会马上编译报错 </li>
+</ul>
+</li>
+<li>相同参数类型，相同业务含义，才可以使用 Java 的可变参数，避免使用 Object <ul>
+<li>说明： 可变参数必须放置在参数列表的最后。 （提倡同学们尽量不用可变参数编程） </li>
+<li>正例： public User getUsers(String type, Integer… ids) {…} </li>
+</ul>
+</li>
+<li>Object 的 equals 方法容易抛空指针异常，应使用常量或确定有值的对象来调用equals <ul>
+<li>正例： “test”.equals(object); </li>
+<li>反例： object.equals(“test”); </li>
+<li>说明： 推荐使用 java.util.Objects#equals（JDK7 引入的工具类） </li>
+</ul>
+</li>
+<li>所有的相同类型的包装类对象之间值的比较，全部使用 equals 方法比较 <ul>
+<li>说明： 对于 Integer var = ? 在-128 至 127 范围内的赋值， Integer 对象是在IntegerCache.cache 产生，会复用已有对象，这个区间内的 Integer 值可以直接使用==进行判断，但是这个区间之外的所有数据，都会在堆上产生，并不会复用已有对象，这是一个大坑，推荐使用 equals 方法进行判断。</li>
+</ul>
+</li>
+<li>关于基本数据类型与包装数据类型的使用标准如下 <ul>
+<li>【强制】 所有的 POJO 类属性必须使用包装数据类型 </li>
+<li>【强制】 RPC 方法的返回值和参数必须使用包装数据类型 </li>
+<li>【推荐】 所有的局部变量使用基本数据类型 </li>
+<li>说明： POJO 类属性没有初值是提醒使用者在需要使用时，必须自己显式地进行赋值，任何NPE 问题，或者入库检查，都由使用者来保证 </li>
+<li>正例： 数据库的查询结果可能是 null，因为自动拆箱，用基本数据类型接收有 NPE 风险 </li>
+<li>反例： 比如显示成交总额涨跌情况，即正负 x%， x 为基本数据类型，调用的 RPC 服务，调用不成功时，返回的是默认值，页面显示为 0%，这是不合理的，应该显示成中划线。所以包装数据类型的 null 值，能够表示额外的信息，如：远程调用失败，异常退出 </li>
+</ul>
+</li>
+<li>定义 DO/DTO/VO 等 POJO 类时，不要设定任何属性默认值 </li>
+<li>序列化类新增属性时，请不要修改 serialVersionUID 字段，避免反序列失败； 如果完全不兼容升级，避免反序列化混乱，那么请修改 serialVersionUID 值 <ul>
+<li>注意 serialVersionUID 不一致会抛出序列化运行时异常 </li>
+</ul>
+</li>
+<li>构造方法里面禁止加入任何业务逻辑，如果有初始化逻辑，请放在 init 方法中 </li>
+<li>在getter/setter 方法中， 不要增加业务逻辑，增加排查问题的难度 </li>
+<li>循环体内，字符串的连接方式，使用 StringBuilder 的 append 方法进行扩展 </li>
+<li>final 可以声明类、成员变量、方法、以及本地变量，下列情况使用 final 关键字 <ul>
+<li>不允许被继承的类，如： String 类 </li>
+<li>不允许修改引用的域对象，如： POJO 类的域变量 </li>
+<li>不允许被重写的方法，如： POJO 类的 setter 方法 </li>
+<li>不允许运行过程中重新赋值的局部变量 </li>
+</ul>
+</li>
+<li>慎用 Object 的 clone 方法来拷贝对象 <ul>
+<li>对象的 clone 方法默认是浅拷贝，若想实现深拷贝需要重写 clone 方法实现属性对象的拷贝 </li>
+</ul>
+</li>
+</ul>
+<h4 id="集合处理"><a href="#集合处理" class="headerlink" title="集合处理"></a>集合处理</h4><ul>
+<li><p>关于 hashCode 和 equals 的处理，遵循如下规则 </p>
+<ul>
+<li>只要重写 equals，就必须重写 hashCode </li>
+<li>因为 Set 存储的是不重复的对象，依据 hashCode 和 equals 进行判断，所以 Set 存储的对象必须重写这两个方法 </li>
+<li>如果自定义对象做为 Map 的键，那么必须重写 hashCode 和 equals </li>
+<li>说明： String 重写了 hashCode 和 equals 方法，所以我们可以非常愉快地使用 String 对象<br>作为 key 来使用</li>
+</ul>
+</li>
+<li><p>ArrayList的subList结果不可强转成ArrayList，否则会抛出 ClassCastException异常 </p>
+<ul>
+<li>说明： subList 返回的是 ArrayList 的内部类 SubList，并不是 ArrayList ，而是ArrayList 的一个视图，对于 SubList 子列表的所有操作最终会反映到原列表上 </li>
+</ul>
+</li>
+<li><p>集合初始化时， 指定集合初始值大小 </p>
+<ul>
+<li>HashMap 需要放置 1024 个元素， 由于没有设置容量初始大小，随着元素不断增加，容量 7 次被迫扩大， resize 需要重建 hash 表，严重影响性能 </li>
+</ul>
+</li>
+<li><p>使用 entrySet 遍历 Map 类集合 KV，而不是 keySet 方式进行遍历 </p>
+<ul>
+<li>说明： keySet 其实是遍历了 2 次，一次是转为 Iterator 对象，另一次是从 hashMap 中取出key 所对应的 value。而 entrySet 只是遍历了一次就把 key 和 value 都放到了 entry 中，效率更高。如果是 JDK8，使用 Map.foreach 方法 </li>
+</ul>
+</li>
+<li><p>高度注意 Map 类集合 K/V 能不能存储 null 值的情况，如下表格：</p>
+<p>| Hashtable         | 不允许为 null | 不允许为 null | Dictionary  | 线程安全            |<br>| —————– | ——— | ——— | ———– | ————— |<br>| ConcurrentHashMap | 不允许为 null | 不允许为 null | AbstractMap | 锁分段技术（JDK8:CAS） |<br>| TreeMap           | 不允许为 null | 允许为 null  | AbstractMap | 线程不安全           |<br>| HashMap           | 允许为 null  | 允许为 null  | AbstractMap | 线程不安全           |</p>
+</li>
+<li><p>利用 Set 元素唯一的特性，可以快速对一个集合进行去重操作，避免使用 List 的contains 方法进行遍历、对比、 去重操作 </p>
+</li>
+</ul>
+<h4 id="并发处理"><a href="#并发处理" class="headerlink" title="并发处理"></a>并发处理</h4><ul>
+<li>获取单例对象需要保证线程安全，其中的方法也要保证线程安全 <ul>
+<li>说明： 资源驱动类、工具类、单例工厂类都需要注意 </li>
+</ul>
+</li>
+<li>高并发时，同步调用应该去考量锁的性能损耗。能用无锁数据结构，就不要用锁； 能锁区块，就不要锁整个方法体； 能用对象锁，就不要用类锁 <ul>
+<li>说明： 尽可能使加锁的代码块工作量尽可能的小，避免在锁代码块中调用 RPC 方法 </li>
+</ul>
+</li>
+<li>并发修改同一记录时，避免更新丢失， 需要加锁。 要么在应用层加锁，要么在缓存加锁，要么在数据库层使用乐观锁，使用 version 作为更新依据 <ul>
+<li>说明： 如果每次访问冲突概率小于 20%，推荐使用乐观锁，否则使用悲观锁。乐观锁的重试次数不得小于 3 次 </li>
+</ul>
+</li>
+</ul>
+<h4 id="控制语句"><a href="#控制语句" class="headerlink" title="控制语句"></a>控制语句</h4><ul>
+<li>在 if/else/for/while/do 语句中必须使用大括号。 即使只有一行代码，避免采用单行的编码方式： if (condition) statements; </li>
+</ul>
+<h4 id="注释规约"><a href="#注释规约" class="headerlink" title="注释规约"></a>注释规约</h4><ul>
+<li>类、类属性、类方法的注释必须使用 Javadoc 规范，使用<code>/**内容*/</code>格式，不得使用<code>// xxx</code> 方式 </li>
+<li>所有的抽象方法（包括接口中的方法） 必须要用 Javadoc 注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能 </li>
+<li>所有的类都必须添加创建者和创建日期 </li>
+</ul>
+<h3 id="异常日志"><a href="#异常日志" class="headerlink" title="异常日志"></a>异常日志</h3><h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h4><ul>
+<li>有 try 块放到了事务代码中， catch 异常后，如果需要回滚事务，一定要注意手动回滚事务 </li>
+<li>不能在 finally 块中使用 return， finally 块中的 return 返回后方法结束执行，不会再执行 try 块中的 return 语句 </li>
+<li>防止 NPE，是程序员的基本修养，注意 NPE 产生的场景 <ul>
+<li>返回类型为基本数据类型， return 包装数据类型的对象时，自动拆箱有可能产生 NPE </li>
+<li>数据库的查询结果可能为 null </li>
+<li>集合里的元素即使 isNotEmpty，取出的数据元素也可能为 null </li>
+<li>远程调用返回对象时，一律要求进行空指针判断，防止 NPE </li>
+<li>对于 Session 中获取的数据，建议 NPE 检查，避免空指针 </li>
+<li>级联调用 obj.getA().getB().getC()； 一连串调用，易产生 NPE </li>
+<li>使用 JDK8 的 Optional 类来防止 NPE 问题 </li>
+</ul>
+</li>
+</ul>
+<h4 id="日志规约"><a href="#日志规约" class="headerlink" title="日志规约"></a>日志规约</h4><ul>
+<li>避免重复打印日志，浪费磁盘空间，务必在 log4j.xml 中设置 additivity=false </li>
+<li>可以使用 warn 日志级别来记录用户输入参数错误的情况，避免用户投诉时，无所适从 </li>
+</ul>
+<h3 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h3><ul>
+<li>好的单元测试宏观上来说，具有自动化、独立性、可重复执行的特点 </li>
+<li>单元测试应该是全自动执行的，并且非交互式的 ，单元测试中不准使用 System.out 来进行人肉验证，必须使用 assert 来验证 </li>
+<li>保持单元测试的独立性。为了保证单元测试稳定可靠且便于维护，单元测试用例之间决不能互相调用，也不能依赖执行的先后次序 </li>
+<li>单元测试是可以重复执行的，不能受到外界环境的影响 </li>
+<li>和数据库相关的单元测试，可以设定自动回滚机制，不给数据库造成脏数据。或者对单元测试产生的数据有明确的前后缀标识 </li>
+</ul>
+<h3 id="安全规约"><a href="#安全规约" class="headerlink" title="安全规约"></a>安全规约</h3><ul>
+<li>隶属于用户个人的页面或者功能必须进行权限控制校验 </li>
+<li>用户敏感数据禁止直接展示，必须对展示数据进行脱敏 </li>
+<li>用户输入的 SQL 参数严格使用参数绑定或者 METADATA 字段值限定，防止 SQL 注入，禁止字符串拼接 SQL 访问数据库 </li>
+<li>用户请求传入的任何参数必须做有效性验证 </li>
+</ul>
+<h3 id="MySQL-数据库"><a href="#MySQL-数据库" class="headerlink" title="MySQL 数据库"></a>MySQL 数据库</h3><h4 id="建表规约"><a href="#建表规约" class="headerlink" title="建表规约"></a>建表规约</h4><ul>
+<li>表达是与否概念的字段，必须使用 is_xxx 的方式命名，数据类型是 unsigned tinyint(1 表示是， 0 表示否)</li>
+<li>表名不使用复数名词 ,禁用保留字 (desc、 range、 match、 delayed )</li>
+<li>小数类型为 decimal，禁止使用 float 和 double <ul>
+<li>说明： float 和 double 在存储的时候，存在精度损失的问题，很可能在值的比较时，得到不正确的结果。如果存储的数据范围超过 decimal 的范围，建议将数据拆成整数和小数分开存储 </li>
+</ul>
+</li>
+<li>表必备三字段： id, gmt_create, gmt_modified <ul>
+<li>说明： 其中 id 必为主键，类型为 unsigned bigint、单表时自增、步长为 1。 gmt_create,<br>gmt_modified 的类型均为 date_time 类型，前者现在时表示主动创建，后者过去分词表示被<br>动更新 </li>
+</ul>
+</li>
+<li>单表行数超过 500 万行或者单表容量超过 2GB，才推荐进行分库分表 </li>
+</ul>
+<h4 id="索引规约"><a href="#索引规约" class="headerlink" title="索引规约"></a>索引规约</h4><ul>
+<li>业务上具有唯一特性的字段，即使是多个字段的组合，也必须建成唯一索引 <ul>
+<li>说明： 不要以为唯一索引影响了 insert 速度，这个速度损耗可以忽略，但提高查找速度是明显的； 另外，即使在应用层做了非常完善的校验控制，只要没有唯一索引，根据墨菲定律，必然有脏数据产生</li>
+</ul>
+</li>
+<li>超过三个表禁止 join。需要 join 的字段，数据类型必须绝对一致； 多表关联查询时，保证被关联的字段需要有索引 <ul>
+<li>说明： 即使双表 join 也要注意表索引、 SQL 性能 </li>
+</ul>
+</li>
+<li>在 varchar 字段上建立索引时，必须指定索引长度，没必要对全字段建立索引，根据实际文本区分度决定索引长度即可 <ul>
+<li>说明： 索引的长度与区分度是一对矛盾体，一般对字符串类型数据，长度为 20 的索引，区分度会高达 90%以上，可以使用 count(distinct left(列名, 索引长度))/count(*)的区分度来确定 </li>
+</ul>
+</li>
+<li>页面搜索严禁左模糊或者全模糊，如果需要请走搜索引擎来解决 <ul>
+<li>说明： 索引文件具有 B-Tree 的最左前缀匹配特性，如果左边的值未确定，那么无法使用此索引 </li>
+</ul>
+</li>
+<li>利用延迟关联或者子查询优化超多分页场景 <ul>
+<li>说明： MySQL 并不是跳过 offset 行，而是取 offset+N 行，然后返回放弃前 offset 行，返回N 行，那当 offset 特别大的时候，效率就非常的低下，要么控制返回的总页数，要么对超过特定阈值的页数进行 SQL 改写。</li>
+<li>正例： 先快速定位需要获取的 id 段，然后再关联：SELECT a.* FROM 表 1 a, (select id from 表 1 where 条件 LIMIT 100000,20 ) b where a.id=b.id </li>
+</ul>
+</li>
+<li>建组合索引的时候，区分度最高的在最左边 <ul>
+<li>存在非等号和等号混合判断条件时，在建索引时，请把等号条件的列前置 </li>
+</ul>
+</li>
+</ul>
+<h4 id="SQL-语句"><a href="#SQL-语句" class="headerlink" title="SQL 语句"></a>SQL 语句</h4><ul>
+<li>不要使用 count(列名)或 count(常量)来替代 count(<em>)， count(</em>)是 SQL92 定义的标准统计行数的语法，跟数据库无关，跟 NULL 和非 NULL 无关 <ul>
+<li>count(*)会统计值为 NULL 的行，而 count(列名)不会统计此列为 NULL 值的行 </li>
+</ul>
+</li>
+<li>count(distinct col) 计算该列除 NULL 之外的不重复行数， 注意 count(distinct col1, col2) 如果其中一列全为 NULL，那么即使另一列有不同的值，也返回为 0 </li>
+<li>当某一列的值全是 NULL 时， count(col)的返回结果为 0，但 sum(col)的返回结果为NULL，因此使用 sum()时需注意 NPE 问题 <ul>
+<li>正例： 可以使用如下方式来避免 sum 的 NPE 问题： SELECT IF(ISNULL(SUM(g)),0,SUM(g)) FROM table </li>
+</ul>
+</li>
+<li>使用 ISNULL()来判断是否为 NULL 值 ,NULL 与任何值的直接比较都为 NULL </li>
+<li>在代码中写分页查询逻辑时，若 count 为 0 应直接返回，避免执行后面的分页语句 </li>
+<li>不得使用外键与级联，一切外键概念必须在应用层解决 <ul>
+<li>外键与级联更新适用于单机低并发，不适合分布式、高并发集群； 级联更新是强阻塞，存在数据库更新风暴的风险； 外键影响数据库的插入速度 </li>
+</ul>
+</li>
+<li>禁止使用存储过程，存储过程难以调试和扩展，更没有移植性 </li>
+<li>数据订正时，删除和修改记录时，要先 select，避免出现误删除，确认无误才能执行更新语句 </li>
+</ul>
+<h4 id="ORM-映射"><a href="#ORM-映射" class="headerlink" title="ORM 映射"></a>ORM 映射</h4><ul>
+<li>在表查询中，一律不要使用 * 作为查询的字段列表，需要哪些字段必须明确写明 <ul>
+<li>增加查询分析器解析成本 </li>
+<li>增减字段容易与 resultMap 配置不一致 </li>
+</ul>
+</li>
+<li>sql.xml 配置参数使用： #{}， #param# 不要使用${} 此种方式容易出现 SQL 注入 </li>
+<li>更新数据表记录时，必须同时更新记录对应的 gmt_modified 字段值为当前时间 </li>
+<li>@Transactional 事务不要滥用。事务会影响数据库的 QPS，另外使用事务的地方需要考虑各方面的回滚方案，包括缓存回滚、搜索引擎回滚、消息补偿、统计修正等 </li>
+</ul>
+<h3 id="工程结构"><a href="#工程结构" class="headerlink" title="工程结构"></a>工程结构</h3><h4 id="应用分层"><a href="#应用分层" class="headerlink" title="应用分层"></a>应用分层</h4><ul>
+<li>图中默认上层依赖于下层，箭头关系表示可直接依赖，如：开放接口层可以依赖于  Web 层，也可以直接依赖于 Service 层，依此类推<ul>
+<li><img src="C:\Users\kolly\Pictures\123.png" alt="123"></li>
+<li>开放接口层：可直接封装 Service 方法暴露成 RPC 接口； 通过 Web 封装成 http 接口； 进行网关安全控制、 流量控制等 </li>
+<li>终端显示层：各个端的模板渲染并执行显示的层。 当前主要是 velocity 渲染， JS 渲染，JSP 渲染，移动端展示等 </li>
+<li>Web 层：主要是对访问控制进行转发，各类基本参数校验，或者不复用的业务简单处理等 </li>
+<li>Service 层：相对具体的业务逻辑服务层 </li>
+<li>Manager 层：通用业务处理层，它有如下特征 <ul>
+<li>对第三方平台封装的层，预处理返回结果及转化异常信息 </li>
+<li>对 Service 层通用能力的下沉，如缓存方案、 中间件通用处理 </li>
+<li>与 DAO 层交互，对多个 DAO 的组合复用</li>
+</ul>
+</li>
+<li>DAO 层：数据访问层，与底层 MySQL、 Oracle、 Hbase 等进行数据交互 </li>
+<li>外部接口或第三方平台：包括其它部门 RPC 开放接口，基础平台，其它公司的 HTTP 接口 </li>
+</ul>
+</li>
+<li>【分层异常处理规约】在 DAO 层，产生的异常类型有很多，无法用细粒度的异常进行 catch，使用 catch(Exception e)方式，并 throw new DAOException(e)，不需要打印日志，因为日志在 Manager/Service 层一定需要捕获并打到日志文件中去，如果同台服务器再打日志，浪费性能和存储。在 Service 层出现异常时，必须记录出错日志到磁盘，尽可能带上参数信息，相当于保护案发现场。如果 Manager 层与 Service 同机部署，日志方式与 DAO层处理一致，如果是单独部署，则采用与 Service 一致的处理方式。 Web 层绝不应该继续往上抛异常，因为已经处于顶层，如果意识到这个异常将导致页面无法正常渲染，那么就应该直接<br>跳转到友好错误页面， 加上用户容易理解的错误提示信息。开放接口层要将异常处理成错误码和错误信息方式返回</li>
+</ul>
+<h4 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h4><ul>
+<li>高并发服务器建议调小 TCP 协议的 time_wait 超时时间 <ul>
+<li>操作系统默认 240 秒后，才会关闭处于 time_wait 状态的连接，在高并发访问下，服务器端会因为处于 time_wait 的连接数太多，可能无法建立新的连接，所以需要在服务器上调小此等待值 ，在 linux 服务器上请通过变更/etc/sysctl.conf 文件去修改该缺省值（秒） ：net.ipv4.tcp_fin_timeout = 30 </li>
+</ul>
+</li>
+<li>调大服务器所支持的最大文件句柄数（File Descriptor，简写为 fd） <ul>
+<li>主流操作系统的设计是将 TCP/UDP 连接采用与文件一样的方式去管理，即一个连接对应于一个 fd。 主流的 linux 服务器默认所支持最大 fd 数量为 1024，当并发连接数很大时很容易因为 fd 不足而出现“open too many files”错误，导致新的连接无法建立。 建议将 linux服务器所支持的最大句柄数调高数倍（与服务器的内存数量相关） </li>
+</ul>
+</li>
+<li>给 JVM 设置-XX:+HeapDumpOnOutOfMemoryError 参数，让 JVM 碰到 OOM 场景时输出dump 信息 </li>
+<li>在线上生产环境， JVM 的 Xms 和 Xmx 设置一样大小的内存容量， 避免在 GC 后调整堆大小带来的压力 </li>
+<li>​</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/10/23/阿里巴巴java规范笔记/">阿里巴巴JAVA开发手册笔记</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">kolly</a></p>
+        <p><span>发布时间:</span>2017-10-23, 20:35:51</p>
+        <p><span>最后更新:</span>2017-10-23, 20:35:53</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/23/阿里巴巴java规范笔记/" title="阿里巴巴JAVA开发手册笔记">http://code.kolly.com/2017/10/23/阿里巴巴java规范笔记/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://code.kolly.com/2017/10/23/阿里巴巴java规范笔记/　　作者: kolly" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/23/IntelliJ Idea中查看类的继承关系图/">
+                    IntelliJ Idea中查看类的继承关系图
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/10/23/MARKDOWN基础语法/">
+                    MARKDOWN基础语法
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#编程规约"><span class="toc-number">1.</span> <span class="toc-text">编程规约</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#命名风格"><span class="toc-number">1.1.</span> <span class="toc-text">命名风格</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#常量定义"><span class="toc-number">1.2.</span> <span class="toc-text">常量定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码格式"><span class="toc-number">1.3.</span> <span class="toc-text">代码格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OOP-规约"><span class="toc-number">1.4.</span> <span class="toc-text">OOP 规约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#集合处理"><span class="toc-number">1.5.</span> <span class="toc-text">集合处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#并发处理"><span class="toc-number">1.6.</span> <span class="toc-text">并发处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#控制语句"><span class="toc-number">1.7.</span> <span class="toc-text">控制语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#注释规约"><span class="toc-number">1.8.</span> <span class="toc-text">注释规约</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异常日志"><span class="toc-number">2.</span> <span class="toc-text">异常日志</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#异常处理"><span class="toc-number">2.1.</span> <span class="toc-text">异常处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#日志规约"><span class="toc-number">2.2.</span> <span class="toc-text">日志规约</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单元测试"><span class="toc-number">3.</span> <span class="toc-text">单元测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安全规约"><span class="toc-number">4.</span> <span class="toc-text">安全规约</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL-数据库"><span class="toc-number">5.</span> <span class="toc-text">MySQL 数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#建表规约"><span class="toc-number">5.1.</span> <span class="toc-text">建表规约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#索引规约"><span class="toc-number">5.2.</span> <span class="toc-text">索引规约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SQL-语句"><span class="toc-number">5.3.</span> <span class="toc-text">SQL 语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ORM-映射"><span class="toc-number">5.4.</span> <span class="toc-text">ORM 映射</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工程结构"><span class="toc-number">6.</span> <span class="toc-text">工程结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#应用分层"><span class="toc-number">6.1.</span> <span class="toc-text">应用分层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#服务器"><span class="toc-number">6.2.</span> <span class="toc-text">服务器</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"阿里巴巴JAVA开发手册笔记　| Kolly Code　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/10/23/IntelliJ Idea中查看类的继承关系图/" title="上一篇: IntelliJ Idea中查看类的继承关系图">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/10/23/MARKDOWN基础语法/" title="下一篇: MARKDOWN基础语法">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/IntelliJ Idea中查看类的继承关系图/">IntelliJ Idea中查看类的继承关系图</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/阿里巴巴java规范笔记/">阿里巴巴JAVA开发手册笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/MARKDOWN基础语法/">MARKDOWN基础语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/MARKDOWN实用小技巧/">MARKDOWN实用小技巧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/Untitled 1/">Untitled 1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/JAVA同步syncnized关键字解读/">JAVA同步syncnized关键字解读</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/redis平滑升级redis-2.4到redis-3.2/">redis平滑升级redis-2.4到redis-3.2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/redis安装/">redis安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/利用df和du命令查看系统内存占用/">利用linux的df和du命令查看文件和目录的内存占用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/06/通过rsync+inotify实现多服务器文件的实时同步/">通过rsync+inotify实现多服务器文件的实时同步</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 kolly
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
