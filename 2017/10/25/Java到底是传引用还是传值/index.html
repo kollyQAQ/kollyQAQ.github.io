@@ -15,17 +15,20 @@
 
 
 
-<meta name="description" content="http://rickie622.blog.163.com/blog/static/2123881120135269273376/">
-<meta name="keywords" content="linux">
+<meta name="description" content="问题: 如果Java是用引用来传递的话，为什么交换函数（swap）不起作用呢？ 回答: 你的问题引出了Java新手的常犯的错误。事实上，一些老手也很难搞清楚这些概念。 Java确实使用对象的引用来做计算的，所有的对象变量都是引用。但是，Java在向方法传递参数时传的不是引用，是值。 以 badSwap() 函数为例: 123456789public void badSwap(int var1, i">
+<meta name="keywords" content="JAVA">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis平滑升级redis-2.4到redis-3.2">
-<meta property="og:url" content="http://code.kolly.com/2017/07/07/redis平滑升级redis-2.4到redis-3.2/index.html">
+<meta property="og:title" content="Java到底是传引用还是传值">
+<meta property="og:url" content="http://code.kolly.com/2017/10/25/Java到底是传引用还是传值/index.html">
 <meta property="og:site_name" content="Kolly Code">
-<meta property="og:description" content="http://rickie622.blog.163.com/blog/static/2123881120135269273376/">
-<meta property="og:updated_time" content="2017-07-10T12:18:24.559Z">
+<meta property="og:description" content="问题: 如果Java是用引用来传递的话，为什么交换函数（swap）不起作用呢？ 回答: 你的问题引出了Java新手的常犯的错误。事实上，一些老手也很难搞清楚这些概念。 Java确实使用对象的引用来做计算的，所有的对象变量都是引用。但是，Java在向方法传递参数时传的不是引用，是值。 以 badSwap() 函数为例: 123456789public void badSwap(int var1, i">
+<meta property="og:image" content="https://kollyqaq.github.io/img/java-base-1.png">
+<meta property="og:image" content="https://kollyqaq.github.io/img/java-base-1.png">
+<meta property="og:updated_time" content="2017-10-25T02:23:27.690Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="redis平滑升级redis-2.4到redis-3.2">
-<meta name="twitter:description" content="http://rickie622.blog.163.com/blog/static/2123881120135269273376/">
+<meta name="twitter:title" content="Java到底是传引用还是传值">
+<meta name="twitter:description" content="问题: 如果Java是用引用来传递的话，为什么交换函数（swap）不起作用呢？ 回答: 你的问题引出了Java新手的常犯的错误。事实上，一些老手也很难搞清楚这些概念。 Java确实使用对象的引用来做计算的，所有的对象变量都是引用。但是，Java在向方法传递参数时传的不是引用，是值。 以 badSwap() 函数为例: 123456789public void badSwap(int var1, i">
+<meta name="twitter:image" content="https://kollyqaq.github.io/img/java-base-1.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -57,7 +60,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>redis平滑升级redis-2.4到redis-3.2 | Kolly Code</title>
+<title>Java到底是传引用还是传值 | Kolly Code</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -261,11 +264,11 @@
     </div>
     <link class="menu-list" tags="Tags" friends="Friends" about="About Me"/>
 </nav>
-      <div class="body-wrap"><article id="post-redis平滑升级redis-2.4到redis-3.2" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Java到底是传引用还是传值" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/07/07/redis平滑升级redis-2.4到redis-3.2/" class="article-date">
-      <time datetime="2017-07-07T07:26:36.854Z" itemprop="datePublished">2017-07-07</time>
+      <a href="/2017/10/25/Java到底是传引用还是传值/" class="article-date">
+      <time datetime="2017-10-25T02:23:27.647Z" itemprop="datePublished">2017-10-25</time>
 </a>
 
 
@@ -280,7 +283,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      redis平滑升级redis-2.4到redis-3.2
+      Java到底是传引用还是传值
     </h1>
   
 
@@ -289,13 +292,13 @@
       <div class="article-info article-info-post">
         
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
+    <a class="article-category-link" href="/categories/JAVA基础/">JAVA基础</a>
     </div>
 
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -305,9 +308,21 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <blockquote>
-<p><a href="http://rickie622.blog.163.com/blog/static/2123881120135269273376/" target="_blank" rel="external">http://rickie622.blog.163.com/blog/static/2123881120135269273376/</a></p>
-</blockquote>
+        <p>问题: 如果Java是用引用来传递的话，为什么交换函数（swap）不起作用呢？</p>
+<p>回答: 你的问题引出了Java新手的常犯的错误。事实上，一些老手也很难搞清楚这些概念。</p>
+<p>Java确实使用对象的引用来做计算的，所有的对象变量都是引用。但是，Java在向方法传递参数时传的不是引用，是值。</p>
+<p>以 badSwap() 函数为例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public void badSwap(int var1, int var2)&#123;</div><div class="line"></div><div class="line">    int temp = var1;</div><div class="line"></div><div class="line">    var1 = var2;</div><div class="line"></div><div class="line">    var2 = temp;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当badSwap方法返回时，被当作参数传入的变量仍然保持了原来的值不变。如果我们把传入的int型变量改为Object型也是一样的，因为Java通过传值来传递引用的。现在,我们来看下是哪个地方搞的鬼:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public void tricky(Point arg1, Point arg2)&#123;</div><div class="line">    arg1.x = 100;</div><div class="line">    arg1.y = 100;</div><div class="line">    Point temp = arg1;</div><div class="line">    arg1 = arg2;</div><div class="line">    arg2 = temp;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">public static void main(String [] args)&#123;</div><div class="line">    Point pnt1 = new Point(0,0);</div><div class="line">    Point pnt2 = new Point(0,0);</div><div class="line">    System.out.println(&quot;X: &quot; + pnt1.x + &quot; Y: &quot; +pnt1.y);</div><div class="line">    System.out.println(&quot;X: &quot; + pnt2.x + &quot; Y: &quot; +pnt2.y);</div><div class="line">    System.out.println(&quot; &quot;);</div><div class="line">    tricky(pnt1,pnt2);</div><div class="line">    System.out.println(&quot;X: &quot; + pnt1.x + &quot; Y:&quot; + pnt1.y);</div><div class="line">    System.out.println(&quot;X: &quot; + pnt2.x + &quot; Y: &quot; +pnt2.y);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行这个函数,将得到以下输出:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">X: 0 Y: 0</div><div class="line">X: 0 Y: 0</div><div class="line"></div><div class="line">X: 100 Y: 100</div><div class="line">X: 0 Y: 0</div></pre></td></tr></table></figure>
+<p>即使是通过值传递，tricky函数依然成功地改变了pnt1的值。但是pnt1和pnt2的置换失败了。这正是最令人困惑的地方。在main()函数当中，pnt1和pnt2仅仅是对象的引用。当你向tricky()函数传递pnt1和pnt2参数时，Java仅仅向传递任何其他参数一样，通过传值来传递引用。这就意味着：传向函数的引用实际上是原始引用的副本。下面的图一展现了当Java传递对象给函数之后,两个引用指向了同一对象</p>
+<p><img src="https://kollyqaq.github.io/img/java-base-1.png" alt="java-base-1"></p>
+<p>图一: 当被传递给函数之后,一个对象至少存在两个引用</p>
+<p>Java复制并传递了“引用”的值，而不是对象。因此，方法中对对象的计算是会起作用的，因为引用指向了原来的对象。但是因为方法中对象的引用是“副本”，所以对象交换就没起作用。如图2所示，交换动作只对方法中的引用副本起作用了，不影响方法外的引用。所以不好意思，方法被调用后，改变不了方法外的对象的引用。如果要对方法外的对象引用做交换，我们应该交换原始的引用，而不是它的副本。</p>
+<p><img src="https://kollyqaq.github.io/img/java-base-1.png" alt="java-base-1"></p>
+<p>图二: 只有传入函数的引用交换了,原始引用则没有</p>
 
       
     </div>
@@ -316,13 +331,13 @@
   
     
     <div class="copyright">
-        <p><span>Title:</span><a href="/2017/07/07/redis平滑升级redis-2.4到redis-3.2/">redis平滑升级redis-2.4到redis-3.2</a></p>
+        <p><span>Title:</span><a href="/2017/10/25/Java到底是传引用还是传值/">Java到底是传引用还是传值</a></p>
         <p><span>Author:</span><a href="/" title="Back to Homepage">kolly</a></p>
-        <p><span>Created:</span>2017-07-07, 15:26:36</p>
-        <p><span>Updated:</span>2017-07-10, 20:18:24</p>
+        <p><span>Created:</span>2017-10-25, 10:23:27</p>
+        <p><span>Updated:</span>2017-10-25, 10:23:27</p>
         <p>
-            <span>Full URL:</span><a class="post-url" href="/2017/07/07/redis平滑升级redis-2.4到redis-3.2/" title="redis平滑升级redis-2.4到redis-3.2">http://code.kolly.com/2017/07/07/redis平滑升级redis-2.4到redis-3.2/</a>
-            <span class="copy-path" data-clipboard-text="From http://code.kolly.com/2017/07/07/redis平滑升级redis-2.4到redis-3.2/　　By kolly" title="Copy Article&#39;s Link &amp; Author"><i class="fa fa-clipboard"></i></span>
+            <span>Full URL:</span><a class="post-url" href="/2017/10/25/Java到底是传引用还是传值/" title="Java到底是传引用还是传值">http://code.kolly.com/2017/10/25/Java到底是传引用还是传值/</a>
+            <span class="copy-path" data-clipboard-text="From http://code.kolly.com/2017/10/25/Java到底是传引用还是传值/　　By kolly" title="Copy Article&#39;s Link &amp; Author"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -334,16 +349,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/10/23/JAVA同步syncnized关键字解读/">
-                    JAVA同步syncnized关键字解读
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/07/07/redis安装/">
-                    redis安装
+                <a href="/2017/10/25/阿里巴巴java规范笔记/">
+                    阿里巴巴JAVA开发手册笔记
                 </a>
             </div>
         
@@ -391,7 +400,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"redis平滑升级redis-2.4到redis-3.2　| Kolly Code　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"Java到底是传引用还是传值　| Kolly Code　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -411,15 +420,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/10/23/JAVA同步syncnized关键字解读/" title="Pre: JAVA同步syncnized关键字解读">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="Back to Homepage"><i class="fa fa-home"></i></a>
         
 
         <a title="Mini Archives"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/07/07/redis安装/" title="Next: redis安装">
+            <a href="/2017/10/25/阿里巴巴java规范笔记/" title="Next: 阿里巴巴JAVA开发手册笔记">
                 <i class="fa fa-angle-right"></i>
             </a>
         
