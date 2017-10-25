@@ -270,7 +270,7 @@
   
     <div class="article-meta">
       <a href="/2017/10/25/Java到底是传引用还是传值/" class="article-date">
-      <time datetime="2017-10-25T02:23:27.647Z" itemprop="datePublished">2017-10-25</time>
+      <time datetime="2017-10-25T02:27:55.257Z" itemprop="datePublished">2017-10-25</time>
 </a>
 
 
@@ -305,12 +305,12 @@
 <p>执行这个函数,将得到以下输出:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">X: 0 Y: 0</div><div class="line">X: 0 Y: 0</div><div class="line"></div><div class="line">X: 100 Y: 100</div><div class="line">X: 0 Y: 0</div></pre></td></tr></table></figure>
 <p>即使是通过值传递，tricky函数依然成功地改变了pnt1的值。但是pnt1和pnt2的置换失败了。这正是最令人困惑的地方。在main()函数当中，pnt1和pnt2仅仅是对象的引用。当你向tricky()函数传递pnt1和pnt2参数时，Java仅仅向传递任何其他参数一样，通过传值来传递引用。这就意味着：传向函数的引用实际上是原始引用的副本。下面的图一展现了当Java传递对象给函数之后,两个引用指向了同一对象</p>
-<p><img src="https://kollyqaq.github.io/img/java-base-1.png" alt="java-base-1"></p>
-<p>图一: 当被传递给函数之后,一个对象至少存在两个引用</p>
-<p>Java复制并传递了“引用”的值，而不是对象。因此，方法中对对象的计算是会起作用的，因为引用指向了原来的对象。但是因为方法中对象的引用是“副本”，所以对象交换就没起作用。如图2所示，交换动作只对方法中的引用副本起作用了，不影响方法外的引用。所以不好意思，方法被调用后，改变不了方法外的对象的引用。如果要对方法外的对象引用做交换，我们应该交换原始的引用，而不是它的副本。</p>
-<p><img src="https://kollyqaq.github.io/img/java-base-1.png" alt="java-base-1"></p>
-<p>图二: 只有传入函数的引用交换了,原始引用则没有</p>
+<div align="center"><br><br><img src="https://kollyqaq.github.io/img/java-base-1.jpg" alt="java-base-1"><br><br>图一: 当被传递给函数之后,一个对象至少存在两个引用<br><br></div>
 
+
+
+<p>Java复制并传递了“引用”的值，而不是对象。因此，方法中对对象的计算是会起作用的，因为引用指向了原来的对象。但是因为方法中对象的引用是“副本”，所以对象交换就没起作用。如图2所示，交换动作只对方法中的引用副本起作用了，不影响方法外的引用。所以不好意思，方法被调用后，改变不了方法外的对象的引用。如果要对方法外的对象引用做交换，我们应该交换原始的引用，而不是它的副本。</p>
+<div align="center"><br><br><img src="https://kollyqaq.github.io/img/java-base-1.jpg" alt="java-base-1"><br><br>图二: 只有传入函数的引用交换了,原始引用则没有<br><br></div>
       
     </div>
     
