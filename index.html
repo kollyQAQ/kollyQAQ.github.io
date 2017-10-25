@@ -142,13 +142,13 @@
                 <div class="tips-box hide">
                     <div class="tips-arrow"></div>
                     <ul class="tips-inner">
-                        <li>菜单</li>
-                        <li>标签</li>
+                        <li>Menu</li>
+                        <li>Tags</li>
                         
-                        <li>友情链接</li>
+                        <li>Friends</li>
                         
                         
-                        <li>关于我</li>
+                        <li>About Me</li>
                         
                     </ul>
                 </div>
@@ -262,9 +262,248 @@
             </nav>
         </header>                
     </div>
-    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+    <link class="menu-list" tags="Tags" friends="Friends" about="About Me"/>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-java 单例模式中双重检查锁定 volatile 的作用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/25/java 单例模式中双重检查锁定 volatile 的作用/" class="article-date">
+      <time datetime="2017-10-25T06:10:08.183Z" itemprop="datePublished">2017-10-25</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/25/java 单例模式中双重检查锁定 volatile 的作用/">java 单例模式中双重检查锁定 volatile 的作用</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p><img src="https://kollyqaq.github.io/img/java-singleton.png" alt=""></p>
+<p><strong>volatile具有两个中国要的特性</strong></p>
+<ul>
+<li>禁止指令重排序（有序性）</li>
+<li>保证内存可见性（可见性）</li>
+</ul>
+<p><strong>那volatile在singleton的创建过程起到了什么作用呢</strong></p>
+<p>先上结论，这段代码里volatile的作用仅仅是<strong>禁止重排序</strong></p>
+<p><strong>1. 为什么要禁止重排序？</strong></p>
+<p>实例化一个对象其实可以分为三个步骤：</p>
+<p>　　（1）分配内存空间。</p>
+<p>　　（2）初始化对象。</p>
+<p>　　（3）将内存空间的地址赋值给对应的引用。</p>
+<p>但是由于操作系统可以对指令进行重排序，所以上面的过程也可能会变成如下过程：</p>
+<p>　　（1）分配内存空间。</p>
+<p>　　（2）将内存空间的地址赋值给对应的引用。</p>
+<p>　　（3）初始化对象</p>
+<p>如果是这个流程，多线程环境下就可能将一个未初始化的对象引用暴露出来，从而导致不可预料的结果（这里就是因为 instance = new Singleton(); 不是原子操作，编译器存在指令重排，从而存在线程1 创建实例后（初始化未完成），线程2 判断对象不为空后对其操作，但实际对象仍为空，造成错误）。因此，为了防止这个过程的重排序，我们需要将变量设置为volatile类型的变量，volatile的禁止重排序保证了操作的有序性。</p>
+<p><strong>2. 为什么没有起到可见性的作用？</strong></p>
+<p><a href="http://blog.csdn.net/ns_code/article/details/17348313" target="_blank" rel="external">happens before原则</a>里面有这样一条</p>
+<blockquote>
+<p>JSR-133<br>An unlock on a monitor happens before every subsequent lock on that same monitor</p>
+</blockquote>
+<p>第二次非null判断是在加锁以后，则根据这一条，另一个线程一定能看到这个引用被赋值。所以即使没有volatile，依旧能保证可见性</p>
+<p><strong>3. 如果不加volatile，能不能使代码正确运行？</strong></p>
+<p>既然可见性已经有了保证，那我们只需要保证有序性。怎么保证有序性呢？</p>
+<p>只需要在“构造对象”和“连接引用与实例”之间加上一道内存屏障</p>
+<p>由于是在单线程里，同样根据<a href="http://blog.csdn.net/ns_code/article/details/17348313" target="_blank" rel="external">happens before原则</a>里面这一条</p>
+<blockquote>
+<p>JSR-133</p>
+<p>Each action in a thread happens before every action in that thread that comes later in the program’s order</p>
+</blockquote>
+<p>你只需要在构造和赋值之间随意做点事情，保证赋值在构造函数结束后再完成，就可以，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Singleton temp = new Singleton();</div><div class="line">temp.toString();//构造与赋值之间随意做点事情保证顺序</div><div class="line">instance=temp;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/JAVA并发编程/">JAVA并发编程</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-redis平滑升级redis-2.4到redis-3.2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/25/redis平滑升级redis-2.4到redis-3.2/" class="article-date">
+      <time datetime="2017-10-25T03:21:51.891Z" itemprop="datePublished">2017-10-25</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/25/redis平滑升级redis-2.4到redis-3.2/">redis平滑升级redis-2.4到redis-3.2</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <blockquote>
+<p><a href="http://rickie622.blog.163.com/blog/static/2123881120135269273376/" target="_blank" rel="external">http://rickie622.blog.163.com/blog/static/2123881120135269273376/</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-手把手教你安装redis" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/25/手把手教你安装redis/" class="article-date">
+      <time datetime="2017-10-25T03:21:17.536Z" itemprop="datePublished">2017-10-25</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/25/手把手教你安装redis/">redis安装</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h4 id="下载，解压，编译"><a href="#下载，解压，编译" class="headerlink" title="下载，解压，编译"></a>下载，解压，编译</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ cd /usr/local/src</div><div class="line">$ wget http://download.redis.io/releases/redis-3.2.8.tar.gz</div><div class="line">$ tar xzf redis-3.2.8.tar.gz</div><div class="line">$ cd redis-3.2.8</div><div class="line">$ make</div></pre></td></tr></table></figure>
+<p>如果没有安装tcl会报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ yum install tcl</div><div class="line">$ make</div></pre></td></tr></table></figure>
+<p>如果没有安装gcc会报错(gcc: Command not found)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ yum install gcc-c++</div><div class="line">$ make</div></pre></td></tr></table></figure>
+<p>如果报错（Newer version of jemalloc required）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ make MALLOC=libc</div></pre></td></tr></table></figure>
+<h4 id="拷贝文件"><a href="#拷贝文件" class="headerlink" title="拷贝文件"></a>拷贝文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ cd  /usr/local/src/redis-3.2.8/src  #二进制文件是编译完成后在src目录下</div><div class="line">$ touch redis.conf #新建一个redis配置文件，官网有，记得修改一条：daemonize yes</div><div class="line">$ cp redis.conf /etc/  </div><div class="line">$ cp redis-benchmark redis-cli redis-server /usr/bin/  #方便在任何地方启动</div></pre></td></tr></table></figure>
+<h4 id="启动redis服务"><a href="#启动redis服务" class="headerlink" title="启动redis服务"></a>启动redis服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ redis-server /etc/redis.conf</div></pre></td></tr></table></figure>
+<h4 id="测试客户端连接"><a href="#测试客户端连接" class="headerlink" title="测试客户端连接"></a>测试客户端连接</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ redis-cli  	</div><div class="line">redis&gt; set name zhangsan</div><div class="line">OK  </div><div class="line"> redis&gt; get name   </div><div class="line">&quot;zhangsan&quot;</div></pre></td></tr></table></figure>
+<h4 id="测试端口是否启动"><a href="#测试端口是否启动" class="headerlink" title="测试端口是否启动"></a>测试端口是否启动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ netstat -tlnp</div></pre></td></tr></table></figure>
+<h4 id="设置开机启动"><a href="#设置开机启动" class="headerlink" title="设置开机启动"></a>设置开机启动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ echo &quot;redis-server  /etc/redis.conf&quot; &gt;&gt;/etc/rc.local</div></pre></td></tr></table></figure>
+<h4 id="关闭redis服务"><a href="#关闭redis服务" class="headerlink" title="关闭redis服务"></a>关闭redis服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ redis-cli shutdown save</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-Java到底是传引用还是传值" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -945,148 +1184,6 @@
 
 
   
-    <article id="post-redis平滑升级redis-2.4到redis-3.2" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/07/07/redis平滑升级redis-2.4到redis-3.2/" class="article-date">
-      <time datetime="2017-07-07T07:26:36.854Z" itemprop="datePublished">2017-07-07</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/07/redis平滑升级redis-2.4到redis-3.2/">redis平滑升级redis-2.4到redis-3.2</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <blockquote>
-<p><a href="http://rickie622.blog.163.com/blog/static/2123881120135269273376/" target="_blank" rel="external">http://rickie622.blog.163.com/blog/static/2123881120135269273376/</a></p>
-</blockquote>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-redis安装" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/07/07/redis安装/" class="article-date">
-      <time datetime="2017-07-07T06:34:04.795Z" itemprop="datePublished">2017-07-07</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/07/redis安装/">redis安装</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h4 id="下载，解压，编译"><a href="#下载，解压，编译" class="headerlink" title="下载，解压，编译"></a>下载，解压，编译</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ cd /usr/local/src</div><div class="line">$ wget http://download.redis.io/releases/redis-3.2.8.tar.gz</div><div class="line">$ tar xzf redis-3.2.8.tar.gz</div><div class="line">$ cd redis-3.2.8</div><div class="line">$ make</div></pre></td></tr></table></figure>
-<p>如果报错</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ yum install tcl</div><div class="line">$ make</div></pre></td></tr></table></figure>
-<p>如果报错(gcc: Command not found)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ yum install gcc-c++</div><div class="line">$ make</div></pre></td></tr></table></figure>
-<p>如果报错（Newer version of jemalloc required）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ make MALLOC=libc</div></pre></td></tr></table></figure>
-<h4 id="拷贝文件"><a href="#拷贝文件" class="headerlink" title="拷贝文件"></a>拷贝文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ cd  /usr/local/src/redis-3.2.8/src  #二进制文件是编译完成后在src目录下</div><div class="line">$ touch redis.conf #新建一个redis配置文件，官网有，记得修改一条：daemonize yes</div><div class="line">$ cp redis.conf /etc/  </div><div class="line">$ cp redis-benchmark redis-cli redis-server /usr/bin/  #方便在任何地方启动</div></pre></td></tr></table></figure>
-<h4 id="启动redis服务"><a href="#启动redis服务" class="headerlink" title="启动redis服务"></a>启动redis服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ redis-server /etc/redis.conf</div></pre></td></tr></table></figure>
-<h4 id="测试客户端连接"><a href="#测试客户端连接" class="headerlink" title="测试客户端连接"></a>测试客户端连接</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ redis-cli  	</div><div class="line">redis&gt; set name zhangsan</div><div class="line">OK  </div><div class="line"> redis&gt; get name   </div><div class="line">&quot;zhangsan&quot;</div></pre></td></tr></table></figure>
-<h4 id="测试端口是否启动"><a href="#测试端口是否启动" class="headerlink" title="测试端口是否启动"></a>测试端口是否启动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ netstat -tlnp</div></pre></td></tr></table></figure>
-<h4 id="设置开机启动"><a href="#设置开机启动" class="headerlink" title="设置开机启动"></a>设置开机启动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ echo &quot;redis-server  /etc/redis.conf&quot; &gt;&gt;/etc/rc.local</div></pre></td></tr></table></figure>
-<h4 id="关闭redis服务"><a href="#关闭redis服务" class="headerlink" title="关闭redis服务"></a>关闭redis服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ redis-cli shutdown save</div></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-利用df和du命令查看系统内存占用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1189,110 +1286,10 @@
 
 
   
-    <article id="post-通过rsync+inotify实现多服务器文件的实时同步" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2017/07/06/通过rsync+inotify实现多服务器文件的实时同步/" class="article-date">
-      <time datetime="2017-07-06T02:31:19.518Z" itemprop="datePublished">2017-07-06</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/06/通过rsync+inotify实现多服务器文件的实时同步/">通过rsync+inotify实现多服务器文件的实时同步</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h3 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h3><p>公司有八台nginx服务器用来做静态文件服务器和http请求转发，所以当需要修改nginx配置文件或者部署静态文件的时候，需要分别修改八台机器上的文件，费时费力。</p>
-<h3 id="最终目的"><a href="#最终目的" class="headerlink" title="最终目的"></a>最终目的</h3><p>对其中某一个机器的某些文件夹做监控，只要其中的内容有发生修改，其余机器马上同步这些修改到自己的机器上</p>
-<h3 id="实现工具"><a href="#实现工具" class="headerlink" title="实现工具"></a>实现工具</h3><p>rsync+inotify</p>
-<h3 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h3><ol>
-<li><p>主服务器A安装rsync</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum install rsync</div></pre></td></tr></table></figure>
-</li>
-<li><p>写配置文件，需要自己建文件夹和文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd /etc/rsync.d</div><div class="line">$ touch rsyncd.secret</div></pre></td></tr></table></figure>
-<p>rsyncd.secret文件内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">admin123   //后面其他服务器要同步此服务器文件需要用到的密码</div></pre></td></tr></table></figure>
-</li>
-<li><p>安装inotify工具</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install inotify-tools</div></pre></td></tr></table></figure>
-</li>
-<li><p>编写实现同步的脚本,这个脚本的作用就是通过inotify监控本服务器某个文件目录的变化，进而触发其他host进行rsync同步操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd /etc/inotify</div><div class="line">$ touch inotify.sh</div></pre></td></tr></table></figure>
-<p>inotify.sh文件内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">    host=&quot;10.104.xx.xxx 10.104.xx.xxx 10.104.xx.xxx&quot;</div><div class="line">    src=/data/web/html</div><div class="line">    dst=htmlFile</div><div class="line">    user=root</div><div class="line">    pass_file=/etc/rsync.d/rsyncd.secrets</div><div class="line"></div><div class="line">    /usr/bin/inotifywait -mrq --timefmt &apos;%d/%m/%y %H:%M&apos; --format &apos;%T %w%f&apos; -e  modify,delete,create,attrib $src | while read files</div><div class="line">         do</div><div class="line">         for hostip in $host</div><div class="line">             do</div><div class="line">             /usr/bin/rsync -vzrtopg --delete --progress --password-file=$pass_file $src $user@$hostip::$dst    </div><div class="line">             done</div><div class="line">         echo &quot;$&#123;files&#125; was rsynced&quot; &gt;&gt;/tmp/rsync.log 2&gt;&amp;1</div><div class="line">         done</div></pre></td></tr></table></figure>
-</li>
-<li><p>同步服务器B、C、D安装rsync</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum install rsync</div></pre></td></tr></table></figure>
-</li>
-<li><p>写配置文件，需要自己建文件夹和文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd /etc/rsync.d</div><div class="line">$ touch rsyncd.conf rsyncd.secret rsyncd.motd</div></pre></td></tr></table></figure>
-<p>rsyncd.conf是配置文件，内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">uid = root</div><div class="line">gid = root</div><div class="line">use chroot = yes</div><div class="line"></div><div class="line">max connections = 100</div><div class="line"></div><div class="line">pid file = /var/run/rsyncd.pid</div><div class="line">log file = /var/log/rsyncd.log</div><div class="line">motd file = /etc/rsync.d/rsyncd.motd</div><div class="line"></div><div class="line">[htmlFile]</div><div class="line">path = /data </div><div class="line">comment = Rsync html file</div><div class="line">uid = root</div><div class="line">gid = root</div><div class="line">auth users = root</div><div class="line">secrets file = /etc/rsync.d/rsyncd.secrets</div><div class="line">read only = yes</div><div class="line">list = yes</div><div class="line">ignore errors</div><div class="line">read only = no</div><div class="line">write only = no</div><div class="line">hosts allow = xx.xxx.xx.xx (主服务器A的host)</div></pre></td></tr></table></figure>
-<p>rsyncd.secret是密码文件，内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root:admin123</div></pre></td></tr></table></figure>
-<p>rsyncd.motd是服务器描述文件，内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">++++++++++++++++++++++++++++++++++++</div><div class="line">This is Server B, Welcome！</div><div class="line">+++++++++++++++++++++++++++++++++++++</div></pre></td></tr></table></figure>
-</li>
-<li><p>将rsyncd.secrets这个密码文件的文件属性设为root拥有, 且权限要设为600, 否则无法备份成功</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ chmod 600 rsyncd.secrets</div></pre></td></tr></table></figure>
-</li>
-<li><p>启动rsync服务器(daemon参数方式，是让rsync以服务器模式运行)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/bin/rsync --daemon  --config=/etc/rsync.d/rsyncd.conf</div></pre></td></tr></table></figure>
-</li>
-<li><p>设置开机启动rsync服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo  “/usr/bin/rsync --daemon  --config=/etc/rsync.d/rsyncd.conf &gt;/dev/null &amp;”&gt;&gt;/etc/rc.local</div></pre></td></tr></table></figure></li>
-</ol>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/">nginx</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 </div>
       <footer id="footer">
@@ -1303,14 +1300,14 @@
                 2016-2017 kolly
             </div>
             <div class="footer-right">
-                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+                <a href="http://hexo.io/" target="_blank" title="A fast, simple &amp; powerful blog framework">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="Another simple and elegant theme for Hexo  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
             </div>
         </div>
         
             <div class="visit">
                 
                     <span id="busuanzi_container_site_pv" style='display:none'>
-                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        <span id="site-visit" title="Site Visitors"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
                         </span>
                     </span>
                 
@@ -1319,7 +1316,7 @@
                 
                 
                     <span id="busuanzi_container_page_pv" style='display:none'>
-                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        <span id="page-visit"  title="Page Hits"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
                         </span>
                     </span>
                 
@@ -1352,9 +1349,9 @@
 
 
 <div class="scroll" id="scroll">
-    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
-    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
-    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+    <a href="#" title="Back to Top"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="Comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="Go to Bottom"><i class="fa fa-arrow-down"></i></a>
 </div>
 <script>
     // Open in New Window
