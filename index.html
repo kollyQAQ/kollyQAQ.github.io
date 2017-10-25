@@ -266,87 +266,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-MARKDOWN实用小技巧" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/25/MARKDOWN实用小技巧/" class="article-date">
-      <time datetime="2017-10-25T02:32:50.040Z" itemprop="datePublished">2017-10-25</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/25/MARKDOWN实用小技巧/">MARKDOWN实用小技巧</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h4 id="首行缩进"><a href="#首行缩进" class="headerlink" title="首行缩进"></a>首行缩进</h4><p>写文章时，我们常常希望能够<strong>首行缩进</strong>，这时可以在段首加入<code>&amp;ensp;</code>来输入一个空格.加入<code>&amp;emsp;</code>来输入两个空格。</p>
-<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><p>文本</p>
-<blockquote>
-<p><code>&amp;emsp;&amp;emsp;</code>一语未了，只听后院中有人笑声，说：“我来迟了，不曾迎接远客！”</p>
-<p>这是第二行哈，可以看到已经缩进了。</p>
-</blockquote>
-<p>效果</p>
-<blockquote>
-<p>  一语未了，只听后院中有人笑声，说：“我来迟了，不曾迎接远客！”</p>
-<p>这是第二行哈，可以看到已经缩进了。</p>
-</blockquote>
-<h3 id="设置图片居中"><a href="#设置图片居中" class="headerlink" title="设置图片居中"></a>设置图片居中</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;div align=center&gt;</div><div class="line">![]()</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
-<p><span style="color:red;">注: ” [] “中是图片描述,” () “是图片的URL(本地或网络).</span></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/MARKDOWN/">MARKDOWN</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MARKDOWN/">MARKDOWN</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-Java到底是传引用还是传值" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2017/10/25/Java到底是传引用还是传值/" class="article-date">
-      <time datetime="2017-10-25T02:27:55.257Z" itemprop="datePublished">2017-10-25</time>
+      <time datetime="2017-10-25T02:38:41.385Z" itemprop="datePublished">2017-10-25</time>
 </a>
 
 
@@ -375,9 +299,9 @@
 <p>回答: 你的问题引出了Java新手的常犯的错误。事实上，一些老手也很难搞清楚这些概念。</p>
 <p>Java确实使用对象的引用来做计算的，所有的对象变量都是引用。但是，Java在向方法传递参数时传的不是引用，是值。</p>
 <p>以 badSwap() 函数为例:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public void badSwap(int var1, int var2)&#123;</div><div class="line"></div><div class="line">    int temp = var1;</div><div class="line"></div><div class="line">    var1 = var2;</div><div class="line"></div><div class="line">    var2 = temp;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public void badSwap(int var1, int var2)&#123;</div><div class="line">    int temp = var1;</div><div class="line">    var1 = var2;</div><div class="line">    var2 = temp;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>当badSwap方法返回时，被当作参数传入的变量仍然保持了原来的值不变。如果我们把传入的int型变量改为Object型也是一样的，因为Java通过传值来传递引用的。现在,我们来看下是哪个地方搞的鬼:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public void tricky(Point arg1, Point arg2)&#123;</div><div class="line">    arg1.x = 100;</div><div class="line">    arg1.y = 100;</div><div class="line">    Point temp = arg1;</div><div class="line">    arg1 = arg2;</div><div class="line">    arg2 = temp;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">public static void main(String [] args)&#123;</div><div class="line">    Point pnt1 = new Point(0,0);</div><div class="line">    Point pnt2 = new Point(0,0);</div><div class="line">    System.out.println(&quot;X: &quot; + pnt1.x + &quot; Y: &quot; +pnt1.y);</div><div class="line">    System.out.println(&quot;X: &quot; + pnt2.x + &quot; Y: &quot; +pnt2.y);</div><div class="line">    System.out.println(&quot; &quot;);</div><div class="line">    tricky(pnt1,pnt2);</div><div class="line">    System.out.println(&quot;X: &quot; + pnt1.x + &quot; Y:&quot; + pnt1.y);</div><div class="line">    System.out.println(&quot;X: &quot; + pnt2.x + &quot; Y: &quot; +pnt2.y);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public void tricky(Point arg1, Point arg2)&#123;</div><div class="line">    arg1.x = 100;</div><div class="line">    arg1.y = 100;</div><div class="line">    Point temp = arg1;</div><div class="line">    arg1 = arg2;</div><div class="line">    arg2 = temp;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">public static void main(String [] args)&#123;</div><div class="line">    Point pnt1 = new Point(0,0);</div><div class="line">    Point pnt2 = new Point(0,0);</div><div class="line">    System.out.println(&quot;X: &quot; + pnt1.x + &quot; Y: &quot; +pnt1.y);</div><div class="line">    System.out.println(&quot;X: &quot; + pnt2.x + &quot; Y: &quot; +pnt2.y);</div><div class="line">    System.out.println(&quot;&quot;);</div><div class="line">    tricky(pnt1,pnt2);</div><div class="line">    System.out.println(&quot;X: &quot; + pnt1.x + &quot; Y:&quot; + pnt1.y);</div><div class="line">    System.out.println(&quot;X: &quot; + pnt2.x + &quot; Y: &quot; +pnt2.y);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>执行这个函数,将得到以下输出:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">X: 0 Y: 0</div><div class="line">X: 0 Y: 0</div><div class="line"></div><div class="line">X: 100 Y: 100</div><div class="line">X: 0 Y: 0</div></pre></td></tr></table></figure>
 <p>即使是通过值传递，tricky函数依然成功地改变了pnt1的值。但是pnt1和pnt2的置换失败了。这正是最令人困惑的地方。在main()函数当中，pnt1和pnt2仅仅是对象的引用。当你向tricky()函数传递pnt1和pnt2参数时，Java仅仅向传递任何其他参数一样，通过传值来传递引用。这就意味着：传向函数的引用实际上是原始引用的副本。下面的图一展现了当Java传递对象给函数之后,两个引用指向了同一对象</p>
@@ -401,6 +325,82 @@
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-MARKDOWN实用小技巧" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/25/MARKDOWN实用小技巧/" class="article-date">
+      <time datetime="2017-10-25T02:37:06.617Z" itemprop="datePublished">2017-10-25</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/25/MARKDOWN实用小技巧/">MARKDOWN实用小技巧</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="首行缩进"><a href="#首行缩进" class="headerlink" title="首行缩进"></a>首行缩进</h3><p>写文章时，我们常常希望能够<strong>首行缩进</strong>，这时可以在段首加入<code>&amp;ensp;</code>来输入一个空格.加入<code>&amp;emsp;</code>来输入两个空格。</p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><p>文本</p>
+<blockquote>
+<p><code>&amp;emsp;&amp;emsp;</code>一语未了，只听后院中有人笑声，说：“我来迟了，不曾迎接远客！”</p>
+<p>这是第二行哈，可以看到已经缩进了。</p>
+</blockquote>
+<p>效果</p>
+<blockquote>
+<p>  一语未了，只听后院中有人笑声，说：“我来迟了，不曾迎接远客！”</p>
+<p>这是第二行哈，可以看到已经缩进了。</p>
+</blockquote>
+<h3 id="设置图片居中"><a href="#设置图片居中" class="headerlink" title="设置图片居中"></a>设置图片居中</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;div align=center&gt;</div><div class="line">![]()</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<p><span style="color:red;">注: ” [] “中是图片描述,” () “是图片的URL(本地或网络).</span></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/MARKDOWN/">MARKDOWN</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MARKDOWN/">MARKDOWN</a></li></ul>
     </div>
 
       
