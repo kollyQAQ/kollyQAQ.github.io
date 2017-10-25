@@ -15,19 +15,17 @@
 
 
 
-<meta name="description" content="volatile具有两个重要的特性  禁止指令重排序（有序性） 保证内存可见性（可见性）  那volatile在singleton的创建过程起到了什么作用呢 先上结论，这段代码里volatile的作用仅仅是禁止重排序 1. 为什么要禁止重排序？ 实例化一个对象其实可以分为三个步骤： 　　（1）分配内存空间。 　　（2）初始化对象。 　　（3）将内存空间的地址赋值给对应的引用。 但是由于操作系统可">
-<meta name="keywords" content="JAVA">
+<meta name="description" content="123456789101112131415161718//懒汉式（静态内部类）public class Singleton &amp;#123;	//静态内部类	private static class SingletonHolder&amp;#123;		//final为了避免被覆盖		private static final Singleton instance = new Singleton();	&amp;#12">
+<meta name="keywords" content="JAVA,设计模式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java双重检查锁定单例模式中volatile 的作用">
-<meta property="og:url" content="http://code.kolly.com/2017/10/25/java双重检查锁定单例模式中volatile 的作用/index.html">
+<meta property="og:title" content="最好的单例模式写法">
+<meta property="og:url" content="http://code.kolly.com/2017/10/25/最好的单例模式写法/index.html">
 <meta property="og:site_name" content="Kolly Code">
-<meta property="og:description" content="volatile具有两个重要的特性  禁止指令重排序（有序性） 保证内存可见性（可见性）  那volatile在singleton的创建过程起到了什么作用呢 先上结论，这段代码里volatile的作用仅仅是禁止重排序 1. 为什么要禁止重排序？ 实例化一个对象其实可以分为三个步骤： 　　（1）分配内存空间。 　　（2）初始化对象。 　　（3）将内存空间的地址赋值给对应的引用。 但是由于操作系统可">
-<meta property="og:image" content="https://kollyqaq.github.io/img/java-singleton.png">
-<meta property="og:updated_time" content="2017-10-25T06:26:47.342Z">
+<meta property="og:description" content="123456789101112131415161718//懒汉式（静态内部类）public class Singleton &amp;#123;	//静态内部类	private static class SingletonHolder&amp;#123;		//final为了避免被覆盖		private static final Singleton instance = new Singleton();	&amp;#12">
+<meta property="og:updated_time" content="2017-10-25T07:05:48.536Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java双重检查锁定单例模式中volatile 的作用">
-<meta name="twitter:description" content="volatile具有两个重要的特性  禁止指令重排序（有序性） 保证内存可见性（可见性）  那volatile在singleton的创建过程起到了什么作用呢 先上结论，这段代码里volatile的作用仅仅是禁止重排序 1. 为什么要禁止重排序？ 实例化一个对象其实可以分为三个步骤： 　　（1）分配内存空间。 　　（2）初始化对象。 　　（3）将内存空间的地址赋值给对应的引用。 但是由于操作系统可">
-<meta name="twitter:image" content="https://kollyqaq.github.io/img/java-singleton.png">
+<meta name="twitter:title" content="最好的单例模式写法">
+<meta name="twitter:description" content="123456789101112131415161718//懒汉式（静态内部类）public class Singleton &amp;#123;	//静态内部类	private static class SingletonHolder&amp;#123;		//final为了避免被覆盖		private static final Singleton instance = new Singleton();	&amp;#12">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -59,7 +57,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>java双重检查锁定单例模式中volatile 的作用 | Kolly Code</title>
+<title>最好的单例模式写法 | Kolly Code</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -263,11 +261,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-java双重检查锁定单例模式中volatile 的作用" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-最好的单例模式写法" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/25/java双重检查锁定单例模式中volatile 的作用/" class="article-date">
-      <time datetime="2017-10-25T06:26:20.265Z" itemprop="datePublished">2017-10-25</time>
+      <a href="/2017/10/25/最好的单例模式写法/" class="article-date">
+      <time datetime="2017-10-25T07:05:21.068Z" itemprop="datePublished">2017-10-25</time>
 </a>
 
 
@@ -282,7 +280,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      java双重检查锁定单例模式中volatile 的作用
+      最好的单例模式写法
     </h1>
   
 
@@ -291,13 +289,13 @@
       <div class="article-info article-info-post">
         
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/JAVA并发编程/">JAVA并发编程</a>
+    <a class="article-category-link" href="/categories/JAVA设计模式/">JAVA设计模式</a>
     </div>
 
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -307,40 +305,22 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p><img src="https://kollyqaq.github.io/img/java-singleton.png" alt=""></p>
-<p><strong>volatile具有两个重要的特性</strong></p>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">//懒汉式（静态内部类）</div><div class="line">public class Singleton &#123;</div><div class="line"></div><div class="line">	//静态内部类</div><div class="line">	private static class SingletonHolder&#123;</div><div class="line">		//final为了避免被覆盖</div><div class="line">		private static final Singleton instance = new Singleton();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	//通过反射可以被破坏</div><div class="line">	//对于反射来说，私有的构造方法和公有的没有区别</div><div class="line">	private Singleton()&#123;&#125;</div><div class="line"></div><div class="line">	public static Singleton getInstance()&#123;</div><div class="line">		return SingletonHolder.instance;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <ul>
-<li>禁止指令重排序（有序性）</li>
-<li>保证内存可见性（可见性）</li>
+<li>这个实现思路中最主要的一点就是利用类中静态变量的唯一性，由Java虚拟机来保证其线程安全性，确保该成员变量只能初始化一次。(线程安全)</li>
+<li>静态内部类与外部类没有什么大的关系，外部类加载的时候，内部类不会被加载，静态内部类只是调用的时候用了外部类的名字而已，所以只有当我们调用 Singleton.getInstance() 时，内部类 SingletonHolder才会初始化，静态变量 instance被创建出来。(懒汉式，节省空间)</li>
+<li>没有用到synchronized ，节省时间</li>
 </ul>
-<p><span style="color:red;"><strong>那volatile在singleton的创建过程起到了什么作用呢</strong></span></p>
-<p>先上结论，这段代码里volatile的作用仅仅是<strong>禁止重排序</strong></p>
-<p><strong>1. 为什么要禁止重排序？</strong></p>
-<p>实例化一个对象其实可以分为三个步骤：</p>
-<p>　　（1）分配内存空间。</p>
-<p>　　（2）初始化对象。</p>
-<p>　　（3）将内存空间的地址赋值给对应的引用。</p>
-<p>但是由于操作系统可以对指令进行重排序，所以上面的过程也可能会变成如下过程：</p>
-<p>　　（1）分配内存空间。</p>
-<p>　　（2）将内存空间的地址赋值给对应的引用。</p>
-<p>　　（3）初始化对象</p>
-<p>如果是这个流程，多线程环境下就可能将一个未初始化的对象引用暴露出来，从而导致不可预料的结果（这里就是因为 instance = new Singleton(); 不是原子操作，编译器存在指令重排，从而存在线程1 创建实例后（初始化未完成），线程2 判断对象不为空后对其操作，但实际对象仍为空，造成错误）。因此，为了防止这个过程的重排序，我们需要将变量设置为volatile类型的变量，volatile的禁止重排序保证了操作的有序性。</p>
-<p><strong>2. 为什么没有起到可见性的作用？</strong></p>
-<p><a href="http://blog.csdn.net/ns_code/article/details/17348313" target="_blank" rel="external">happens before原则</a>里面有这样一条</p>
-<blockquote>
-<p>JSR-133<br>An unlock on a monitor happens before every subsequent lock on that same monitor</p>
-</blockquote>
-<p>第二次非null判断是在加锁以后，则根据这一条，另一个线程一定能看到这个引用被赋值。所以即使没有volatile，依旧能保证可见性</p>
-<p><strong>3. 如果不加volatile，能不能使代码正确运行？</strong></p>
-<p>既然可见性已经有了保证，那我们只需要保证有序性。怎么保证有序性呢？</p>
-<p>只需要在“构造对象”和“连接引用与实例”之间加上一道内存屏障</p>
-<p>由于是在单线程里，同样根据<a href="http://blog.csdn.net/ns_code/article/details/17348313" target="_blank" rel="external">happens before原则</a>里面这一条</p>
-<blockquote>
-<p>JSR-133</p>
-<p>Each action in a thread happens before every action in that thread that comes later in the program’s order</p>
-</blockquote>
-<p>你只需要在构造和赋值之间随意做点事情，保证赋值在构造函数结束后再完成，就可以，比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Singleton temp = new Singleton();</div><div class="line">temp.toString();//构造与赋值之间随意做点事情保证顺序</div><div class="line">instance=temp;</div></pre></td></tr></table></figure>
+<p>下面通过反射来破坏上面的单例模式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class ReflectTest &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) throws Exception &#123;</div><div class="line"></div><div class="line">		//正常获取单例</div><div class="line">		Singleton s1 = Singleton.getInstance();</div><div class="line"></div><div class="line">		//利用反射机制，来调用私有构造方法创建一个实例</div><div class="line">		Constructor&lt;Singleton&gt; constructor = Singleton.class.getDeclaredConstructor();</div><div class="line">		//强制授权让他可以访问</div><div class="line">		constructor.setAccessible(true);</div><div class="line">		//创建实例</div><div class="line">		Singleton s2 = constructor.newInstance();</div><div class="line"></div><div class="line">		System.out.println(s1 == s2);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>得到的结果是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">false</div></pre></td></tr></table></figure>
+<p>说明我们确实通过反射得到了两个不同的实例，所以这个单例模式也有bug</p>
+<p>怎么办？有办法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;</div><div class="line"></div><div class="line">	private static boolean initialized = false;</div><div class="line"></div><div class="line">	//静态内部类</div><div class="line">	private static class SingletonHolder &#123;</div><div class="line">		//final为了避免被覆盖</div><div class="line">		private static final Singleton instance = new Singleton();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	private Singleton() &#123;</div><div class="line">		//防止通过反射实例化对象</div><div class="line">		synchronized (SingletonHolder.class) &#123;</div><div class="line">			if (!initialized) &#123;</div><div class="line">				initialized = true;</div><div class="line">			&#125; else &#123;</div><div class="line">				throw new RuntimeException(&quot;禁止初始化&quot;);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public static Singleton getInstance() &#123;</div><div class="line">		return SingletonHolder.instance;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是再调用ReflectTest.java的main方法就会报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Exception in thread &quot;main&quot; java.lang.reflect.InvocationTargetException</div><div class="line">	at com.kolly.ReflectTest.main</div><div class="line">Caused by: java.lang.RuntimeException: 禁止初始化</div><div class="line">	at com.kolly.Singleton.&lt;init&gt;</div></pre></td></tr></table></figure>
+<p>到此就完美解决了单例模式的所有问题~</p>
 
       
     </div>
@@ -349,13 +329,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/10/25/java双重检查锁定单例模式中volatile 的作用/">java双重检查锁定单例模式中volatile 的作用</a></p>
+        <p><span>本文标题:</span><a href="/2017/10/25/最好的单例模式写法/">最好的单例模式写法</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">kolly</a></p>
-        <p><span>发布时间:</span>2017-10-25, 14:26:20</p>
-        <p><span>最后更新:</span>2017-10-25, 14:26:47</p>
+        <p><span>发布时间:</span>2017-10-25, 15:05:21</p>
+        <p><span>最后更新:</span>2017-10-25, 15:05:48</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/10/25/java双重检查锁定单例模式中volatile 的作用/" title="java双重检查锁定单例模式中volatile 的作用">http://code.kolly.com/2017/10/25/java双重检查锁定单例模式中volatile 的作用/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://code.kolly.com/2017/10/25/java双重检查锁定单例模式中volatile 的作用/　　作者: kolly" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/25/最好的单例模式写法/" title="最好的单例模式写法">http://code.kolly.com/2017/10/25/最好的单例模式写法/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://code.kolly.com/2017/10/25/最好的单例模式写法/　　作者: kolly" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -367,16 +347,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/10/25/JAVA同步syncnized关键字解读/">
-                    JAVA同步syncnized关键字解读
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/10/25/redis平滑升级redis-2.4到redis-3.2/">
-                    redis平滑升级redis-2.4到redis-3.2
+                <a href="/2017/10/25/JAVA同步syncnized关键字解读/">
+                    JAVA同步syncnized关键字解读
                 </a>
             </div>
         
@@ -424,7 +398,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"java双重检查锁定单例模式中volatile 的作用　| Kolly Code　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"最好的单例模式写法　| Kolly Code　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -444,15 +418,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/10/25/JAVA同步syncnized关键字解读/" title="上一篇: JAVA同步syncnized关键字解读">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/10/25/redis平滑升级redis-2.4到redis-3.2/" title="下一篇: redis平滑升级redis-2.4到redis-3.2">
+            <a href="/2017/10/25/JAVA同步syncnized关键字解读/" title="下一篇: JAVA同步syncnized关键字解读">
                 <i class="fa fa-angle-right"></i>
             </a>
         

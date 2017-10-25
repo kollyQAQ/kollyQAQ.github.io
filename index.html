@@ -187,7 +187,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/">IDEA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MARKDOWN/">MARKDOWN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux命令/">linux命令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IDEA/">IDEA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MARKDOWN/">MARKDOWN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux命令/">linux命令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
                     </div>
                 </section>
                 
@@ -266,11 +266,155 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-最好的单例模式写法" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/25/最好的单例模式写法/" class="article-date">
+      <time datetime="2017-10-25T07:05:21.068Z" itemprop="datePublished">2017-10-25</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/25/最好的单例模式写法/">最好的单例模式写法</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">//懒汉式（静态内部类）</div><div class="line">public class Singleton &#123;</div><div class="line"></div><div class="line">	//静态内部类</div><div class="line">	private static class SingletonHolder&#123;</div><div class="line">		//final为了避免被覆盖</div><div class="line">		private static final Singleton instance = new Singleton();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	//通过反射可以被破坏</div><div class="line">	//对于反射来说，私有的构造方法和公有的没有区别</div><div class="line">	private Singleton()&#123;&#125;</div><div class="line"></div><div class="line">	public static Singleton getInstance()&#123;</div><div class="line">		return SingletonHolder.instance;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>这个实现思路中最主要的一点就是利用类中静态变量的唯一性，由Java虚拟机来保证其线程安全性，确保该成员变量只能初始化一次。(线程安全)</li>
+<li>静态内部类与外部类没有什么大的关系，外部类加载的时候，内部类不会被加载，静态内部类只是调用的时候用了外部类的名字而已，所以只有当我们调用 Singleton.getInstance() 时，内部类 SingletonHolder才会初始化，静态变量 instance被创建出来。(懒汉式，节省空间)</li>
+<li>没有用到synchronized ，节省时间</li>
+</ul>
+<p>下面通过反射来破坏上面的单例模式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class ReflectTest &#123;</div><div class="line"></div><div class="line">	public static void main(String[] args) throws Exception &#123;</div><div class="line"></div><div class="line">		//正常获取单例</div><div class="line">		Singleton s1 = Singleton.getInstance();</div><div class="line"></div><div class="line">		//利用反射机制，来调用私有构造方法创建一个实例</div><div class="line">		Constructor&lt;Singleton&gt; constructor = Singleton.class.getDeclaredConstructor();</div><div class="line">		//强制授权让他可以访问</div><div class="line">		constructor.setAccessible(true);</div><div class="line">		//创建实例</div><div class="line">		Singleton s2 = constructor.newInstance();</div><div class="line"></div><div class="line">		System.out.println(s1 == s2);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>得到的结果是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">false</div></pre></td></tr></table></figure>
+<p>说明我们确实通过反射得到了两个不同的实例，所以这个单例模式也有bug</p>
+<p>怎么办？有办法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public class Singleton &#123;</div><div class="line"></div><div class="line">	private static boolean initialized = false;</div><div class="line"></div><div class="line">	//静态内部类</div><div class="line">	private static class SingletonHolder &#123;</div><div class="line">		//final为了避免被覆盖</div><div class="line">		private static final Singleton instance = new Singleton();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	private Singleton() &#123;</div><div class="line">		//防止通过反射实例化对象</div><div class="line">		synchronized (SingletonHolder.class) &#123;</div><div class="line">			if (!initialized) &#123;</div><div class="line">				initialized = true;</div><div class="line">			&#125; else &#123;</div><div class="line">				throw new RuntimeException(&quot;禁止初始化&quot;);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public static Singleton getInstance() &#123;</div><div class="line">		return SingletonHolder.instance;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是再调用ReflectTest.java的main方法就会报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Exception in thread &quot;main&quot; java.lang.reflect.InvocationTargetException</div><div class="line">	at com.kolly.ReflectTest.main</div><div class="line">Caused by: java.lang.RuntimeException: 禁止初始化</div><div class="line">	at com.kolly.Singleton.&lt;init&gt;</div></pre></td></tr></table></figure>
+<p>到此就完美解决了单例模式的所有问题~</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/JAVA设计模式/">JAVA设计模式</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-JAVA同步syncnized关键字解读" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/25/JAVA同步syncnized关键字解读/" class="article-date">
+      <time datetime="2017-10-25T06:27:14.520Z" itemprop="datePublished">2017-10-25</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/10/25/JAVA同步syncnized关键字解读/">JAVA同步syncnized关键字解读</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>&emsp;&emsp;在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。</p>
+<p>&emsp;&emsp;采用synchronized修饰符实现的同步机制叫做互斥锁机制，它所获得的锁叫做互斥锁。每个对象都有一个monitor(锁标记)，当线程拥有这个锁标记时才能访问这个资源，没有锁标记便进入锁池。任何一个对象系统都会为其创建一个互斥锁，这个锁是为了分配给线程的，防止打断原子操作。每个对象的锁只能分配给一个线程，因此叫做互斥锁。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/JAVA并发编程/">JAVA并发编程</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-java双重检查锁定单例模式中volatile 的作用" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2017/10/25/java双重检查锁定单例模式中volatile 的作用/" class="article-date">
-      <time datetime="2017-10-25T06:14:12.922Z" itemprop="datePublished">2017-10-25</time>
+      <time datetime="2017-10-25T06:26:20.265Z" itemprop="datePublished">2017-10-25</time>
 </a>
 
 
@@ -301,7 +445,7 @@
 <li>禁止指令重排序（有序性）</li>
 <li>保证内存可见性（可见性）</li>
 </ul>
-<p><span style="color=red;"><strong>那volatile在singleton的创建过程起到了什么作用呢</strong></span></p>
+<p><span style="color:red;"><strong>那volatile在singleton的创建过程起到了什么作用呢</strong></span></p>
 <p>先上结论，这段代码里volatile的作用仅仅是<strong>禁止重排序</strong></p>
 <p><strong>1. 为什么要禁止重排序？</strong></p>
 <p>实例化一个对象其实可以分为三个步骤：</p>
@@ -1100,173 +1244,6 @@
       
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MARKDOWN/">MARKDOWN</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-JAVA同步syncnized关键字解读" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/23/JAVA同步syncnized关键字解读/" class="article-date">
-      <time datetime="2017-10-23T10:48:16.106Z" itemprop="datePublished">2017-10-23</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/23/JAVA同步syncnized关键字解读/">JAVA同步syncnized关键字解读</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p>&emsp;&emsp;在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。</p>
-<p>&emsp;&emsp;采用synchronized修饰符实现的同步机制叫做互斥锁机制，它所获得的锁叫做互斥锁。每个对象都有一个monitor(锁标记)，当线程拥有这个锁标记时才能访问这个资源，没有锁标记便进入锁池。任何一个对象系统都会为其创建一个互斥锁，这个锁是为了分配给线程的，防止打断原子操作。每个对象的锁只能分配给一个线程，因此叫做互斥锁。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/JAVA并发编程/">JAVA并发编程</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVA/">JAVA</a></li></ul>
-    </div>
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-利用df和du命令查看系统内存占用" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/07/07/利用df和du命令查看系统内存占用/" class="article-date">
-      <time datetime="2017-07-07T02:21:06.973Z" itemprop="datePublished">2017-07-07</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/07/07/利用df和du命令查看系统内存占用/">利用linux的df和du命令查看文件和目录的内存占用</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <blockquote>
-<p>当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。</p>
-<p>df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。</p>
-<p>du可以查看文件及文件夹的大小。</p>
-<p>两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。</p>
-</blockquote>
-<p>做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，不断有文件在备份，如果长时间不管的话，总有一天会占用满。</p>
-<p>题主有一天在发布java项目的时候，就发现提示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">No space left on device</div></pre></td></tr></table></figure>
-<p>因为题主的发布脚本中有一段逻辑是把之前的jar包先备份到/data/backup目录，执行之一步的时候发现磁盘空间不足，于是报错，版本发布失败。</p>
-<p>遇到这种问题，解决思路很简单嘛，磁盘满了删除没用的东西咯，没错，但是怎样能最快找到那些占用磁盘很大又已经没用的文件或者文件夹呢，这就是今天的课题了。<strong>利用linux的df和du命令查看文件和目录的内存占用</strong></p>
-<h3 id="第一步-使用df命令"><a href="#第一步-使用df命令" class="headerlink" title="第一步 使用df命令"></a>第一步 使用df命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos ~]$ df -h</div><div class="line">Filesystem           	  Size      Used Available Use% Mounted on</div><div class="line">/dev/vda1              8254240   3710232   4124716  48% /</div><div class="line">/dev/vdb1             30962748  21870140   7519728  75% /usr/local</div><div class="line">/dev/vdb2             20641788   1672712  17920480   9% /home</div><div class="line">/dev/vdb4            138303008 131277884         0 100% /data</div></pre></td></tr></table></figure>
-<p><strong>df</strong>命令可以显示目前所有文件系统的可用空间及使用情形</p>
-<ul>
-<li>参数<code>-h</code>表示使用「Human-readable」的输出，也就是在档案系统大小使用 GB、MB 等易读的格式。</li>
-<li>上面的命令输出的第一个字段<code>Filesystem</code>及最后一个字段<code>Mounted on</code>分别是档案系统及其挂入点。我们可以看到<code>/dev/vda1</code> 这个分割区被挂在根目录下。</li>
-<li>接下来的四个字段 <code>Size</code>、<code>Used</code>、<code>Available</code>、及<code>Use%</code>分别是该分割区的容量、已使用的大小、剩下的大小、及使用的百分比。</li>
-</ul>
-<p>可以看到<code>/data</code>这个目录磁盘已经到了100%，所以在想要往/data/backup目录写文件时系统发出<code>No space left on device</code>的警告。</p>
-<p>那么接下来的目的很简单，清理/data目录，找出占用磁盘空间大而且没用的文件或者目录，delete！</p>
-<h3 id="第二步-使用du命令"><a href="#第二步-使用du命令" class="headerlink" title="第二步 使用du命令"></a>第二步 使用du命令</h3><ol>
-<li><p>进入<code>data</code>目录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos jweblog]$ cd /data</div></pre></td></tr></table></figure>
-</li>
-<li><p>执行du命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos data]$ du --max-depth=1 -h</div><div class="line">15G	./jweb_static</div><div class="line">108G	./jweblog</div><div class="line">8.2M	./news</div><div class="line">1.3G	./japplog</div><div class="line">16K	./lost+found</div><div class="line">7.7M	./backup</div><div class="line">595M	./varlog</div><div class="line">1.1G	./pyweb_log</div><div class="line">125G	.</div></pre></td></tr></table></figure>
-<p><strong>du</strong>命令可以查询文件或文件夹的磁盘使用空间</p>
-<p>参数<code>-h</code>表示使用「Human-readable」的输出，也就是在档案系统大小使用 GB、MB 等易读的格式</p>
-<p>参数<code>--max-depth</code>指定深入目录的层数,这是个极为有用的参数,如果当前目录下文件和文件夹很多，使用不带参数du的命令，会循环列出所有文件和文件夹所使用的空间。这对查看究竟是那个地方过大是不利的</p>
-<p>可以看到的是<code>jweblog</code>这个目录有108G个G，沃德天，赶紧进去看看~</p>
-</li>
-<li><p>进入<code>jweblog</code>目录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos data]$ cd jweblog/</div></pre></td></tr></table></figure>
-</li>
-<li><p>继续执行du命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos jweblog]$ du --max-depth=1 -h</div><div class="line">32K	./jweb_mbox_acs</div><div class="line">4.0K	./jweb_cz_gmaster</div><div class="line">732K	./jweb_coomix_scibo</div><div class="line">15G	./jweb_game_farm</div><div class="line">23G	./jweb_open_manager</div><div class="line">404M	./jweb_mbox_app</div><div class="line">8.2M	./jweb_ak_backend</div><div class="line">14M	./jweb_wifishare_manager</div><div class="line">23M	./jweb_yzj_open</div><div class="line">4.3G	./jweb_akgame_third</div><div class="line">4.2G	./jweb_mpos_wxuser_auth_ak</div><div class="line">654M	./jweb_mbox_wifi_svr</div><div class="line">608K	./jweb_qqy_wx_auth</div><div class="line">970M	./jweb_wb_gmwx</div><div class="line">8.3G	./jweb_mpos_wxuser_auth</div><div class="line">4.2G	./jweb_bc_bottle</div><div class="line">160K	./jweb_mbox_wifi_wx_svr</div><div class="line">132K	./jweb_wb_gmaster</div><div class="line">1.1G	./jweb_mpos_kmkuser_auth</div><div class="line">4.0K	./default</div><div class="line">35G	./jweb_promotion_manager</div><div class="line">12G	./jweb_mpos_wxuser_auth_cn</div><div class="line">108G	.</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>到此应该就可以破案了，这里是各个工程的日志，看看哪些日志没用的删掉就可以啦~</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux命令/">linux命令</a></li></ul>
     </div>
 
       
