@@ -1,0 +1,586 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>利用linux的df和du命令查看文件和目录的内存占用 | Stay Hungry,Stay Foolish</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="kolly">
+    
+
+    
+    <meta name="description" content="当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。 df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。 du可以查看文件及文件夹的大小。 两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。  做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，不断有文件在备份，如果长时间不管">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用linux的df和du命令查看文件和目录的内存占用">
+<meta property="og:url" content="http://kollyqaq.github.io/2017/05/14/利用df和du命令查看系统内存占用/index.html">
+<meta property="og:site_name" content="Stay Hungry,Stay Foolish">
+<meta property="og:description" content="当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。 df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。 du可以查看文件及文件夹的大小。 两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。  做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，不断有文件在备份，如果长时间不管">
+<meta property="og:updated_time" content="2017-10-27T08:14:57.145Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用linux的df和du命令查看文件和目录的内存占用">
+<meta name="twitter:description" content="当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。 df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。 du可以查看文件及文件夹的大小。 两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。  做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，不断有文件在备份，如果长时间不管">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Stay Hungry,Stay Foolish" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/curry.jpg" alt="Stay Hungry,Stay Foolish" title="Stay Hungry,Stay Foolish"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Stay Hungry,Stay Foolish">Stay Hungry,Stay Foolish</a></h1>
+				<h2 class="blog-motto">曾梦想仗剑走天涯，看一看世界的繁华</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">所有文章</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kollyqaq.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/14/利用df和du命令查看系统内存占用/" title="利用linux的df和du命令查看文件和目录的内存占用" itemprop="url">利用linux的df和du命令查看文件和目录的内存占用</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="kolly" target="_blank" itemprop="author">kolly</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-14T02:11:50.000Z" itemprop="datePublished"> 发表于 2017-05-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一步-使用df命令"><span class="toc-number">1.</span> <span class="toc-text">第一步 使用df命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二步-使用du命令"><span class="toc-number">2.</span> <span class="toc-text">第二步 使用du命令</span></a></li></ol>
+		
+		</div>
+		
+		<blockquote>
+<p>当磁盘大小超过标准时会有报警提示，这时如果掌握df和du命令是非常明智的选择。</p>
+<p>df可以查看一级文件夹大小、使用比例、档案系统及其挂入点，但对文件却无能为力。</p>
+<p>du可以查看文件及文件夹的大小。</p>
+<p>两者配合使用，非常有效。比如用df查看哪个一级目录过大，然后用df查看文件夹或文件的大小，如此便可迅速确定症结。</p>
+</blockquote>
+<p>做后台开发经常遇到磁盘占满的情况，毕竟不断有日志在生成，不断有文件在备份，如果长时间不管的话，总有一天会占用满。</p>
+<p>题主有一天在发布java项目的时候，就发现提示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">No space left on device</div></pre></td></tr></table></figure>
+<p>因为题主的发布脚本中有一段逻辑是把之前的jar包先备份到/data/backup目录，执行之一步的时候发现磁盘空间不足，于是报错，版本发布失败。</p>
+<p>遇到这种问题，解决思路很简单嘛，磁盘满了删除没用的东西咯，没错，但是怎样能最快找到那些占用磁盘很大又已经没用的文件或者文件夹呢，这就是今天的课题了。<strong>利用linux的df和du命令查看文件和目录的内存占用</strong></p>
+<h3 id="第一步-使用df命令"><a href="#第一步-使用df命令" class="headerlink" title="第一步 使用df命令"></a>第一步 使用df命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos ~]$ df -h</div><div class="line">Filesystem           	  Size      Used Available Use% Mounted on</div><div class="line">/dev/vda1              8254240   3710232   4124716  48% /</div><div class="line">/dev/vdb1             30962748  21870140   7519728  75% /usr/local</div><div class="line">/dev/vdb2             20641788   1672712  17920480   9% /home</div><div class="line">/dev/vdb4            138303008 131277884         0 100% /data</div></pre></td></tr></table></figure>
+<p><strong>df</strong>命令可以显示目前所有文件系统的可用空间及使用情形</p>
+<ul>
+<li>参数<code>-h</code>表示使用「Human-readable」的输出，也就是在档案系统大小使用 GB、MB 等易读的格式。</li>
+<li>上面的命令输出的第一个字段<code>Filesystem</code>及最后一个字段<code>Mounted on</code>分别是档案系统及其挂入点。我们可以看到<code>/dev/vda1</code> 这个分割区被挂在根目录下。</li>
+<li>接下来的四个字段 <code>Size</code>、<code>Used</code>、<code>Available</code>、及<code>Use%</code>分别是该分割区的容量、已使用的大小、剩下的大小、及使用的百分比。</li>
+</ul>
+<p>可以看到<code>/data</code>这个目录磁盘已经到了100%，所以在想要往/data/backup目录写文件时系统发出<code>No space left on device</code>的警告。</p>
+<p>那么接下来的目的很简单，清理/data目录，找出占用磁盘空间大而且没用的文件或者目录，delete！</p>
+<h3 id="第二步-使用du命令"><a href="#第二步-使用du命令" class="headerlink" title="第二步 使用du命令"></a>第二步 使用du命令</h3><ol>
+<li><p>进入<code>data</code>目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos jweblog]$ cd /data</div></pre></td></tr></table></figure>
+</li>
+<li><p>执行du命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos data]$ du --max-depth=1 -h</div><div class="line">15G	./jweb_static</div><div class="line">108G	./jweblog</div><div class="line">8.2M	./news</div><div class="line">1.3G	./japplog</div><div class="line">16K	./lost+found</div><div class="line">7.7M	./backup</div><div class="line">595M	./varlog</div><div class="line">1.1G	./pyweb_log</div><div class="line">125G	.</div></pre></td></tr></table></figure>
+<p><strong>du</strong>命令可以查询文件或文件夹的磁盘使用空间</p>
+<p>参数<code>-h</code>表示使用「Human-readable」的输出，也就是在档案系统大小使用 GB、MB 等易读的格式</p>
+<p>参数<code>--max-depth</code>指定深入目录的层数,这是个极为有用的参数,如果当前目录下文件和文件夹很多，使用不带参数du的命令，会循环列出所有文件和文件夹所使用的空间。这对查看究竟是那个地方过大是不利的</p>
+<p>可以看到的是<code>jweblog</code>这个目录有108G个G，沃德天，赶紧进去看看~</p>
+</li>
+<li><p>进入<code>jweblog</code>目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos data]$ cd jweblog/</div></pre></td></tr></table></figure>
+</li>
+<li><p>继续执行du命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">[appadmin@VM_95_213_centos jweblog]$ du --max-depth=1 -h</div><div class="line">32K	./jweb_mbox_acs</div><div class="line">4.0K	./jweb_cz_gmaster</div><div class="line">732K	./jweb_coomix_scibo</div><div class="line">15G	./jweb_game_farm</div><div class="line">23G	./jweb_open_manager</div><div class="line">404M	./jweb_mbox_app</div><div class="line">8.2M	./jweb_ak_backend</div><div class="line">14M	./jweb_wifishare_manager</div><div class="line">23M	./jweb_yzj_open</div><div class="line">4.3G	./jweb_akgame_third</div><div class="line">4.2G	./jweb_mpos_wxuser_auth_ak</div><div class="line">654M	./jweb_mbox_wifi_svr</div><div class="line">608K	./jweb_qqy_wx_auth</div><div class="line">970M	./jweb_wb_gmwx</div><div class="line">8.3G	./jweb_mpos_wxuser_auth</div><div class="line">4.2G	./jweb_bc_bottle</div><div class="line">160K	./jweb_mbox_wifi_wx_svr</div><div class="line">132K	./jweb_wb_gmaster</div><div class="line">1.1G	./jweb_mpos_kmkuser_auth</div><div class="line">4.0K	./default</div><div class="line">35G	./jweb_promotion_manager</div><div class="line">12G	./jweb_mpos_wxuser_auth_cn</div><div class="line">108G	.</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>到此应该就可以破案了，这里是各个工程的日志，看看哪些日志没用的删掉就可以啦~</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Linux命令/">Linux命令</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kollyqaq.github.io/2017/05/14/利用df和du命令查看系统内存占用/" data-title="利用linux的df和du命令查看文件和目录的内存占用 | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/06/14/通过rsync+inotify实现多服务器文件的实时同步/" title="通过rsync+inotify实现多服务器文件的实时同步">
+  <strong>上一篇：</strong><br/>
+  <span>
+  通过rsync+inotify实现多服务器文件的实时同步</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一步-使用df命令"><span class="toc-number">1.</span> <span class="toc-text">第一步 使用df命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二步-使用du命令"><span class="toc-number">2.</span> <span class="toc-text">第二步 使用du命令</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="kollyqaq" data-theme="medium"></div>
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/IntelliJ-IDEA/" title="IntelliJ-IDEA">IntelliJ-IDEA<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java基础/" title="Java基础">Java基础<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发编程/" title="Java并发编程">Java并发编程<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java设计模式/" title="Java设计模式">Java设计模式<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux命令/" title="Linux命令">Linux命令<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Redis/" title="Redis">Redis<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/服务器运维/" title="服务器运维">服务器运维<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/编程规范/" title="编程规范">编程规范<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java关键字/" title="Java关键字">Java关键字<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Redis/" title="Redis">Redis<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+			
+		
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com" target="_blank" title="世界上最活跃的开源社区">github</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://spring4all.com" target="_blank" title="学习spring所有技术的社区">spring4all社区</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Kolly. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/6040399147" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/kollyqaq" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/li-jun-chao-96" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="kolly">kolly</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+	//$('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
