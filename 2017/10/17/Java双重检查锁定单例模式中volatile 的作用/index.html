@@ -12,12 +12,13 @@
 
     
     <meta name="description" content="volatile具有两个重要的特性  禁止指令重排序（有序性） 保证内存可见性（可见性）  那volatile在singleton的创建过程起到了什么作用呢 先上结论，这段代码里volatile的作用仅仅是禁止重排序 1. 为什么要禁止重排序？ 实例化一个对象其实可以分为三个步骤： 　　（1）分配内存空间。 　　（2）初始化对象。 　　（3）将内存空间的地址赋值给对应的引用。 但是由于操作系统可">
-<meta name="keywords" content="Java关键字,Java">
+<meta name="keywords" content="Java,Java关键字">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java双重检查锁定单例模式中volatile 的作用">
 <meta property="og:url" content="http://kollyqaq.github.io/2017/10/17/Java双重检查锁定单例模式中volatile 的作用/index.html">
 <meta property="og:site_name" content="Stay Hungry,Stay Foolish">
 <meta property="og:description" content="volatile具有两个重要的特性  禁止指令重排序（有序性） 保证内存可见性（可见性）  那volatile在singleton的创建过程起到了什么作用呢 先上结论，这段代码里volatile的作用仅仅是禁止重排序 1. 为什么要禁止重排序？ 实例化一个对象其实可以分为三个步骤： 　　（1）分配内存空间。 　　（2）初始化对象。 　　（3）将内存空间的地址赋值给对应的引用。 但是由于操作系统可">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://kollyqaq.github.io/img/java-singleton.png">
 <meta property="og:updated_time" content="2017-10-27T08:28:40.443Z">
 <meta name="twitter:card" content="summary">
@@ -43,10 +44,6 @@
       
 <div>
 		
-			<div id="imglogo">
-				<a href="/"><img src="/img/curry.jpg" alt="Stay Hungry,Stay Foolish" title="Stay Hungry,Stay Foolish"/></a>
-			</div>
-			
 			<div id="textlogo">
 				<h1 class="site-name"><a href="/" title="Stay Hungry,Stay Foolish">Stay Hungry,Stay Foolish</a></h1>
 				<h2 class="blog-motto">曾梦想仗剑走天涯，看一看世界的繁华</h2>
@@ -148,7 +145,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Java关键字/">Java关键字</a><a href="/tags/Java/">Java</a>
+  <span></span> <a href="/tags/Java/">Java</a><a href="/tags/Java关键字/">Java关键字</a>
   </div>
 
 </div>
@@ -270,11 +267,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>4</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>4</sup></a></li>
 			
 		
 			
@@ -290,11 +287,19 @@
 			
 		
 			
+				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
 			
 		
 			
@@ -303,16 +308,6 @@
 		
 			
 				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
-			
-		
 			
 		
 		</ul>

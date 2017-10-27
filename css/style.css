@@ -392,7 +392,7 @@ body >header {
   width: 100%;
   -webkit-box-shadow: 2px 4px 5px rgba(3,3,3,0.2);
   box-shadow: 2px 4px 5px rgba(3,3,3,0.2);
-  background: url("../") center #2ca6cb;
+  background: url("../img/banner.jpg") center #2ca6cb;
   color: #fff;
   padding: 1em 0 0.8em;
 }
@@ -420,35 +420,18 @@ body >header a {
   float: left;
   width: 4em;
   height: 4em;
-}
-@media only screen and (min-width: 768px) {
-  #imglogo {
-    width: 5em;
-  }
-}
-@media only screen and (min-width: 1024px) {
-  #imglogo {
-    width: 5.5em;
-  }
+  padding-right: 10px;
 }
 #imglogo img {
   width: 4em;
 }
-@media only screen and (min-width: 768px) {
-  #imglogo img {
-    width: 5em;
-  }
-}
-@media only screen and (min-width: 1024px) {
-  #imglogo img {
-    width: 5.5em;
-  }
-}
+border-radius 100%,
 #textlogo {
   float: left;
   width: 75%;
   margin-left: 0.5em;
 }
+border-radius 100% h1.site-name,
 #textlogo h1.site-name {
   width: 86%;
   font-family: "covered_by_your_graceregular";
@@ -458,25 +441,30 @@ body >header a {
   -moz-osx-font-smoothing: grayscale;
 }
 @media only screen and (min-width: 768px) {
+  border-radius 100% h1.site-name,
   #textlogo h1.site-name {
     font-size: 240%;
   }
 }
 @media only screen and (min-width: 1024px) {
+  border-radius 100% h1.site-name,
   #textlogo h1.site-name {
     font-size: 280%;
   }
 }
+border-radius 100% h2.blog-motto,
 #textlogo h2.blog-motto {
   font-size: 0.7em;
   font-weight: normal;
 }
 @media only screen and (min-width: 768px) {
+  border-radius 100% h2.blog-motto,
   #textlogo h2.blog-motto {
     font-size: 100%;
   }
 }
 @media only screen and (min-width: 1024px) {
+  border-radius 100% h2.blog-motto,
   #textlogo h2.blog-motto {
     font-size: 110%;
   }
