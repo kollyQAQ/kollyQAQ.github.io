@@ -11,13 +11,13 @@
     
 
     
-    <meta name="description" content="###一.线程的状态 在正式学习Thread类中的具体方法之前，我们先来了解一下线程有哪些状态，这个将会有助于后面对Thread类中的方法的理解。 　　线程从创建到最终的消亡，要经历若干个状态。一般来说，线程包括以下这几个状态：创建(new)、就绪(runnable)、运行(running)、阻塞(blocked)、time waiting、waiting、消亡（dead）。 　　当需要新起一个线">
+    <meta name="description" content="一.线程的状态在正式学习Thread类中的具体方法之前，我们先来了解一下线程有哪些状态，这个将会有助于后面对Thread类中的方法的理解。 　　线程从创建到最终的消亡，要经历若干个状态。一般来说，线程包括以下这几个状态：创建(new)、就绪(runnable)、运行(running)、阻塞(blocked)、time waiting、waiting、消亡（dead）。 　　当需要新起一个线程来执行">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java并发编程：Thread类的使用">
 <meta property="og:url" content="http://kollyqaq.github.io/2017/10/30/Java并发编程：Thread类的使用/index.html">
 <meta property="og:site_name" content="Stay Hungry,Stay Foolish">
-<meta property="og:description" content="###一.线程的状态 在正式学习Thread类中的具体方法之前，我们先来了解一下线程有哪些状态，这个将会有助于后面对Thread类中的方法的理解。 　　线程从创建到最终的消亡，要经历若干个状态。一般来说，线程包括以下这几个状态：创建(new)、就绪(runnable)、运行(running)、阻塞(blocked)、time waiting、waiting、消亡（dead）。 　　当需要新起一个线">
+<meta property="og:description" content="一.线程的状态在正式学习Thread类中的具体方法之前，我们先来了解一下线程有哪些状态，这个将会有助于后面对Thread类中的方法的理解。 　　线程从创建到最终的消亡，要经历若干个状态。一般来说，线程包括以下这几个状态：创建(new)、就绪(runnable)、运行(running)、阻塞(blocked)、time waiting、waiting、消亡（dead）。 　　当需要新起一个线程来执行">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://images.cnitblog.com/blog/288799/201409/061045374695226.jpg">
 <meta property="og:image" content="http://images.cnitblog.com/i/288799/201408/182136581436496.jpg">
@@ -26,10 +26,10 @@
 <meta property="og:image" content="http://images.cnitblog.com/i/288799/201408/191050522371780.jpg">
 <meta property="og:image" content="http://images.cnitblog.com/i/288799/201408/191129005348267.jpg">
 <meta property="og:image" content="http://images.cnitblog.com/blog/288799/201409/061046391107893.jpg">
-<meta property="og:updated_time" content="2017-10-30T08:59:02.242Z">
+<meta property="og:updated_time" content="2017-10-30T09:00:45.314Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发编程：Thread类的使用">
-<meta name="twitter:description" content="###一.线程的状态 在正式学习Thread类中的具体方法之前，我们先来了解一下线程有哪些状态，这个将会有助于后面对Thread类中的方法的理解。 　　线程从创建到最终的消亡，要经历若干个状态。一般来说，线程包括以下这几个状态：创建(new)、就绪(runnable)、运行(running)、阻塞(blocked)、time waiting、waiting、消亡（dead）。 　　当需要新起一个线">
+<meta name="twitter:description" content="一.线程的状态在正式学习Thread类中的具体方法之前，我们先来了解一下线程有哪些状态，这个将会有助于后面对Thread类中的方法的理解。 　　线程从创建到最终的消亡，要经历若干个状态。一般来说，线程包括以下这几个状态：创建(new)、就绪(runnable)、运行(running)、阻塞(blocked)、time waiting、waiting、消亡（dead）。 　　当需要新起一个线程来执行">
 <meta name="twitter:image" content="http://images.cnitblog.com/blog/288799/201409/061045374695226.jpg">
 
     
@@ -100,29 +100,26 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一-线程的状态"><span class="toc-number">1.</span> <span class="toc-text">一.线程的状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二-上下文切换"><span class="toc-number">2.</span> <span class="toc-text">二.上下文切换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三-Thread类中的方法"><span class="toc-number">3.</span> <span class="toc-text">三.Thread类中的方法</span></a></li></ol>
 		
 		</div>
 		
-		<p>###一.线程的状态</p>
-<p>在正式学习Thread类中的具体方法之前，我们先来了解一下线程有哪些状态，这个将会有助于后面对Thread类中的方法的理解。</p>
+		<h3 id="一-线程的状态"><a href="#一-线程的状态" class="headerlink" title="一.线程的状态"></a>一.线程的状态</h3><p>在正式学习Thread类中的具体方法之前，我们先来了解一下线程有哪些状态，这个将会有助于后面对Thread类中的方法的理解。</p>
 <p>　　线程从创建到最终的消亡，要经历若干个状态。一般来说，线程包括以下这几个状态：创建(new)、就绪(runnable)、运行(running)、阻塞(blocked)、time waiting、waiting、消亡（dead）。</p>
 <p>　　当需要新起一个线程来执行某个子任务时，就创建了一个线程。但是线程创建之后，不会立即进入就绪状态，因为线程的运行需要一些条件（比如内存资源，在前面的JVM内存区域划分一篇博文中知道程序计数器、Java栈、本地方法栈都是线程私有的，所以需要为线程分配一定的内存空间），只有线程运行需要的所有条件满足了，才进入就绪状态。</p>
 <p>　　当线程进入就绪状态后，不代表立刻就能获取CPU执行时间，也许此时CPU正在执行其他的事情，因此它要等待。当得到CPU执行时间之后，线程便真正进入运行状态。</p>
 <p>　　线程在运行状态过程中，可能有多个原因导致当前线程不继续运行下去，比如用户主动让线程睡眠（睡眠一定的时间之后再重新执行）、用户主动让线程等待，或者被同步块给阻塞，此时就对应着多个状态：time waiting（睡眠或等待一定的事件）、waiting（等待被唤醒）、blocked（阻塞）。</p>
 <p>　　当由于突然中断或者子任务执行完毕，线程就会被消亡。</p>
 <p>　　下面这副图描述了线程从创建到消亡之间的状态：</p>
-<p><img src="http://images.cnitblog.com/blog/288799/201409/061045374695226.jpg" alt="img"></p>
+<p><img src="http://images.cnitblog.com/blog/288799/201409/061045374695226.jpg" alt=""></p>
 <p>　　在有些教程上将blocked、waiting、time waiting统称为阻塞状态，这个也是可以的，只不过这里我想将线程的状态和Java中的方法调用联系起来，所以将waiting和time waiting两个状态分离出来。</p>
-<p>###二.上下文切换</p>
-<p>对于单核CPU来说（对于多核CPU，此处就理解为一个核），CPU在一个时刻只能运行一个线程，当在运行一个线程的过程中转去运行另外一个线程，这个叫做线程上下文切换（对于进程也是类似）。</p>
+<h3 id="二-上下文切换"><a href="#二-上下文切换" class="headerlink" title="二.上下文切换"></a>二.上下文切换</h3><p>对于单核CPU来说（对于多核CPU，此处就理解为一个核），CPU在一个时刻只能运行一个线程，当在运行一个线程的过程中转去运行另外一个线程，这个叫做线程上下文切换（对于进程也是类似）。</p>
 <p>　　由于可能当前线程的任务并没有执行完毕，所以在切换时需要保存线程的运行状态，以便下次重新切换回来时能够继续切换之前的状态运行。举个简单的例子：比如一个线程A正在读取一个文件的内容，正读到文件的一半，此时需要暂停线程A，转去执行线程B，当再次切换回来执行线程A的时候，我们不希望线程A又从文件的开头来读取。</p>
 <p>　　因此需要记录线程A的运行状态，那么会记录哪些数据呢？因为下次恢复时需要知道在这之前当前线程已经执行到哪条指令了，所以需要记录程序计数器的值，另外比如说线程正在进行某个计算的时候被挂起了，那么下次继续执行的时候需要知道之前挂起时变量的值时多少，因此需要记录CPU寄存器的状态。所以一般来说，线程上下文切换过程中会记录程序计数器、CPU寄存器状态等数据。</p>
 <p>　　说简单点的：<span style="color:red;">对于线程的上下文切换实际上就是 存储和恢复CPU状态的过程，它使得线程执行能够从中断点恢复执行</span>。</p>
 <p>　　虽然多线程可以使得任务执行的效率得到提升，但是由于在线程切换时同样会带来一定的开销代价，并且多个线程会导致系统资源占用的增加，所以在进行多线程编程时要注意这些因素。</p>
-<p>###三.Thread类中的方法</p>
-<p>通过查看java.lang.Thread类的源码可知：</p>
-<p>　　<img src="http://images.cnitblog.com/i/288799/201408/182136581436496.jpg" alt="img"></p>
+<h3 id="三-Thread类中的方法"><a href="#三-Thread类中的方法" class="headerlink" title="三.Thread类中的方法"></a>三.Thread类中的方法</h3><p>通过查看java.lang.Thread类的源码可知：</p>
+<p>　　<img src="http://images.cnitblog.com/i/288799/201408/182136581436496.jpg" alt=""></p>
 <p>　　Thread类实现了Runnable接口，在Thread类中，有一些比较关键的属性，比如name是表示Thread的名字，可以通过Thread类的构造器中的参数来指定线程名字，priority表示线程的优先级（最大值为10，最小值为1，默认值为5），daemon表示线程是否是守护线程，target表示要执行的任务。</p>
 <p>　　下面是Thread类中常用的方法：</p>
 <p>　　以下是关系到线程运行状态的几个方法：</p>
@@ -150,10 +147,10 @@
 <p>　　看下面一个例子：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">     </div><div class="line">    public static void main(String[] args) throws IOException  &#123;</div><div class="line">        System.out.println(&quot;进入线程&quot;+Thread.currentThread().getName());</div><div class="line">        Test test = new Test();</div><div class="line">        MyThread thread1 = test.new MyThread();</div><div class="line">        thread1.start();</div><div class="line">        try &#123;</div><div class="line">            System.out.println(&quot;线程&quot;+Thread.currentThread().getName()+&quot;等待&quot;);</div><div class="line">            thread1.join();</div><div class="line">            System.out.println(&quot;线程&quot;+Thread.currentThread().getName()+&quot;继续执行&quot;);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            // TODO Auto-generated catch block</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125; </div><div class="line">     </div><div class="line">    class MyThread extends Thread&#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            System.out.println(&quot;进入线程&quot;+Thread.currentThread().getName());</div><div class="line">            try &#123;</div><div class="line">                Thread.currentThread().sleep(5000);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                // TODO: handle exception</div><div class="line">            &#125;</div><div class="line">            System.out.println(&quot;线程&quot;+Thread.currentThread().getName()+&quot;执行完毕&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出结果：</p>
-<p>　　<img src="http://images.cnitblog.com/i/288799/201408/191048580654866.jpg" alt="img"></p>
+<p>　　<img src="http://images.cnitblog.com/i/288799/201408/191048580654866.jpg" alt=""></p>
 <p>　　可以看出，当调用thread1.join()方法后，main线程会进入等待，然后等待thread1执行完之后再继续执行。</p>
 <p>　　实际上调用join方法是调用了Object的wait方法，这个可以通过查看源码得知：</p>
-<p>　　<img src="http://images.cnitblog.com/i/288799/201408/191050522371780.jpg" alt="img"></p>
+<p>　　<img src="http://images.cnitblog.com/i/288799/201408/191050522371780.jpg" alt=""></p>
 <p>　　wait方法会让线程进入阻塞状态，并且会释放线程占有的锁，并交出CPU执行权限。</p>
 <p>　　由于wait方法会让线程释放对象锁，所以join方法同样会让线程释放对一个对象持有的锁。具体的wait方法使用在后面文章中给出。</p>
 <p>　　6）interrupt方法</p>
@@ -161,7 +158,7 @@
 <p>　　下面看一个例子：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">     </div><div class="line">    public static void main(String[] args) throws IOException  &#123;</div><div class="line">        Test test = new Test();</div><div class="line">        MyThread thread = test.new MyThread();</div><div class="line">        thread.start();</div><div class="line">        try &#123;</div><div class="line">            Thread.currentThread().sleep(2000);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">             </div><div class="line">        &#125;</div><div class="line">        thread.interrupt();</div><div class="line">    &#125; </div><div class="line">     </div><div class="line">    class MyThread extends Thread&#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            try &#123;</div><div class="line">                System.out.println(&quot;进入睡眠状态&quot;);</div><div class="line">                Thread.currentThread().sleep(10000);</div><div class="line">                System.out.println(&quot;睡眠完毕&quot;);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                System.out.println(&quot;得到中断异常&quot;);</div><div class="line">            &#125;</div><div class="line">            System.out.println(&quot;run方法执行完毕&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出结果：</p>
-<p>　　<img src="http://images.cnitblog.com/i/288799/201408/191129005348267.jpg" alt="img"></p>
+<p>　　<img src="http://images.cnitblog.com/i/288799/201408/191129005348267.jpg" alt=""></p>
 <p>　　从这里可以看出，通过interrupt方法可以中断处于阻塞状态的线程。那么能不能中断处于非阻塞状态的线程呢？看下面这个例子：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">     </div><div class="line">    public static void main(String[] args) throws IOException  &#123;</div><div class="line">        Test test = new Test();</div><div class="line">        MyThread thread = test.new MyThread();</div><div class="line">        thread.start();</div><div class="line">        try &#123;</div><div class="line">            Thread.currentThread().sleep(2000);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">             </div><div class="line">        &#125;</div><div class="line">        thread.interrupt();</div><div class="line">    &#125; </div><div class="line">     </div><div class="line">    class MyThread extends Thread&#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            int i = 0;</div><div class="line">            while(i&lt;Integer.MAX_VALUE)&#123;</div><div class="line">                System.out.println(i+&quot; while循环&quot;);</div><div class="line">                i++;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>运行该程序会发现，while循环会一直运行直到变量i的值超出Integer.MAX_VALUE。所以说直接调用interrupt方法不能中断正在运行中的线程。</p>
@@ -187,7 +184,7 @@
 <p>　　守护线程和用户线程的区别在于：守护线程依赖于创建它的线程，而用户线程则不依赖。举个简单的例子：如果在main线程中创建了一个守护线程，当main方法运行完毕之后，守护线程也会随着消亡。而用户线程则不会，用户线程会一直运行直到其运行完毕。在JVM中，像垃圾收集器线程就是守护线程。</p>
 <p>　　Thread类有一个比较常用的静态方法currentThread()用来获取当前线程。</p>
 <p>　　在上面已经说到了Thread类中的大部分方法，那么Thread类中的方法调用到底会引起线程状态发生怎样的变化呢？下面一幅图就是在上面的图上进行改进而来的：</p>
-<p> <img src="http://images.cnitblog.com/blog/288799/201409/061046391107893.jpg" alt="img"></p>
+<p> <img src="http://images.cnitblog.com/blog/288799/201409/061046391107893.jpg" alt=""></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -243,7 +240,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一-线程的状态"><span class="toc-number">1.</span> <span class="toc-text">一.线程的状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二-上下文切换"><span class="toc-number">2.</span> <span class="toc-text">二.上下文切换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三-Thread类中的方法"><span class="toc-number">3.</span> <span class="toc-text">三.Thread类中的方法</span></a></li></ol>
  
   </div>
 
@@ -319,11 +316,11 @@
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+				<li><a href="/tags/Java关键字/" title="Java关键字">Java关键字<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Java关键字/" title="Java关键字">Java关键字<sup>4</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
 			
 		
 			
@@ -339,11 +336,11 @@
 			
 		
 			
-				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
 			
 		
 			
@@ -355,7 +352,7 @@
 			
 		
 			
-				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
 			
 		
 		</ul>
