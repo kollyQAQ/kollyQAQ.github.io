@@ -21,7 +21,8 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://images.cnitblog.com/i/288799/201408/191740073939985.jpg">
 <meta property="og:image" content="http://images.cnitblog.com/i/288799/201408/191742096284061.jpg">
-<meta property="og:updated_time" content="2017-10-30T10:42:51.086Z">
+<meta property="og:image" content="http://images.cnitblog.com/i/288799/201408/192113596129599.jpg">
+<meta property="og:updated_time" content="2017-10-30T10:44:29.355Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java关键字解读之synchronized">
 <meta name="twitter:description" content="###前言 &amp;emsp;&amp;emsp;在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。 &amp;emsp;&amp;emsp;采用synchronized修饰符实现的同步机制叫做互斥锁机制，它所获得的锁叫做互斥锁。每个对象都有">
@@ -123,6 +124,15 @@
 <p>　　synObject可以是this，代表获取当前对象的锁，也可以是类中的一个属性，代表获取该属性的锁。</p>
 <p>　　比如上面的insert方法可以改成以下两种形式：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">class InsertData &#123;</div><div class="line">    private ArrayList&lt;Integer&gt; arrayList = new ArrayList&lt;Integer&gt;();</div><div class="line">     </div><div class="line">    public void insert(Thread thread)&#123;</div><div class="line">        synchronized (this) &#123;</div><div class="line">            for(int i=0;i&lt;100;i++)&#123;</div><div class="line">                System.out.println(thread.getName()+&quot;在插入数据&quot;+i);</div><div class="line">                arrayList.add(i);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">class InsertData &#123;</div><div class="line">    private ArrayList&lt;Integer&gt; arrayList = new ArrayList&lt;Integer&gt;();</div><div class="line">    private Object object = new Object();</div><div class="line">     </div><div class="line">    public void insert(Thread thread)&#123;</div><div class="line">        synchronized (object) &#123;</div><div class="line">            for(int i=0;i&lt;100;i++)&#123;</div><div class="line">                System.out.println(thread.getName()+&quot;在插入数据&quot;+i);</div><div class="line">                arrayList.add(i);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从上面可以看出，synchronized代码块使用起来比synchronized方法要灵活得多。因为也许一个方法中只有一部分代码只需要同步，如果此时对整个方法用synchronized进行同步，会影响程序执行效率。而使用synchronized代码块就可以避免这个问题，synchronized代码块可以实现只对需要同步的地方进行同步。</p>
+<p>　　另外，每个类也会有一个锁，它可以用来控制对static数据成员的并发访问。</p>
+<p>　　并且如果一个线程执行一个对象的非static synchronized方法，另外一个线程需要执行这个对象所属类的static synchronized方法，此时不会发生互斥现象，因为访问static synchronized方法占用的是类锁，而访问非static synchronized方法占用的是对象锁，所以不存在互斥现象。</p>
+<p>看下面这段代码就明白了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line"> </div><div class="line">    public static void main(String[] args)  &#123;</div><div class="line">        final InsertData insertData = new InsertData();</div><div class="line">        new Thread()&#123;</div><div class="line">            @Override</div><div class="line">            public void run() &#123;</div><div class="line">                insertData.insert();</div><div class="line">            &#125;</div><div class="line">        &#125;.start(); </div><div class="line">        new Thread()&#123;</div><div class="line">            @Override</div><div class="line">            public void run() &#123;</div><div class="line">                insertData.insert1();</div><div class="line">            &#125;</div><div class="line">        &#125;.start();</div><div class="line">    &#125;  </div><div class="line">&#125;</div><div class="line"> </div><div class="line">class InsertData &#123; </div><div class="line">    public synchronized void insert()&#123;</div><div class="line">        System.out.println(&quot;执行insert&quot;);</div><div class="line">        try &#123;</div><div class="line">            Thread.sleep(5000);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        System.out.println(&quot;执行insert完毕&quot;);</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    public synchronized static void insert1() &#123;</div><div class="line">        System.out.println(&quot;执行insert1&quot;);</div><div class="line">        System.out.println(&quot;执行insert1完毕&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行结果;</p>
+<p>　　<img src="http://images.cnitblog.com/i/288799/201408/192113596129599.jpg" alt="img"></p>
+<p>　　第一个线程里面执行的是insert方法，不会导致第二个线程执行insert1方法发生阻塞现象。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -262,19 +272,19 @@
 			
 		
 			
-				<li><a href="/tags/Java关键字/" title="Java关键字">Java关键字<sup>4</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+				<li><a href="/tags/Java关键字/" title="Java关键字">Java关键字<sup>4</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Redis/" title="Redis">Redis<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
 			
 		
 			
@@ -283,10 +293,6 @@
 		
 			
 				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
 			
 		
 			
@@ -299,6 +305,10 @@
 		
 			
 				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
 			
 		
 		</ul>
