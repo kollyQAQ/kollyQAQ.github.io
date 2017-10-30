@@ -26,7 +26,7 @@
 <meta property="og:image" content="http://images.cnitblog.com/i/288799/201408/191050522371780.jpg">
 <meta property="og:image" content="http://images.cnitblog.com/i/288799/201408/191129005348267.jpg">
 <meta property="og:image" content="http://images.cnitblog.com/blog/288799/201409/061046391107893.jpg">
-<meta property="og:updated_time" content="2017-10-30T09:00:45.314Z">
+<meta property="og:updated_time" content="2017-10-30T10:11:50.878Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发编程：Thread类的使用">
 <meta name="twitter:description" content="一.线程的状态在正式学习Thread类中的具体方法之前，我们先来了解一下线程有哪些状态，这个将会有助于后面对Thread类中的方法的理解。 　　线程从创建到最终的消亡，要经历若干个状态。一般来说，线程包括以下这几个状态：创建(new)、就绪(runnable)、运行(running)、阻塞(blocked)、time waiting、waiting、消亡（dead）。 　　当需要新起一个线程来执行">
@@ -131,15 +131,15 @@
 <p>　　sleep方法有两个重载版本：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sleep(long millis)     //参数为毫秒</div><div class="line"> </div><div class="line">sleep(long millis,int nanoseconds)    //第一参数为毫秒，第二个参数为纳秒</div></pre></td></tr></table></figure>
 <p>sleep相当于让线程睡眠，交出CPU，让CPU去执行其他的任务。</p>
-<p>　　但是有一点要非常注意，sleep方法不会释放锁，也就是说如果当前线程持有对某个对象的锁，则即使调用sleep方法，其他线程也无法访问这个对象。看下面这个例子就清楚了：</p>
+<p>　　但是有一点要非常注意，<span style="color:red;">sleep方法不会释放锁，也就是说如果当前线程持有对某个对象的锁，则即使调用sleep方法，其他线程也无法访问这个对象</span>。看下面这个例子就清楚了：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">     </div><div class="line">    private int i = 10;</div><div class="line">    private Object object = new Object();</div><div class="line">     </div><div class="line">    public static void main(String[] args) throws IOException  &#123;</div><div class="line">        Test test = new Test();</div><div class="line">        MyThread thread1 = test.new MyThread();</div><div class="line">        MyThread thread2 = test.new MyThread();</div><div class="line">        thread1.start();</div><div class="line">        thread2.start();</div><div class="line">    &#125; </div><div class="line">     </div><div class="line">     </div><div class="line">    class MyThread extends Thread&#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            synchronized (object) &#123;</div><div class="line">                i++;</div><div class="line">                System.out.println(&quot;i:&quot;+i);</div><div class="line">                try &#123;</div><div class="line">                    System.out.println(&quot;线程&quot;+Thread.currentThread().getName()+&quot;进入睡眠状态&quot;);</div><div class="line">                    Thread.currentThread().sleep(10000);</div><div class="line">                &#125; catch (InterruptedException e) &#123;</div><div class="line">                    // TODO: handle exception</div><div class="line">                &#125;</div><div class="line">                System.out.println(&quot;线程&quot;+Thread.currentThread().getName()+&quot;睡眠结束&quot;);</div><div class="line">                i++;</div><div class="line">                System.out.println(&quot;i:&quot;+i);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>输出结果：</p>
 <p>　　<img src="http://images.cnitblog.com/i/288799/201408/191016230185255.jpg" alt="img"></p>
 <p>　　从上面输出结果可以看出，当Thread-0进入睡眠状态之后，Thread-1并没有去执行具体的任务。只有当Thread-0执行完之后，此时Thread-0释放了对象锁，Thread-1才开始执行。</p>
 <p>　　注意，如果调用了sleep方法，必须捕获InterruptedException异常或者将该异常向上层抛出。当线程睡眠时间满后，不一定会立即得到执行，因为此时可能CPU正在执行其他的任务。所以说调用sleep方法相当于让线程进入阻塞状态。</p>
 <p>　　4）yield方法</p>
-<p>　　调用yield方法会让当前线程交出CPU权限，让CPU去执行其他的线程。它跟sleep方法类似，同样不会释放锁。但是yield不能控制具体的交出CPU的时间，另外，yield方法只能让拥有相同优先级的线程有获取CPU执行时间的机会。</p>
-<p>　　注意，调用yield方法并不会让线程进入阻塞状态，而是让线程重回就绪状态，它只需要等待重新获取CPU执行时间，这一点是和sleep方法不一样的。</p>
+<p>　　调用yield方法会让当前线程交出CPU权限，让CPU去执行其他的线程。<span style="color:red;">它跟sleep方法类似，同样不会释放锁。但是yield不能控制具体的交出CPU的时间，另外，yield方法只能让拥有相同优先级的线程有获取CPU执行时间的机会</span>。</p>
+<p>　　注意，<span style="color:red;">调用yield方法并不会让线程进入阻塞状态，而是让线程重回就绪状态，它只需要等待重新获取CPU执行时间，这一点是和sleep方法不一样的</span>。</p>
 <p>　　5）join方法</p>
 <p>　　join方法有三个重载版本：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">join()</div><div class="line">join(long millis)     //参数为毫秒</div><div class="line">join(long millis,int nanoseconds)    //第一参数为毫秒，第二个参数为纳秒</div></pre></td></tr></table></figure>
@@ -332,15 +332,15 @@
 			
 		
 			
-				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
 			
 		
 			
@@ -352,7 +352,7 @@
 			
 		
 			
-				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
 			
 		
 		</ul>

@@ -11,18 +11,21 @@
     
 
     
-    <meta name="description" content="&amp;emsp;&amp;emsp;在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。 &amp;emsp;&amp;emsp;采用synchronized修饰符实现的同步机制叫做互斥锁机制，它所获得的锁叫做互斥锁。每个对象都有一个moni">
+    <meta name="description" content="###前言 &amp;emsp;&amp;emsp;在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。 &amp;emsp;&amp;emsp;采用synchronized修饰符实现的同步机制叫做互斥锁机制，它所获得的锁叫做互斥锁。每个对象都有">
 <meta name="keywords" content="Java,Java关键字">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java关键字解读之synchronized">
 <meta property="og:url" content="http://kollyqaq.github.io/2017/10/15/Java关键字解读之synchronized/index.html">
 <meta property="og:site_name" content="Stay Hungry,Stay Foolish">
-<meta property="og:description" content="&amp;emsp;&amp;emsp;在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。 &amp;emsp;&amp;emsp;采用synchronized修饰符实现的同步机制叫做互斥锁机制，它所获得的锁叫做互斥锁。每个对象都有一个moni">
+<meta property="og:description" content="###前言 &amp;emsp;&amp;emsp;在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。 &amp;emsp;&amp;emsp;采用synchronized修饰符实现的同步机制叫做互斥锁机制，它所获得的锁叫做互斥锁。每个对象都有">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-10-30T06:53:41.382Z">
+<meta property="og:image" content="http://images.cnitblog.com/i/288799/201408/191740073939985.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/i/288799/201408/191742096284061.jpg">
+<meta property="og:updated_time" content="2017-10-30T10:42:51.086Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java关键字解读之synchronized">
-<meta name="twitter:description" content="&amp;emsp;&amp;emsp;在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。 &amp;emsp;&amp;emsp;采用synchronized修饰符实现的同步机制叫做互斥锁机制，它所获得的锁叫做互斥锁。每个对象都有一个moni">
+<meta name="twitter:description" content="###前言 &amp;emsp;&amp;emsp;在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。 &amp;emsp;&amp;emsp;采用synchronized修饰符实现的同步机制叫做互斥锁机制，它所获得的锁叫做互斥锁。每个对象都有">
+<meta name="twitter:image" content="http://images.cnitblog.com/i/288799/201408/191740073939985.jpg">
 
     
     <link rel="alternative" href="/atom.xml" title="Stay Hungry,Stay Foolish" type="application/atom+xml">
@@ -92,12 +95,34 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronized方法"><span class="toc-number">1.</span> <span class="toc-text">synchronized方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronized代码块"><span class="toc-number">2.</span> <span class="toc-text">synchronized代码块</span></a></li></ol>
 		
 		</div>
 		
-		<p>&emsp;&emsp;在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。</p>
+		<p>###前言</p>
+<p>&emsp;&emsp;在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。</p>
 <p>&emsp;&emsp;采用synchronized修饰符实现的同步机制叫做互斥锁机制，它所获得的锁叫做互斥锁。每个对象都有一个monitor(锁标记)，当线程拥有这个锁标记时才能访问这个资源，没有锁标记便进入锁池。任何一个对象系统都会为其创建一个互斥锁，这个锁是为了分配给线程的，防止打断原子操作。每个对象的锁只能分配给一个线程，因此叫做互斥锁。</p>
+<p>&emsp;&emsp;在Java中，每一个对象都拥有一个锁标记（monitor），也称为监视器，多线程同时访问某个对象时，线程只有获取了该对象的锁才能访问。</p>
+<p>　　在Java中，可以使用synchronized关键字来标记一个方法或者代码块，当某个线程调用该对象的synchronized方法或者访问synchronized代码块时，这个线程便获得了该对象的锁，其他线程暂时无法访问这个方法，只有等待这个方法执行完毕或者代码块执行完毕，这个线程才会释放该对象的锁，其他线程才能执行这个方法或者代码块。</p>
+<h3 id="synchronized方法"><a href="#synchronized方法" class="headerlink" title="synchronized方法"></a>synchronized方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line"> </div><div class="line">    public static void main(String[] args)  &#123;</div><div class="line">        final InsertData insertData = new InsertData();</div><div class="line">         </div><div class="line">        new Thread() &#123;</div><div class="line">            public void run() &#123;</div><div class="line">                insertData.insert(Thread.currentThread());</div><div class="line">            &#125;;</div><div class="line">        &#125;.start();</div><div class="line">         </div><div class="line">         </div><div class="line">        new Thread() &#123;</div><div class="line">            public void run() &#123;</div><div class="line">                insertData.insert(Thread.currentThread());</div><div class="line">            &#125;;</div><div class="line">        &#125;.start();</div><div class="line">    &#125;  </div><div class="line">&#125;</div><div class="line"> </div><div class="line">class InsertData &#123;</div><div class="line">    private ArrayList&lt;Integer&gt; arrayList = new ArrayList&lt;Integer&gt;();</div><div class="line">     </div><div class="line">    public void insert(Thread thread)&#123;</div><div class="line">        for(int i=0;i&lt;5;i++)&#123;</div><div class="line">            System.out.println(thread.getName()+&quot;在插入数据&quot;+i);</div><div class="line">            arrayList.add(i);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>此时程序的输出结果为：</p>
+<p>　　<img src="http://images.cnitblog.com/i/288799/201408/191740073939985.jpg" alt="img"></p>
+<p>　　说明两个线程在同时执行insert方法。</p>
+<p>　　而如果在insert方法前面加上关键字synchronized的话，运行结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">class InsertData &#123;</div><div class="line">    private ArrayList&lt;Integer&gt; arrayList = new ArrayList&lt;Integer&gt;();</div><div class="line">     </div><div class="line">    public synchronized void insert(Thread thread)&#123;</div><div class="line">        for(int i=0;i&lt;5;i++)&#123;</div><div class="line">            System.out.println(thread.getName()+&quot;在插入数据&quot;+i);</div><div class="line">            arrayList.add(i);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>　<img src="http://images.cnitblog.com/i/288799/201408/191742096284061.jpg" alt="img"></p>
+<p>　　从上输出结果说明，Thread-1插入数据是等Thread-0插入完数据之后才进行的。说明Thread-0和Thread-1是顺序执行insert方法的。</p>
+<p>　　这就是synchronized方法。</p>
+<p>　　不过有几点需要注意：</p>
+<p>　　1）当一个线程正在访问一个对象的synchronized方法，那么其他线程不能访问该对象的其他synchronized方法。这个原因很简单，因为一个对象只有一把锁，当一个线程获取了该对象的锁之后，其他线程无法获取该对象的锁，所以无法访问该对象的其他synchronized方法。</p>
+<p>　　2）当一个线程正在访问一个对象的synchronized方法，那么其他线程能访问该对象的非synchronized方法。这个原因很简单，访问非synchronized方法不需要获得该对象的锁，假如一个方法没用synchronized关键字修饰，说明它不会使用到临界资源，那么其他线程是可以访问这个方法的，</p>
+<p>　　3）如果一个线程A需要访问对象object1的synchronized方法fun1，另外一个线程B需要访问对象object2的synchronized方法fun1，即使object1和object2是同一类型），也不会产生线程安全问题，因为他们访问的是不同的对象，所以不存在互斥问题。</p>
+<h3 id="synchronized代码块"><a href="#synchronized代码块" class="headerlink" title="synchronized代码块"></a>synchronized代码块</h3><p>synchronized代码块类似于以下这种形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">synchronized(synObject) &#123;</div><div class="line">         </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当在某个线程中执行这段代码块，该线程会获取对象synObject的锁，从而使得其他线程无法同时访问该代码块。</p>
+<p>　　synObject可以是this，代表获取当前对象的锁，也可以是类中的一个属性，代表获取该属性的锁。</p>
+<p>　　比如上面的insert方法可以改成以下两种形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">class InsertData &#123;</div><div class="line">    private ArrayList&lt;Integer&gt; arrayList = new ArrayList&lt;Integer&gt;();</div><div class="line">     </div><div class="line">    public void insert(Thread thread)&#123;</div><div class="line">        synchronized (this) &#123;</div><div class="line">            for(int i=0;i&lt;100;i++)&#123;</div><div class="line">                System.out.println(thread.getName()+&quot;在插入数据&quot;+i);</div><div class="line">                arrayList.add(i);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -161,7 +186,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronized方法"><span class="toc-number">1.</span> <span class="toc-text">synchronized方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronized代码块"><span class="toc-number">2.</span> <span class="toc-text">synchronized代码块</span></a></li></ol>
  
   </div>
 
@@ -253,15 +278,15 @@
 			
 		
 			
-				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
 			
 		
 			
@@ -273,7 +298,7 @@
 			
 		
 			
-				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
 			
 		
 		</ul>
