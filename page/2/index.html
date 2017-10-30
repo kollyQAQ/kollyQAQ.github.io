@@ -73,6 +73,97 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2017/10/17/Java双重检查锁定单例模式中volatile 的作用/" title="java双重检查锁定单例模式中volatile 的作用" itemprop="url">
+  
+    <h1 itemprop="name">java双重检查锁定单例模式中volatile 的作用</h1>
+    
+     
+           <p itemprop="description" >volatile具有两个重要的特性
+
+禁止指令重排序（有序性）
+保证内存可见性（可见性）
+
+那volatile在singleton的创建过程起到了什么作用呢
+先上结论，这段代码里volatile的作用仅仅是禁止重排序
+1. 为什么要禁止重排序？
+实例化一个对象其实可以分为三个步骤</p>
+        
+    
+    <time datetime="2017-10-17T07:34:21.000Z" itemprop="datePublished">2017-10-17</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2017/10/16/Java到底是传引用还是传值/" title="Java到底是传引用还是传值" itemprop="url">
+  
+    <h1 itemprop="name">Java到底是传引用还是传值</h1>
+    
+     
+           <p itemprop="description" >问题: 如果Java是用引用来传递的话，为什么交换函数（swap）不起作用呢？
+回答: 你的问题引出了Java新手的常犯的错误。事实上，一些老手也很难搞清楚这些概念。
+Java确实使用对象的引用来做计算的，所有的对象变量都是引用。但是，Java在向方法传递参数时传的不是引用，是值</p>
+        
+    
+    <time datetime="2017-10-16T07:34:21.000Z" itemprop="datePublished">2017-10-16</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2017/10/15/Redis安装详解/" title="Redis安装详解" itemprop="url">
+  
+    <h1 itemprop="name">Redis安装详解</h1>
+    
+     
+           <p itemprop="description" >下载，解压，编译12345$ cd /usr/local/src$ wget http://download.redis.io/releases/redis-3.2.8.tar.gz$ tar xzf redis-3.2.8.tar.gz$ cd redis-3.2.8$ mak</p>
+        
+    
+    <time datetime="2017-10-15T08:11:26.000Z" itemprop="datePublished">2017-10-15</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2017/10/15/Java关键字解读之synchronized/" title="Java关键字解读之synchronized" itemprop="url">
+  
+    <h1 itemprop="name">Java关键字解读之synchronized</h1>
+    
+     
+           <p itemprop="description" >&amp;emsp;&amp;emsp;在并发编程中，多线程同时并发访问的资源叫做临界资源，当多个线程同时访问对象并要求操作相同资源时，分割了原子操作就有可能出现数据的不一致或数据不完整的情况，为避免这种情况的发生，我们会采取同步机制，以确保在某一时刻，方法内只允许有一个线程。
+&amp;emsp;&amp;e</p>
+        
+    
+    <time datetime="2017-10-15T07:34:21.000Z" itemprop="datePublished">2017-10-15</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2017/10/14/Redis平滑升级2.x到3x/" title="Redis平滑升级2.x到3x" itemprop="url">
   
     <h1 itemprop="name">Redis平滑升级2.x到3x</h1>
@@ -167,11 +258,11 @@ du可以查看文件及文件夹的大小。
 		  
 		
 		  
-			<li><a href="/categories/Java基础/" title="Java基础">Java基础<sup>1</sup></a></li>
+			<li><a href="/categories/Java基础/" title="Java基础">Java基础<sup>3</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Java并发编程/" title="Java并发编程">Java并发编程<sup>2</sup></a></li>
+			<li><a href="/categories/Java并发编程/" title="Java并发编程">Java并发编程<sup>3</sup></a></li>
 		  
 		
 		  
@@ -212,15 +303,15 @@ du可以查看文件及文件夹的大小。
 		<ul class="clearfix">
 		
 			
+				<li><a href="/tags/Java/" title="Java">Java<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java关键字/" title="Java关键字">Java关键字<sup>4</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Java/" title="Java">Java<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Java关键字/" title="Java关键字">Java关键字<sup>2</sup></a></li>
 			
 		
 			
@@ -232,6 +323,14 @@ du可以查看文件及文件夹的大小。
 			
 		
 			
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
 			
 		
@@ -240,19 +339,11 @@ du可以查看文件及文件夹的大小。
 			
 		
 			
-				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
 			
 		
 		</ul>
