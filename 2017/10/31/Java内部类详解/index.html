@@ -1,0 +1,605 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Java内部类详解 | Stay Hungry,Stay Foolish</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="kolly">
+    
+
+    
+    <meta name="description" content="一.内部类基础在Java中，可以将一个类定义在另一个类里面或者一个方法里面，这样的类称为内部类。广泛意义上的内部类一般来说包括这四种：成员内部类、局部内部类、匿名内部类和静态内部类。下面就先来了解一下这四种内部类的用法。 1.成员内部类 　　成员内部类是最普通的内部类，它的定义为位于另一个类的内部，形如下面的形式： 12345678910111213class Circle &amp;#123;    d">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java内部类详解">
+<meta property="og:url" content="http://kollyqaq.github.io/2017/10/31/Java内部类详解/index.html">
+<meta property="og:site_name" content="Stay Hungry,Stay Foolish">
+<meta property="og:description" content="一.内部类基础在Java中，可以将一个类定义在另一个类里面或者一个方法里面，这样的类称为内部类。广泛意义上的内部类一般来说包括这四种：成员内部类、局部内部类、匿名内部类和静态内部类。下面就先来了解一下这四种内部类的用法。 1.成员内部类 　　成员内部类是最普通的内部类，它的定义为位于另一个类的内部，形如下面的形式： 12345678910111213class Circle &amp;#123;    d">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://images.cnitblog.com/i/288799/201407/021558444183591.jpg">
+<meta property="og:image" content="http://images.cnitblog.com/i/288799/201407/021630063402064.jpg">
+<meta property="og:updated_time" content="2017-10-31T10:25:48.189Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java内部类详解">
+<meta name="twitter:description" content="一.内部类基础在Java中，可以将一个类定义在另一个类里面或者一个方法里面，这样的类称为内部类。广泛意义上的内部类一般来说包括这四种：成员内部类、局部内部类、匿名内部类和静态内部类。下面就先来了解一下这四种内部类的用法。 1.成员内部类 　　成员内部类是最普通的内部类，它的定义为位于另一个类的内部，形如下面的形式： 12345678910111213class Circle &amp;#123;    d">
+<meta name="twitter:image" content="http://images.cnitblog.com/i/288799/201407/021558444183591.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Stay Hungry,Stay Foolish" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Stay Hungry,Stay Foolish">Stay Hungry,Stay Foolish</a></h1>
+				<h2 class="blog-motto">曾梦想仗剑走天涯，看一看世界的繁华</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">所有文章</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kollyqaq.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/10/31/Java内部类详解/" title="Java内部类详解" itemprop="url">Java内部类详解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="kolly" target="_blank" itemprop="author">kolly</a>
+		
+  <p class="article-time">
+    <time datetime="2017-10-31T09:58:58.000Z" itemprop="datePublished"> 发表于 2017-10-31</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一-内部类基础"><span class="toc-number">1.</span> <span class="toc-text">一.内部类基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二-深入理解内部类"><span class="toc-number">2.</span> <span class="toc-text">二.深入理解内部类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三-内部类的使用场景和好处"><span class="toc-number">3.</span> <span class="toc-text">三.内部类的使用场景和好处</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="一-内部类基础"><a href="#一-内部类基础" class="headerlink" title="一.内部类基础"></a>一.内部类基础</h3><p>在Java中，可以将一个类定义在另一个类里面或者一个方法里面，这样的类称为内部类。广泛意义上的内部类一般来说包括这四种：成员内部类、局部内部类、匿名内部类和静态内部类。下面就先来了解一下这四种内部类的用法。</p>
+<p><strong>1.成员内部类</strong></p>
+<p>　　成员内部类是最普通的内部类，它的定义为位于另一个类的内部，形如下面的形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">class Circle &#123;</div><div class="line">    double radius = 0;</div><div class="line">     </div><div class="line">    public Circle(double radius) &#123;</div><div class="line">        this.radius = radius;</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    class Draw &#123;     //内部类</div><div class="line">        public void drawSahpe() &#123;</div><div class="line">            System.out.println(&quot;drawshape&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样看起来，类Draw像是类Circle的一个成员，Circle称为外部类。成员内部类可以无条件访问外部类的所有成员属性和成员方法（包括private成员和静态成员）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">class Circle &#123;</div><div class="line">    private double radius = 0;</div><div class="line">    public static int count =1;</div><div class="line">    public Circle(double radius) &#123;</div><div class="line">        this.radius = radius;</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    class Draw &#123;     //内部类</div><div class="line">        public void drawSahpe() &#123;</div><div class="line">            System.out.println(radius);  //外部类的private成员</div><div class="line">            System.out.println(count);   //外部类的静态成员</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>不过要注意的是，当成员内部类拥有和外部类同名的成员变量或者方法时，会发生隐藏现象，即默认情况下访问的是成员内部类的成员。如果要访问外部类的同名成员，需要以下面的形式进行访问：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">外部类.this.成员变量</div><div class="line">外部类.this.成员方法</div></pre></td></tr></table></figure>
+<p>虽然成员内部类可以无条件地访问外部类的成员，而外部类想访问成员内部类的成员却不是这么随心所欲了。在外部类中如果要访问成员内部类的成员，必须先创建一个成员内部类的对象，再通过指向这个对象的引用来访问：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">class Circle &#123;</div><div class="line">    private double radius = 0;</div><div class="line"> </div><div class="line">    public Circle(double radius) &#123;</div><div class="line">        this.radius = radius;</div><div class="line">        getDrawInstance().drawSahpe();   //必须先创建成员内部类的对象，再进行访问</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    private Draw getDrawInstance() &#123;</div><div class="line">        return new Draw();</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    class Draw &#123;     //内部类</div><div class="line">        public void drawSahpe() &#123;</div><div class="line">            System.out.println(radius);  //外部类的private成员</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>成员内部类是依附外部类而存在的，也就是说，如果要创建成员内部类的对象，前提是必须存在一个外部类的对象。创建成员内部类对象的一般方式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    public static void main(String[] args)  &#123;</div><div class="line">        //第一种方式：</div><div class="line">        Outter outter = new Outter();</div><div class="line">        Outter.Inner inner = outter.new Inner();  //必须通过Outter对象来创建</div><div class="line">         </div><div class="line">        //第二种方式：</div><div class="line">        Outter.Inner inner1 = outter.getInnerInstance();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">class Outter &#123;</div><div class="line">    private Inner inner = null;</div><div class="line">    public Outter() &#123;</div><div class="line">         </div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    public Inner getInnerInstance() &#123;</div><div class="line">        if(inner == null)</div><div class="line">            inner = new Inner();</div><div class="line">        return inner;</div><div class="line">    &#125;</div><div class="line">      </div><div class="line">    class Inner &#123;</div><div class="line">        public Inner() &#123;</div><div class="line">             </div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>内部类可以拥有private访问权限、protected访问权限、public访问权限及包访问权限。比如上面的例子，如果成员内部类Inner用private修饰，则只能在外部类的内部访问，如果用public修饰，则任何地方都能访问；如果用protected修饰，则只能在同一个包下或者继承外部类的情况下访问；如果是默认访问权限，则只能在同一个包下访问。这一点和外部类有一点不一样，外部类只能被public和包访问两种权限修饰。我个人是这么理解的，由于成员内部类看起来像是外部类的一个成员，所以可以像类的成员一样拥有多种权限修饰。</p>
+<p><strong>2.局部内部类</strong></p>
+<p>　　局部内部类是定义在一个方法或者一个作用域里面的类，它和成员内部类的区别在于局部内部类的访问仅限于方法内或者该作用域内。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">class People&#123;</div><div class="line">    public People() &#123;</div><div class="line">         </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">class Man&#123;</div><div class="line">    public Man()&#123;</div><div class="line">         </div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    public People getWoman()&#123;</div><div class="line">        class Woman extends People&#123;   //局部内部类</div><div class="line">            int age =0;</div><div class="line">        &#125;</div><div class="line">        return new Woman();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意，局部内部类就像是方法里面的一个局部变量一样，是不能有public、protected、private以及static修饰符的。</p>
+<p><strong>3.匿名内部类</strong></p>
+<p>匿名内部类应该是平时我们编写代码时用得最多的，在编写事件监听的代码时使用匿名内部类不但方便，而且使代码更加容易维护。下面这段代码是一段Android事件监听代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">scan_bt.setOnClickListener(new OnClickListener() &#123;</div><div class="line">             </div><div class="line">            @Override</div><div class="line">            public void onClick(View v) &#123;</div><div class="line">                // TODO Auto-generated method stub</div><div class="line">                 </div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">         </div><div class="line">history_bt.setOnClickListener(new OnClickListener() &#123;</div><div class="line">             </div><div class="line">            @Override</div><div class="line">            public void onClick(View v) &#123;</div><div class="line">                // TODO Auto-generated method stub</div><div class="line">                 </div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<p>这段代码为两个按钮设置监听器，这里面就使用了匿名内部类。这段代码中的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">new OnClickListener() &#123;</div><div class="line">             </div><div class="line">            @Override</div><div class="line">            public void onClick(View v) &#123;</div><div class="line">                // TODO Auto-generated method stub</div><div class="line">                 </div><div class="line">            &#125;</div><div class="line">        &#125;</div></pre></td></tr></table></figure>
+<p>就是匿名内部类的使用。代码中需要给按钮设置监听器对象，使用匿名内部类能够在实现父类或者接口中的方法情况下同时产生一个相应的对象，但是前提是这个父类或者接口必须先存在才能这样使用。当然像下面这种写法也是可以的，跟上面使用匿名内部类达到效果相同。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">private void setListener()</div><div class="line">&#123;</div><div class="line">    scan_bt.setOnClickListener(new Listener1());       </div><div class="line">    history_bt.setOnClickListener(new Listener2());</div><div class="line">&#125;</div><div class="line"> </div><div class="line">class Listener1 implements View.OnClickListener&#123;</div><div class="line">    @Override</div><div class="line">    public void onClick(View v) &#123;</div><div class="line">    // TODO Auto-generated method stub</div><div class="line">             </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">class Listener2 implements View.OnClickListener&#123;</div><div class="line">    @Override</div><div class="line">    public void onClick(View v) &#123;</div><div class="line">    // TODO Auto-generated method stub</div><div class="line">             </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种写法虽然能达到一样的效果，但是既冗长又难以维护，所以一般使用匿名内部类的方法来编写事件监听代码。同样的，匿名内部类也是不能有访问修饰符和static修饰符的。</p>
+<p>　　匿名内部类是唯一一种没有构造器的类。正因为其没有构造器，所以匿名内部类的使用范围非常有限，大部分匿名内部类用于接口回调。匿名内部类在编译的时候由系统自动起名为Outter$1.class。一般来说，匿名内部类用于继承其他类或是实现接口，并不需要增加额外的方法，只是对继承方法的实现或是重写。</p>
+<p><strong>4.静态内部类</strong></p>
+<p>静态内部类也是定义在另一个类里面的类，只不过在类的前面多了一个关键字static。静态内部类是不需要依赖于外部类的，这点和类的静态成员属性有点类似，并且它不能使用外部类的非static成员变量或者方法，这点很好理解，因为在没有外部类的对象的情况下，可以创建静态内部类的对象，如果允许访问外部类的非static成员就会产生矛盾，因为外部类的非static成员必须依附于具体的对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    public static void main(String[] args)  &#123;</div><div class="line">        Outter.Inner inner = new Outter.Inner();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">class Outter &#123;</div><div class="line">    public Outter() &#123;</div><div class="line">         </div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    static class Inner &#123;</div><div class="line">        public Inner() &#123;</div><div class="line">             </div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://images.cnitblog.com/i/288799/201407/021558444183591.jpg" alt=""> </p>
+<h3 id="二-深入理解内部类"><a href="#二-深入理解内部类" class="headerlink" title="二.深入理解内部类"></a>二.深入理解内部类</h3><p>1.为什么成员内部类可以无条件访问外部类的成员？</p>
+<p>　　在此之前，我们已经讨论过了成员内部类可以无条件访问外部类的成员，那具体究竟是如何实现的呢？下面通过反编译字节码文件看看究竟。事实上，编译器在进行编译的时候，会将成员内部类单独编译成一个字节码文件，下面是Outter.java的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class Outter &#123;</div><div class="line">    private Inner inner = null;</div><div class="line">    public Outter() &#123;</div><div class="line">         </div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    public Inner getInnerInstance() &#123;</div><div class="line">        if(inner == null)</div><div class="line">            inner = new Inner();</div><div class="line">        return inner;</div><div class="line">    &#125;</div><div class="line">      </div><div class="line">    protected class Inner &#123;</div><div class="line">        public Inner() &#123;</div><div class="line">             </div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译之后，出现了两个字节码文件：</p>
+<p><img src="http://images.cnitblog.com/i/288799/201407/021630063402064.jpg" alt=""></p>
+<p>反编译Outter$Inner.class文件,经过分析后会得出：</p>
+<p>虽然我们在定义的内部类的构造器是无参构造器，编译器还是会默认添加一个参数，该参数的类型为指向外部类对象的一个引用，所以成员内部类中的Outter this&amp;0 指针便指向了外部类对象，因此可以在成员内部类中随意访问外部类的成员。从这里也间接说明了成员内部类是依赖于外部类的，如果没有创建外部类的对象，则无法对Outter this&amp;0引用进行初始化赋值，也就无法创建成员内部类的对象了。</p>
+<p>2.为什么局部内部类和匿名内部类只能访问局部final变量？</p>
+<p>　　想必这个问题也曾经困扰过很多人，在讨论这个问题之前，先看下面这段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    public static void main(String[] args)  &#123;</div><div class="line">         </div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    public void test(final int b) &#123;</div><div class="line">        final int a = 10;</div><div class="line">        new Thread()&#123;</div><div class="line">            public void run() &#123;</div><div class="line">                System.out.println(a);</div><div class="line">                System.out.println(b);</div><div class="line">            &#125;;</div><div class="line">        &#125;.start();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上段代码中，如果把变量a和b前面的任一个final去掉，这段代码都编译不过。我们先考虑这样一个问题：</p>
+<p>　　当test方法执行完毕之后，变量a的生命周期就结束了，而此时Thread对象的生命周期很可能还没有结束，那么在Thread的run方法中继续访问变量a就变成不可能了，但是又要实现这样的效果，怎么办呢？Java采用了 复制  的手段来解决这个问题。也就是说，run方法中访问的变量a和test方法中的变量a不是同一个变量，而是同一个变量的两份拷贝。当在run方法中改变变量a的值的话，会出现什么情况？对，会造成数据不一致性，这样就达不到原本的意图和要求。为了解决这个问题，java编译器就限定必须将变量a限制为final变量，不允许对变量a进行更改（对于引用类型的变量，是不允许指向新的对象），这样数据不一致性的问题就得以解决了。</p>
+<h3 id="三-内部类的使用场景和好处"><a href="#三-内部类的使用场景和好处" class="headerlink" title="三.内部类的使用场景和好处"></a>三.内部类的使用场景和好处</h3><p>为什么在Java中需要内部类？总结一下主要有以下四点：</p>
+<p>　　1.每个内部类都能独立的继承一个接口的实现，所以无论外部类是否已经继承了某个(接口的)实现，对于内部类都没有影响。内部类使得多继承的解决方案变得完整，</p>
+<p>　　2.方便将存在一定逻辑关系的类组织在一起，又可以对外界隐藏。</p>
+<p>　　3.方便编写事件驱动程序</p>
+<p>　　4.方便编写线程代码</p>
+<p>个人觉得第一点是最重要的原因之一，内部类的存在使得Java的多继承机制变得更加完善。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java基础/">Java基础</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kollyqaq.github.io/2017/10/31/Java内部类详解/" data-title="Java内部类详解 | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/10/31/浅谈Java中的深拷贝和浅拷贝/" title="浅谈Java中的深拷贝和浅拷贝">
+  <strong>上一篇：</strong><br/>
+  <span>
+  浅谈Java中的深拷贝和浅拷贝</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/10/31/Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition/"  title="Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition">
+ <strong>下一篇：</strong><br/> 
+ <span>Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一-内部类基础"><span class="toc-number">1.</span> <span class="toc-text">一.内部类基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二-深入理解内部类"><span class="toc-number">2.</span> <span class="toc-text">二.深入理解内部类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三-内部类的使用场景和好处"><span class="toc-number">3.</span> <span class="toc-text">三.内部类的使用场景和好处</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="kollyqaq" data-theme="medium"></div>
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/IntelliJ-IDEA/" title="IntelliJ-IDEA">IntelliJ-IDEA<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java基础/" title="Java基础">Java基础<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发编程/" title="Java并发编程">Java并发编程<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java设计模式/" title="Java设计模式">Java设计模式<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux命令/" title="Linux命令">Linux命令<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Redis/" title="Redis">Redis<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/服务器运维/" title="服务器运维">服务器运维<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/编程规范/" title="编程规范">编程规范<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java关键字/" title="Java关键字">Java关键字<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Redis/" title="Redis">Redis<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java基础/" title="Java基础">Java基础<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com" target="_blank" title="世界上最活跃的开源社区">github</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://spring4all.com" target="_blank" title="学习spring所有技术的社区">spring4all社区</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Kolly. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/6040399147" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/kollyqaq" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/li-jun-chao-96" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="kolly">kolly</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+	//$('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

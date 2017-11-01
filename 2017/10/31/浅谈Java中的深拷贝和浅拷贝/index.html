@@ -1,0 +1,606 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>浅谈Java中的深拷贝和浅拷贝 | Stay Hungry,Stay Foolish</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="kolly">
+    
+
+    
+    <meta name="description" content="我们先说结论浅拷贝是指在拷贝对象时，对于基本数据类型的变量会重新复制一份，而对于引用类型的变量只是对引用进行拷贝，没有对引用指向的对象进行拷贝。而深拷贝是指在拷贝对象时，同时会对引用指向的对象进行拷贝。区别就在于是否对  对象中的引用变量所指向的对象进行拷贝。 复制一个简单变量12int apples = 5;int pears = apples; 不仅仅是int类型，其它七种原始数据类型(boo">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈Java中的深拷贝和浅拷贝">
+<meta property="og:url" content="http://kollyqaq.github.io/2017/10/31/浅谈Java中的深拷贝和浅拷贝/index.html">
+<meta property="og:site_name" content="Stay Hungry,Stay Foolish">
+<meta property="og:description" content="我们先说结论浅拷贝是指在拷贝对象时，对于基本数据类型的变量会重新复制一份，而对于引用类型的变量只是对引用进行拷贝，没有对引用指向的对象进行拷贝。而深拷贝是指在拷贝对象时，同时会对引用指向的对象进行拷贝。区别就在于是否对  对象中的引用变量所指向的对象进行拷贝。 复制一个简单变量12int apples = 5;int pears = apples; 不仅仅是int类型，其它七种原始数据类型(boo">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201301/10/1357823538_3539.jpg">
+<meta property="og:updated_time" content="2017-10-31T13:18:33.683Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅谈Java中的深拷贝和浅拷贝">
+<meta name="twitter:description" content="我们先说结论浅拷贝是指在拷贝对象时，对于基本数据类型的变量会重新复制一份，而对于引用类型的变量只是对引用进行拷贝，没有对引用指向的对象进行拷贝。而深拷贝是指在拷贝对象时，同时会对引用指向的对象进行拷贝。区别就在于是否对  对象中的引用变量所指向的对象进行拷贝。 复制一个简单变量12int apples = 5;int pears = apples; 不仅仅是int类型，其它七种原始数据类型(boo">
+<meta name="twitter:image" content="http://img.my.csdn.net/uploads/201301/10/1357823538_3539.jpg">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Stay Hungry,Stay Foolish" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Stay Hungry,Stay Foolish">Stay Hungry,Stay Foolish</a></h1>
+				<h2 class="blog-motto">曾梦想仗剑走天涯，看一看世界的繁华</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">所有文章</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kollyqaq.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/10/31/浅谈Java中的深拷贝和浅拷贝/" title="浅谈Java中的深拷贝和浅拷贝" itemprop="url">浅谈Java中的深拷贝和浅拷贝</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="kolly" target="_blank" itemprop="author">kolly</a>
+		
+  <p class="article-time">
+    <time datetime="2017-10-31T13:09:32.000Z" itemprop="datePublished"> 发表于 2017-10-31</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#我们先说结论"><span class="toc-number">1.</span> <span class="toc-text">我们先说结论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复制一个简单变量"><span class="toc-number">2.</span> <span class="toc-text">复制一个简单变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浅拷贝"><span class="toc-number">3.</span> <span class="toc-text">浅拷贝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#深拷贝"><span class="toc-number">4.</span> <span class="toc-text">深拷贝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="我们先说结论"><a href="#我们先说结论" class="headerlink" title="我们先说结论"></a>我们先说结论</h3><p>浅拷贝是指在拷贝对象时，对于基本数据类型的变量会重新复制一份，而对于引用类型的变量只是对引用进行拷贝，没有对引用指向的对象进行拷贝。而深拷贝是指在拷贝对象时，同时会对引用指向的对象进行拷贝。区别就在于是否对  对象中的引用变量所指向的对象进行拷贝。</p>
+<h3 id="复制一个简单变量"><a href="#复制一个简单变量" class="headerlink" title="复制一个简单变量"></a>复制一个简单变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">int apples = 5;</div><div class="line">int pears = apples;</div></pre></td></tr></table></figure>
+<p>不仅仅是int类型，其它七种原始数据类型(boolean,char,byte,short,float,double.long)同样适用于该类情况。</p>
+<h3 id="浅拷贝"><a href="#浅拷贝" class="headerlink" title="浅拷贝"></a>浅拷贝</h3><p>但是如果你复制的是一个对象，情况就有些复杂了。 </p>
+<p>假设说我是一个beginner，我会这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">class Student &#123; </div><div class="line">    private int number; </div><div class="line"> </div><div class="line">    public int getNumber() &#123; </div><div class="line">        return number; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    public void setNumber(int number) &#123; </div><div class="line">        this.number = number; </div><div class="line">    &#125; </div><div class="line">     </div><div class="line">&#125; </div><div class="line">public class Test &#123; </div><div class="line">     </div><div class="line">    public static void main(String args[]) &#123; </div><div class="line">         </div><div class="line">        Student stu1 = new Student(); </div><div class="line">        stu1.setNumber(12345); </div><div class="line">        Student stu2 = stu1; </div><div class="line">         </div><div class="line">        System.out.println(&quot;学生1:&quot; + stu1.getNumber()); </div><div class="line">        System.out.println(&quot;学生2:&quot; + stu2.getNumber()); </div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">学生1:12345</div><div class="line">学生2:12345</div></pre></td></tr></table></figure>
+<p>这里我们自定义了一个学生类，该类只有一个number字段。</p>
+<p>我们新建了一个学生实例，然后将该值赋值给stu2实例。(Student stu2 = stu1;)</p>
+<p>再看看打印结果，作为一个新手，拍了拍胸腹，对象复制不过如此，</p>
+<p>难道真的是这样吗？</p>
+<p>我们试着改变stu2实例的number字段，再打印结果看看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">stu2.setNumber(54321);</div><div class="line">System.out.println(&quot;学生1:&quot; + stu1.getNumber());</div><div class="line">System.out.println(&quot;学生2:&quot; + stu2.getNumber());</div></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">学生1:54321 </div><div class="line">学生2:54321</div></pre></td></tr></table></figure>
+<p>这就怪了，为什么改变学生2的学号，学生1的学号也发生了变化呢？</p>
+<p>原因出在(stu2 = stu1) 这一句。该语句的作用是将stu1的引用赋值给stu2，</p>
+<p>这样，stu1和stu2指向内存堆中同一个对象。如图：</p>
+<p><img src="http://img.my.csdn.net/uploads/201301/10/1357823538_3539.jpg" alt=""></p>
+<p>那么，怎样才能达到复制一个对象呢？</p>
+<p>是否记得万类之王Object。它有11个方法，有两个protected的方法，其中一个为clone方法。</p>
+<p>该方法的签名是：</p>
+<p>protected native Object clone() throws CloneNotSupportedException;</p>
+<p>因为每个类直接或间接的父类都是Object，因此它们都含有clone()方法，但是因为该方法是protected，所以都不能在类外进行访问。</p>
+<p>要想对一个对象进行复制，就需要对clone方法覆盖。</p>
+<p>一般步骤是（浅复制）：</p>
+<ol>
+<li>被复制的类需要实现Clonenable接口（不实现的话在调用clone方法会抛出CloneNotSupportedException异常) 该接口为标记接口(不含任何方法)</li>
+<li>覆盖clone()方法，访问修饰符设为public。方法中调用super.clone()方法得到需要的复制对象，（native为本地方法)</li>
+</ol>
+<p>下面对上面那个方法进行改造：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">class Student implements Cloneable&#123; </div><div class="line">    private int number; </div><div class="line"> </div><div class="line">    public int getNumber() &#123; </div><div class="line">        return number; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    public void setNumber(int number) &#123; </div><div class="line">        this.number = number; </div><div class="line">    &#125; </div><div class="line">     </div><div class="line">    @Override </div><div class="line">    public Object clone() &#123; </div><div class="line">        Student stu = null; </div><div class="line">        try&#123; </div><div class="line">            stu = (Student)super.clone(); </div><div class="line">        &#125;catch(CloneNotSupportedException e) &#123; </div><div class="line">            e.printStackTrace(); </div><div class="line">        &#125; </div><div class="line">        return stu; </div><div class="line">    &#125; </div><div class="line">&#125; </div><div class="line">public class Test &#123; </div><div class="line">     </div><div class="line">    public static void main(String args[]) &#123; </div><div class="line">         </div><div class="line">        Student stu1 = new Student(); </div><div class="line">        stu1.setNumber(12345); </div><div class="line">        Student stu2 = (Student)stu1.clone(); </div><div class="line">         </div><div class="line">        System.out.println(&quot;学生1:&quot; + stu1.getNumber()); </div><div class="line">        System.out.println(&quot;学生2:&quot; + stu2.getNumber()); </div><div class="line">         </div><div class="line">        stu2.setNumber(54321); </div><div class="line">     </div><div class="line">        System.out.println(&quot;学生1:&quot; + stu1.getNumber()); </div><div class="line">        System.out.println(&quot;学生2:&quot; + stu2.getNumber()); </div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">学生1:12345 </div><div class="line">学生2:12345 </div><div class="line">学生1:12345 </div><div class="line">学生2:54321</div></pre></td></tr></table></figure>
+<p>如果你还不相信这两个对象不是同一个对象，那么你可以看看这一句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">System.out.println(stu1 == stu2); // false</div></pre></td></tr></table></figure>
+<p>上面的复制被称为浅复制(Shallow Copy)，还有一种稍微复杂的深度复制(deep copy)</p>
+<h3 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h3><p>我们在学生类里再加一个Address类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">class Address  &#123; </div><div class="line">    private String add; </div><div class="line"> </div><div class="line">    public String getAdd() &#123; </div><div class="line">        return add; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    public void setAdd(String add) &#123; </div><div class="line">        this.add = add; </div><div class="line">    &#125; </div><div class="line">     </div><div class="line">&#125; </div><div class="line"> </div><div class="line">class Student implements Cloneable&#123; </div><div class="line">    private int number; </div><div class="line"> </div><div class="line">    private Address addr; </div><div class="line">     </div><div class="line">    public Address getAddr() &#123; </div><div class="line">        return addr; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    public void setAddr(Address addr) &#123; </div><div class="line">        this.addr = addr; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    public int getNumber() &#123; </div><div class="line">        return number; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    public void setNumber(int number) &#123; </div><div class="line">        this.number = number; </div><div class="line">    &#125; </div><div class="line">     </div><div class="line">    @Override </div><div class="line">    public Object clone() &#123; </div><div class="line">        Student stu = null; </div><div class="line">        try&#123; </div><div class="line">            stu = (Student)super.clone(); </div><div class="line">        &#125;catch(CloneNotSupportedException e) &#123; </div><div class="line">            e.printStackTrace(); </div><div class="line">        &#125; </div><div class="line">        return stu; </div><div class="line">    &#125; </div><div class="line">&#125; </div><div class="line">public class Test &#123; </div><div class="line">     </div><div class="line">    public static void main(String args[]) &#123; </div><div class="line">         </div><div class="line">        Address addr = new Address(); </div><div class="line">        addr.setAdd(&quot;杭州市&quot;); </div><div class="line">        Student stu1 = new Student(); </div><div class="line">        stu1.setNumber(123); </div><div class="line">        stu1.setAddr(addr); </div><div class="line">         </div><div class="line">        Student stu2 = (Student)stu1.clone(); </div><div class="line">         </div><div class="line">        System.out.println(&quot;学生1:&quot; + stu1.getNumber() + &quot;,地址:&quot; + stu1.getAddr().getAdd()); </div><div class="line">        System.out.println(&quot;学生2:&quot; + stu2.getNumber() + &quot;,地址:&quot; + stu2.getAddr().getAdd()); </div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">学生1:123,地址:杭州市</div><div class="line">学生2:123,地址:杭州市</div></pre></td></tr></table></figure>
+<p>乍一看没什么问题，真的是这样吗？</p>
+<p>我们在main方法中试着改变addr实例的地址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">addr.setAdd(&quot;西湖区&quot;); </div><div class="line"> </div><div class="line">System.out.println(&quot;学生1:&quot; + stu1.getNumber() + &quot;,地址:&quot; + stu1.getAddr().getAdd()); </div><div class="line">System.out.println(&quot;学生2:&quot; + stu2.getNumber() + &quot;,地址:&quot; + stu2.getAddr().getAdd());</div></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">学生1:123,地址:杭州市</div><div class="line">学生2:123,地址:杭州市</div><div class="line">学生1:123,地址:西湖区</div><div class="line">学生2:123,地址:西湖区</div></pre></td></tr></table></figure>
+<p>这就奇怪了，怎么两个学生的地址都改变了？</p>
+<p>原因是浅复制只是复制了addr变量的引用，并没有真正的开辟另一块空间，将值复制后再将引用返回给新对象。</p>
+<p>所以，为了达到真正的复制对象，而不是纯粹引用复制。我们需要将Address类可复制化，并且修改clone方法，完整代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line">class Address implements Cloneable &#123; </div><div class="line">    private String add; </div><div class="line"> </div><div class="line">    public String getAdd() &#123; </div><div class="line">        return add; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    public void setAdd(String add) &#123; </div><div class="line">        this.add = add; </div><div class="line">    &#125; </div><div class="line">     </div><div class="line">    @Override </div><div class="line">    public Object clone() &#123; </div><div class="line">        Address addr = null; </div><div class="line">        try&#123; </div><div class="line">            addr = (Address)super.clone(); </div><div class="line">        &#125;catch(CloneNotSupportedException e) &#123; </div><div class="line">            e.printStackTrace(); </div><div class="line">        &#125; </div><div class="line">        return addr; </div><div class="line">    &#125; </div><div class="line">&#125; </div><div class="line"> </div><div class="line">class Student implements Cloneable&#123; </div><div class="line">    private int number; </div><div class="line"> </div><div class="line">    private Address addr; </div><div class="line">     </div><div class="line">    public Address getAddr() &#123; </div><div class="line">        return addr; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    public void setAddr(Address addr) &#123; </div><div class="line">        this.addr = addr; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    public int getNumber() &#123; </div><div class="line">        return number; </div><div class="line">    &#125; </div><div class="line"> </div><div class="line">    public void setNumber(int number) &#123; </div><div class="line">        this.number = number; </div><div class="line">    &#125; </div><div class="line">     </div><div class="line">    @Override </div><div class="line">    public Object clone() &#123; </div><div class="line">        Student stu = null; </div><div class="line">        try&#123; </div><div class="line">            stu = (Student)super.clone();   //浅复制  </div><div class="line">        &#125;catch(CloneNotSupportedException e) &#123; </div><div class="line">            e.printStackTrace(); </div><div class="line">        &#125; </div><div class="line">        stu.addr = (Address)addr.clone();   //深度复制  </div><div class="line">        return stu; </div><div class="line">    &#125; </div><div class="line">&#125; </div><div class="line">public class Test &#123; </div><div class="line">     </div><div class="line">    public static void main(String args[]) &#123; </div><div class="line">         </div><div class="line">        Address addr = new Address(); </div><div class="line">        addr.setAdd(&quot;杭州市&quot;); </div><div class="line">        Student stu1 = new Student(); </div><div class="line">        stu1.setNumber(123); </div><div class="line">        stu1.setAddr(addr); </div><div class="line">         </div><div class="line">        Student stu2 = (Student)stu1.clone(); </div><div class="line">         </div><div class="line">        System.out.println(&quot;学生1:&quot; + stu1.getNumber() + &quot;,地址:&quot; + stu1.getAddr().getAdd()); </div><div class="line">        System.out.println(&quot;学生2:&quot; + stu2.getNumber() + &quot;,地址:&quot; + stu2.getAddr().getAdd()); </div><div class="line">         </div><div class="line">        addr.setAdd(&quot;西湖区&quot;); </div><div class="line">         </div><div class="line">        System.out.println(&quot;学生1:&quot; + stu1.getNumber() + &quot;,地址:&quot; + stu1.getAddr().getAdd()); </div><div class="line">        System.out.println(&quot;学生2:&quot; + stu2.getNumber() + &quot;,地址:&quot; + stu2.getAddr().getAdd()); </div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>打印结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">学生1:123,地址:杭州市</div><div class="line">学生2:123,地址:杭州市</div><div class="line">学生1:123,地址:西湖区</div><div class="line">学生2:123,地址:杭州市</div></pre></td></tr></table></figure>
+<p>这样结果就符合我们的想法了。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>浅拷贝是指在拷贝对象时，对于基本数据类型的变量会重新复制一份，而对于引用类型的变量只是对引用进行拷贝，</p>
+<p>没有对引用指向的对象进行拷贝。</p>
+<p>而深拷贝是指在拷贝对象时，同时会对引用指向的对象进行拷贝。</p>
+<p>区别就在于是否对  对象中的引用变量所指向的对象进行拷贝。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java基础/">Java基础</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kollyqaq.github.io/2017/10/31/浅谈Java中的深拷贝和浅拷贝/" data-title="浅谈Java中的深拷贝和浅拷贝 | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/10/31/Java内部类详解/"  title="Java内部类详解">
+ <strong>下一篇：</strong><br/> 
+ <span>Java内部类详解
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#我们先说结论"><span class="toc-number">1.</span> <span class="toc-text">我们先说结论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复制一个简单变量"><span class="toc-number">2.</span> <span class="toc-text">复制一个简单变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浅拷贝"><span class="toc-number">3.</span> <span class="toc-text">浅拷贝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#深拷贝"><span class="toc-number">4.</span> <span class="toc-text">深拷贝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="kollyqaq" data-theme="medium"></div>
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/IntelliJ-IDEA/" title="IntelliJ-IDEA">IntelliJ-IDEA<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java基础/" title="Java基础">Java基础<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发编程/" title="Java并发编程">Java并发编程<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java设计模式/" title="Java设计模式">Java设计模式<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux命令/" title="Linux命令">Linux命令<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Redis/" title="Redis">Redis<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/服务器运维/" title="服务器运维">服务器运维<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/编程规范/" title="编程规范">编程规范<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java关键字/" title="Java关键字">Java关键字<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Redis/" title="Redis">Redis<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java基础/" title="Java基础">Java基础<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com" target="_blank" title="世界上最活跃的开源社区">github</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://spring4all.com" target="_blank" title="学习spring所有技术的社区">spring4all社区</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Kolly. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/6040399147" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/kollyqaq" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/li-jun-chao-96" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="kolly">kolly</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+	//$('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

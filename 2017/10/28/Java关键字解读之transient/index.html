@@ -4,27 +4,25 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>java双重检查锁定单例模式中volatile 的作用 | Stay Hungry,Stay Foolish</title>
+    <title>Java关键字解读之transient | Stay Hungry,Stay Foolish</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="kolly">
     
 
     
-    <meta name="description" content="volatile具有两个重要的特性  禁止指令重排序（有序性） 保证内存可见性（可见性）  那volatile在singleton的创建过程起到了什么作用呢 先上结论，这段代码里volatile的作用仅仅是禁止重排序 1. 为什么要禁止重排序？ 实例化一个对象其实可以分为三个步骤： 　　（1）分配内存空间。 　　（2）初始化对象。 　　（3）将内存空间的地址赋值给对应的引用。 但是由于操作系统可">
+    <meta name="description" content="先解释下Java中的对象序列化在讨论transient之前，有必要先搞清楚Java中序列化的含义； Java中对象的序列化指的是将对象转换成以字节序列的形式来表示，这些字节序列包含了对象的数据和信息，一个序列化后的对象可以被写到数据库或文件中，也可用于网络传输，一般当我们使用缓存cache（内存空间不够有可能会本地存储到硬盘）或远程调用rpc（网络传输）的时候，经常需要让我们的实体类实现Seria">
 <meta name="keywords" content="Java,Java关键字">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java双重检查锁定单例模式中volatile 的作用">
-<meta property="og:url" content="http://kollyqaq.github.io/2017/10/17/Java双重检查锁定单例模式中volatile 的作用/index.html">
+<meta property="og:title" content="Java关键字解读之transient">
+<meta property="og:url" content="http://kollyqaq.github.io/2017/10/28/Java关键字解读之transient/index.html">
 <meta property="og:site_name" content="Stay Hungry,Stay Foolish">
-<meta property="og:description" content="volatile具有两个重要的特性  禁止指令重排序（有序性） 保证内存可见性（可见性）  那volatile在singleton的创建过程起到了什么作用呢 先上结论，这段代码里volatile的作用仅仅是禁止重排序 1. 为什么要禁止重排序？ 实例化一个对象其实可以分为三个步骤： 　　（1）分配内存空间。 　　（2）初始化对象。 　　（3）将内存空间的地址赋值给对应的引用。 但是由于操作系统可">
+<meta property="og:description" content="先解释下Java中的对象序列化在讨论transient之前，有必要先搞清楚Java中序列化的含义； Java中对象的序列化指的是将对象转换成以字节序列的形式来表示，这些字节序列包含了对象的数据和信息，一个序列化后的对象可以被写到数据库或文件中，也可用于网络传输，一般当我们使用缓存cache（内存空间不够有可能会本地存储到硬盘）或远程调用rpc（网络传输）的时候，经常需要让我们的实体类实现Seria">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://kollyqaq.github.io/img/java-singleton.png">
-<meta property="og:updated_time" content="2017-10-27T08:28:40.443Z">
+<meta property="og:updated_time" content="2017-10-31T01:50:07.787Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java双重检查锁定单例模式中volatile 的作用">
-<meta name="twitter:description" content="volatile具有两个重要的特性  禁止指令重排序（有序性） 保证内存可见性（可见性）  那volatile在singleton的创建过程起到了什么作用呢 先上结论，这段代码里volatile的作用仅仅是禁止重排序 1. 为什么要禁止重排序？ 实例化一个对象其实可以分为三个步骤： 　　（1）分配内存空间。 　　（2）初始化对象。 　　（3）将内存空间的地址赋值给对应的引用。 但是由于操作系统可">
-<meta name="twitter:image" content="https://kollyqaq.github.io/img/java-singleton.png">
+<meta name="twitter:title" content="Java关键字解读之transient">
+<meta name="twitter:description" content="先解释下Java中的对象序列化在讨论transient之前，有必要先搞清楚Java中序列化的含义； Java中对象的序列化指的是将对象转换成以字节序列的形式来表示，这些字节序列包含了对象的数据和信息，一个序列化后的对象可以被写到数据库或文件中，也可用于网络传输，一般当我们使用缓存cache（内存空间不够有可能会本地存储到硬盘）或远程调用rpc（网络传输）的时候，经常需要让我们的实体类实现Seria">
 
     
     <link rel="alternative" href="/atom.xml" title="Stay Hungry,Stay Foolish" type="application/atom+xml">
@@ -78,14 +76,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/10/17/Java双重检查锁定单例模式中volatile 的作用/" title="java双重检查锁定单例模式中volatile 的作用" itemprop="url">java双重检查锁定单例模式中volatile 的作用</a>
+      <a href="/2017/10/28/Java关键字解读之transient/" title="Java关键字解读之transient" itemprop="url">Java关键字解读之transient</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="kolly" target="_blank" itemprop="author">kolly</a>
 		
   <p class="article-time">
-    <time datetime="2017-10-17T07:34:21.000Z" itemprop="datePublished"> 发表于 2017-10-17</time>
+    <time datetime="2017-10-28T02:41:10.000Z" itemprop="datePublished"> 发表于 2017-10-28</time>
     
   </p>
 </header>
@@ -94,52 +92,30 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#先解释下Java中的对象序列化"><span class="toc-number">1.</span> <span class="toc-text">先解释下Java中的对象序列化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于transient关键字"><span class="toc-number">2.</span> <span class="toc-text">关于transient关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#举个例子"><span class="toc-number">3.</span> <span class="toc-text">举个例子</span></a></li></ol>
 		
 		</div>
 		
-		<p><img src="https://kollyqaq.github.io/img/java-singleton.png" alt=""></p>
-<p><strong>volatile具有两个重要的特性</strong></p>
-<ul>
-<li>禁止指令重排序（有序性）</li>
-<li>保证内存可见性（可见性）</li>
-</ul>
-<p><span style="color:red;"><strong>那volatile在singleton的创建过程起到了什么作用呢</strong></span></p>
-<p>先上结论，这段代码里volatile的作用仅仅是<strong>禁止重排序</strong></p>
-<p><strong>1. 为什么要禁止重排序？</strong></p>
-<p>实例化一个对象其实可以分为三个步骤：</p>
-<p>　　（1）分配内存空间。</p>
-<p>　　（2）初始化对象。</p>
-<p>　　（3）将内存空间的地址赋值给对应的引用。</p>
-<p>但是由于操作系统可以对指令进行重排序，所以上面的过程也可能会变成如下过程：</p>
-<p>　　（1）分配内存空间。</p>
-<p>　　（2）将内存空间的地址赋值给对应的引用。</p>
-<p>　　（3）初始化对象</p>
-<p>如果是这个流程，多线程环境下就可能将一个未初始化的对象引用暴露出来，从而导致不可预料的结果（这里就是因为 instance = new Singleton(); 不是原子操作，编译器存在指令重排，从而存在线程1 创建实例后（初始化未完成），线程2 判断对象不为空后对其操作，但实际对象仍为空，造成错误）。因此，为了防止这个过程的重排序，我们需要将变量设置为volatile类型的变量，volatile的禁止重排序保证了操作的有序性。</p>
-<p><strong>2. 为什么没有起到可见性的作用？</strong></p>
-<p><a href="http://blog.csdn.net/ns_code/article/details/17348313" target="_blank" rel="external">happens before原则</a>里面有这样一条</p>
-<blockquote>
-<p>JSR-133<br>An unlock on a monitor happens before every subsequent lock on that same monitor</p>
-</blockquote>
-<p>第二次非null判断是在加锁以后，则根据这一条，另一个线程一定能看到这个引用被赋值。所以即使没有volatile，依旧能保证可见性</p>
-<p><strong>3. 如果不加volatile，能不能使代码正确运行？</strong></p>
-<p>既然可见性已经有了保证，那我们只需要保证有序性。怎么保证有序性呢？</p>
-<p>只需要在“构造对象”和“连接引用与实例”之间加上一道内存屏障</p>
-<p>由于是在单线程里，同样根据<a href="http://blog.csdn.net/ns_code/article/details/17348313" target="_blank" rel="external">happens before原则</a>里面这一条</p>
-<blockquote>
-<p>JSR-133</p>
-<p>Each action in a thread happens before every action in that thread that comes later in the program’s order</p>
-</blockquote>
-<p>你只需要在构造和赋值之间随意做点事情，保证赋值在构造函数结束后再完成，就可以，比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Singleton temp = new Singleton();</div><div class="line">temp.toString();//构造与赋值之间随意做点事情保证顺序</div><div class="line">instance=temp;</div></pre></td></tr></table></figure>
-  
+		<h3 id="先解释下Java中的对象序列化"><a href="#先解释下Java中的对象序列化" class="headerlink" title="先解释下Java中的对象序列化"></a>先解释下Java中的对象序列化</h3><p>在讨论transient之前，有必要先搞清楚Java中序列化的含义；</p>
+<p>Java中对象的序列化指的是将对象转换成以字节序列的形式来表示，这些字节序列包含了对象的数据和信息，一个序列化后的对象可以被写到数据库或文件中，也可用于网络传输，一般当我们使用缓存cache（内存空间不够有可能会本地存储到硬盘）或远程调用rpc（网络传输）的时候，经常需要让我们的实体类实现Serializable接口，目的就是为了让其可序列化。</p>
+<p>当然，序列化后的最终目的是为了反序列化，恢复成原先的Java对象，要不然序列化后干嘛呢，所以序列化后的字节序列都是可以恢复成Java对象的，这个过程就是反序列化。</p>
+<h3 id="关于transient关键字"><a href="#关于transient关键字" class="headerlink" title="关于transient关键字"></a>关于transient关键字</h3><p>Java中transient关键字的作用，简单地说，就是让某些被修饰的成员属性变量不被序列化，这一看好像很好理解，就是不被序列化，那么什么情况下，一个对象的某些字段不需要被序列化呢？如果有如下情况，可以考虑使用关键字transient修饰：</p>
+<p>1、类中的字段值可以根据其它字段推导出来，如一个长方形类有三个属性：长度、宽度、面积（示例而已，一般不会这样设计），那么在序列化的时候，面积这个属性就没必要被序列化了；</p>
+<p>2、其它，看具体业务需求吧，哪些字段不想被序列化；</p>
+<p>PS，记得之前看HashMap源码的时候，发现有个字段是用transient修饰的，我觉得还是有道理的，确实没必要对这个modCount字段进行序列化，因为没有意义，modCount主要用于判断HashMap是否被修改（像put、remove操作的时候，modCount都会自增），对于这种变量，一开始可以为任何值，0当然也是可以（new出来、反序列化出来、或者克隆clone出来的时候都是为0的），没必要持久化其值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     * The number of times this HashMap has been structurally modified</div><div class="line">     * Structural modifications are those that change the number of mappings in</div><div class="line">     * the HashMap or otherwise modify its internal structure (e.g.,</div><div class="line">     * rehash).  This field is used to make iterators on Collection-views of</div><div class="line">     * the HashMap fail-fast.  (See ConcurrentModificationException).</div><div class="line">     */</div><div class="line">    transient int modCount;</div></pre></td></tr></table></figure>
+<p>最后，为什么要不被序列化呢，主要是为了节省存储空间，其它的感觉没啥好处，可能还有坏处（有些字段可能需要重新计算，初始化什么的），总的来说，利大于弊。</p>
+<h3 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h3><p>仅仅是示例，具体使用请根据实际情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">class Rectangle implements Serializable&#123;</div><div class="line"></div><div class="line">    /**</div><div class="line">     *</div><div class="line">     */</div><div class="line">    private static final long serialVersionUID = 1710022455003682613L;</div><div class="line">    private Integer width;</div><div class="line">    private Integer height;</div><div class="line">    private transient Integer area;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">    public Rectangle (Integer width, Integer height)&#123;</div><div class="line">        this.width = width;</div><div class="line">        this.height = height;</div><div class="line">        this.area = width * height;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setArea()&#123;</div><div class="line">        this.area = this.width * this.height;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String toString()&#123;</div><div class="line">        StringBuffer sb = new StringBuffer(40);</div><div class="line">        sb.append(&quot;width : &quot;);</div><div class="line">        sb.append(this.width);</div><div class="line">        sb.append(&quot;\nheight : &quot;);</div><div class="line">        sb.append(this.height);</div><div class="line">        sb.append(&quot;\narea : &quot;);</div><div class="line">        sb.append(this.area);</div><div class="line">        return sb.toString();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class TransientExample&#123;</div><div class="line">    public static void main(String args[]) throws Exception &#123;</div><div class="line">        Rectangle rectangle = new Rectangle(3,4);</div><div class="line">        System.out.println(&quot;1.原始对象\n&quot;+rectangle);</div><div class="line">        </div><div class="line">        //序列化到文件</div><div class="line">        ObjectOutputStream o = new ObjectOutputStream(new FileOutputStream(&quot;rectangle&quot;));</div><div class="line">        o.writeObject(rectangle);</div><div class="line">        o.close();</div><div class="line"></div><div class="line">        // 从文件反序列化</div><div class="line">        ObjectInputStream in = new ObjectInputStream(new FileInputStream(&quot;rectangle&quot;));</div><div class="line">        Rectangle rectangle1 = (Rectangle)in.readObject();</div><div class="line">        System.out.println(&quot;2.反序列化后的对象\n&quot;+rectangle1);</div><div class="line">        in.close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>结果打印</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">1.原始对象</div><div class="line">width : 3</div><div class="line">height : 4</div><div class="line">area : 12</div><div class="line">2.序列化再反序列化后的对象</div><div class="line">width : 3</div><div class="line">height : 4</div><div class="line">area : null</div></pre></td></tr></table></figure>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Java并发编程/">Java并发编程</a>
+  <a class="article-category-link" href="/categories/Java基础/">Java基础</a>
 </div>
 
 
@@ -154,7 +130,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://kollyqaq.github.io/2017/10/17/Java双重检查锁定单例模式中volatile 的作用/" data-title="java双重检查锁定单例模式中volatile 的作用 | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
+	  <div data-url="http://kollyqaq.github.io/2017/10/28/Java关键字解读之transient/" data-title="Java关键字解读之transient | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -168,18 +144,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/10/18/MarkDown实用小技巧/" title="MarkDown实用小技巧">
+ <a href="/2017/10/28/Java关键字解读之volatile/" title="Java关键字解读之volatile">
   <strong>上一篇：</strong><br/>
   <span>
-  MarkDown实用小技巧</span>
+  Java关键字解读之volatile</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2017/10/16/Java到底是传引用还是传值/"  title="Java到底是传引用还是传值">
+<a href="/2017/10/26/最牛逼的单例模式写法/"  title="最牛逼的单例模式写法">
  <strong>下一篇：</strong><br/> 
- <span>Java到底是传引用还是传值
+ <span>最牛逼的单例模式写法
 </span>
 </a>
 </div>
@@ -195,7 +171,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#先解释下Java中的对象序列化"><span class="toc-number">1.</span> <span class="toc-text">先解释下Java中的对象序列化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于transient关键字"><span class="toc-number">2.</span> <span class="toc-text">关于transient关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#举个例子"><span class="toc-number">3.</span> <span class="toc-text">举个例子</span></a></li></ol>
  
   </div>
 

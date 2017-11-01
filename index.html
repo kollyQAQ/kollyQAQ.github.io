@@ -73,6 +73,69 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
+    <a href="/2017/10/31/浅谈Java中的深拷贝和浅拷贝/" title="浅谈Java中的深拷贝和浅拷贝" itemprop="url">
+  
+    <h1 itemprop="name">浅谈Java中的深拷贝和浅拷贝</h1>
+    
+     
+           <p itemprop="description" >我们先说结论浅拷贝是指在拷贝对象时，对于基本数据类型的变量会重新复制一份，而对于引用类型的变量只是对引用进行拷贝，没有对引用指向的对象进行拷贝。而深拷贝是指在拷贝对象时，同时会对引用指向的对象进行拷贝。区别就在于是否对  对象中的引用变量所指向的对象进行拷贝。
+复制一个简单变量1</p>
+        
+    
+    <time datetime="2017-10-31T13:09:32.000Z" itemprop="datePublished">2017-10-31</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2017/10/31/Java内部类详解/" title="Java内部类详解" itemprop="url">
+  
+    <h1 itemprop="name">Java内部类详解</h1>
+    
+     
+           <p itemprop="description" >一.内部类基础在Java中，可以将一个类定义在另一个类里面或者一个方法里面，这样的类称为内部类。广泛意义上的内部类一般来说包括这四种：成员内部类、局部内部类、匿名内部类和静态内部类。下面就先来了解一下这四种内部类的用法。
+1.成员内部类
+　　成员内部类是最普通的内部类，它的定义为</p>
+        
+    
+    <time datetime="2017-10-31T09:58:58.000Z" itemprop="datePublished">2017-10-31</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
+    <a href="/2017/10/31/Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition/" title="Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition" itemprop="url">
+  
+    <h1 itemprop="name">Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition</h1>
+    
+     
+           <p itemprop="description" >前言在前面我们将了很多关于同步的问题，然而在现实中，需要线程之间的协作。比如说最经典的生产者-消费者模型：当队列满时，生产者需要等待队列有空间才能继续往里面放入商品，而在等待的期间内，生产者必须释放对临界资源（即队列）的占用权。因为生产者如果不释放对临界资源的占用权，那么消费者就</p>
+        
+    
+    <time datetime="2017-10-31T06:07:37.000Z" itemprop="datePublished">2017-10-31</time>
+  </a>
+</section>
+
+
+
+
+
+
+  
+<section class="post" itemscope itemprop="blogitem">
+  
     <a href="/2017/10/30/Java并发编程：Thread类的使用/" title="Java并发编程：Thread类的使用" itemprop="url">
   
     <h1 itemprop="name">Java并发编程：Thread类的使用</h1>
@@ -99,7 +162,8 @@
     <h1 itemprop="name">foreach循环的原理</h1>
     
      
-           <p itemprop="description" ></p>
+           <p itemprop="description" >前言在JAVA中，遍历集合和数组一般有以下三种形式：
+123456789101112for (int i = 0; i &amp;lt; list.size(); i++) &amp;#123;    System.out.print(list.get(i) + &amp;quot;,&amp;quot;);&amp;</p>
         
     
     <time datetime="2017-10-30T06:52:03.000Z" itemprop="datePublished">2017-10-30</time>
@@ -114,15 +178,15 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2017/10/30/Java关键字解读之final/" title="Java关键字解读之final" itemprop="url">
+    <a href="/2017/10/28/Java关键字解读之volatile/" title="Java关键字解读之volatile" itemprop="url">
   
-    <h1 itemprop="name">Java关键字解读之final</h1>
+    <h1 itemprop="name">Java关键字解读之volatile</h1>
     
      
-           <p itemprop="description" ></p>
+           <p itemprop="description" >一、内存模型的相关概念大家都知道，计算机在执行程序时，每条指令都是在CPU中执行的，而执行指令过程中，势必涉及到数据的读取和写入。由于程序运行过程中的临时数据是存放在主存（物理内存）当中的，这时就存在一个问题，由于CPU执行速度很快，而从内存读取数据和向内存写入数据的过程跟CPU</p>
         
     
-    <time datetime="2017-10-30T06:51:25.000Z" itemprop="datePublished">2017-10-30</time>
+    <time datetime="2017-10-28T02:55:21.000Z" itemprop="datePublished">2017-10-28</time>
   </a>
 </section>
 
@@ -134,15 +198,16 @@
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2017/10/30/Java关键字解读之static/" title="Java关键字解读之static" itemprop="url">
+    <a href="/2017/10/28/Java关键字解读之transient/" title="Java关键字解读之transient" itemprop="url">
   
-    <h1 itemprop="name">Java关键字解读之static</h1>
+    <h1 itemprop="name">Java关键字解读之transient</h1>
     
      
-           <p itemprop="description" ></p>
+           <p itemprop="description" >先解释下Java中的对象序列化在讨论transient之前，有必要先搞清楚Java中序列化的含义；
+Java中对象的序列化指的是将对象转换成以字节序列的形式来表示，这些字节序列包含了对象的数据和信息，一个序列化后的对象可以被写到数据库或文件中，也可用于网络传输，一般当我们使用缓存</p>
         
     
-    <time datetime="2017-10-30T06:51:18.000Z" itemprop="datePublished">2017-10-30</time>
+    <time datetime="2017-10-28T02:41:10.000Z" itemprop="datePublished">2017-10-28</time>
   </a>
 </section>
 
@@ -199,32 +264,6 @@ Mysql索引为什么用B+Tree实现</p>
   
 <section class="post" itemscope itemprop="blogitem">
   
-    <a href="/2017/10/20/IntelliJ Idea中查看类的继承关系图/" title="IntelliJ Idea中查看类的继承关系图" itemprop="url">
-  
-    <h1 itemprop="name">IntelliJ Idea中查看类的继承关系图</h1>
-    
-     
-           <p itemprop="description" >快捷键CTRL+H查看利用idea快捷键查看hierarchy,效果如下
-好处：可以看向上和向下的继承关系
-缺点：只能看继承关系，不能看实现了哪些接口
-
-在指定类右键查看diagram也可以使用快捷键ctrl+alt+u，更快捷
-好处：可以看向上的继承关系
-缺点：既能看继承关系，</p>
-        
-    
-    <time datetime="2017-10-20T07:34:21.000Z" itemprop="datePublished">2017-10-20</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
     <a href="/2017/10/20/阿里巴巴java规范笔记/" title="阿里巴巴JAVA开发手册笔记" itemprop="url">
   
     <h1 itemprop="name">阿里巴巴JAVA开发手册笔记</h1>
@@ -243,54 +282,6 @@ Mysql索引为什么用B+Tree实现</p>
         
     
     <time datetime="2017-10-20T07:34:21.000Z" itemprop="datePublished">2017-10-20</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2017/10/18/MarkDown基础语法/" title="MarkDown基础语法" itemprop="url">
-  
-    <h1 itemprop="name">MarkDown基础语法</h1>
-    
-     
-           <p itemprop="description" >1-6级标题  “#”
-有序列表  “1.”
-无序列表  “*”
-引用  “&amp;gt;”
-粗体 “**”</p>
-        
-    
-    <time datetime="2017-10-18T07:34:21.000Z" itemprop="datePublished">2017-10-18</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2017/10/18/MarkDown实用小技巧/" title="MarkDown实用小技巧" itemprop="url">
-  
-    <h1 itemprop="name">MarkDown实用小技巧</h1>
-    
-     
-           <p itemprop="description" >首行缩进写文章时，我们常常希望能够首行缩进，这时可以在段首加入&amp;amp;ensp;来输入一个空格.加入&amp;amp;emsp;来输入两个空格。
-示例文本
-
-&amp;amp;emsp;&amp;amp;emsp;一语未了，只听后院中有人笑声，说：“我来迟了，不曾迎接远客！”
-这是第二行哈，可以看到已</p>
-        
-    
-    <time datetime="2017-10-18T07:34:21.000Z" itemprop="datePublished">2017-10-18</time>
   </a>
 </section>
 
@@ -330,11 +321,11 @@ Mysql索引为什么用B+Tree实现</p>
 		  
 		
 		  
-			<li><a href="/categories/Java基础/" title="Java基础">Java基础<sup>3</sup></a></li>
+			<li><a href="/categories/Java基础/" title="Java基础">Java基础<sup>6</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Java并发编程/" title="Java并发编程">Java并发编程<sup>3</sup></a></li>
+			<li><a href="/categories/Java并发编程/" title="Java并发编程">Java并发编程<sup>4</sup></a></li>
 		  
 		
 		  
@@ -375,7 +366,7 @@ Mysql索引为什么用B+Tree实现</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>7</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>10</sup></a></li>
 			
 		
 			
@@ -387,11 +378,19 @@ Mysql索引为什么用B+Tree实现</p>
 			
 		
 			
+				<li><a href="/tags/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Redis/" title="Redis">Redis<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
 			
 		
 			
@@ -399,7 +398,7 @@ Mysql索引为什么用B+Tree实现</p>
 			
 		
 			
-				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+				<li><a href="/tags/Java基础/" title="Java基础">Java基础<sup>1</sup></a></li>
 			
 		
 			
@@ -411,11 +410,7 @@ Mysql索引为什么用B+Tree实现</p>
 			
 		
 			
-				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
+				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
 			
 		
 		</ul>

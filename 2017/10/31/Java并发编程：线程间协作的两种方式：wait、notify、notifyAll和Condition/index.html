@@ -1,0 +1,589 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition | Stay Hungry,Stay Foolish</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="kolly">
+    
+
+    
+    <meta name="description" content="前言在前面我们将了很多关于同步的问题，然而在现实中，需要线程之间的协作。比如说最经典的生产者-消费者模型：当队列满时，生产者需要等待队列有空间才能继续往里面放入商品，而在等待的期间内，生产者必须释放对临界资源（即队列）的占用权。因为生产者如果不释放对临界资源的占用权，那么消费者就无法消费队列中的商品，就不会让队列有空间，那么生产者就会一直无限等待下去。因此，一般情况下，当队列满时，会让生产者交出对">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition">
+<meta property="og:url" content="http://kollyqaq.github.io/2017/10/31/Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition/index.html">
+<meta property="og:site_name" content="Stay Hungry,Stay Foolish">
+<meta property="og:description" content="前言在前面我们将了很多关于同步的问题，然而在现实中，需要线程之间的协作。比如说最经典的生产者-消费者模型：当队列满时，生产者需要等待队列有空间才能继续往里面放入商品，而在等待的期间内，生产者必须释放对临界资源（即队列）的占用权。因为生产者如果不释放对临界资源的占用权，那么消费者就无法消费队列中的商品，就不会让队列有空间，那么生产者就会一直无限等待下去。因此，一般情况下，当队列满时，会让生产者交出对">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-31T06:09:55.052Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition">
+<meta name="twitter:description" content="前言在前面我们将了很多关于同步的问题，然而在现实中，需要线程之间的协作。比如说最经典的生产者-消费者模型：当队列满时，生产者需要等待队列有空间才能继续往里面放入商品，而在等待的期间内，生产者必须释放对临界资源（即队列）的占用权。因为生产者如果不释放对临界资源的占用权，那么消费者就无法消费队列中的商品，就不会让队列有空间，那么生产者就会一直无限等待下去。因此，一般情况下，当队列满时，会让生产者交出对">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Stay Hungry,Stay Foolish" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Stay Hungry,Stay Foolish">Stay Hungry,Stay Foolish</a></h1>
+				<h2 class="blog-motto">曾梦想仗剑走天涯，看一看世界的繁华</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">所有文章</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kollyqaq.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/10/31/Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition/" title="Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition" itemprop="url">Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="kolly" target="_blank" itemprop="author">kolly</a>
+		
+  <p class="article-time">
+    <time datetime="2017-10-31T06:07:37.000Z" itemprop="datePublished"> 发表于 2017-10-31</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一-wait-、notify-和notifyAll"><span class="toc-number">2.</span> <span class="toc-text">一.wait()、notify()和notifyAll()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二-Condition"><span class="toc-number">3.</span> <span class="toc-text">二.Condition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三-生产者-消费者模型的实现"><span class="toc-number">4.</span> <span class="toc-text">三.生产者-消费者模型的实现</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在前面我们将了很多关于同步的问题，然而在现实中，需要线程之间的协作。比如说最经典的生产者-消费者模型：当队列满时，生产者需要等待队列有空间才能继续往里面放入商品，而在等待的期间内，生产者必须释放对临界资源（即队列）的占用权。因为生产者如果不释放对临界资源的占用权，那么消费者就无法消费队列中的商品，就不会让队列有空间，那么生产者就会一直无限等待下去。因此，一般情况下，当队列满时，会让生产者交出对临界资源的占用权，并进入挂起状态。然后等待消费者消费了商品，然后消费者通知生产者队列有空间了。同样地，当队列空时，消费者也必须等待，等待生产者通知它队列中有商品了。这种互相通信的过程就是线程间的协作。</p>
+<p>　　今天我们就来探讨一下Java中线程协作的最常见的两种方式：利用Object.wait()、Object.notify()和使用Condition</p>
+<h3 id="一-wait-、notify-和notifyAll"><a href="#一-wait-、notify-和notifyAll" class="headerlink" title="一.wait()、notify()和notifyAll()"></a>一.wait()、notify()和notifyAll()</h3><p>wait()、notify()和notifyAll()是Object类中的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Wakes up a single thread that is waiting on this object&apos;s</div><div class="line"> * monitor. If any threads are waiting on this object, one of them</div><div class="line"> * is chosen to be awakened. The choice is arbitrary and occurs at</div><div class="line"> * the discretion of the implementation. A thread waits on an object&apos;s</div><div class="line"> * monitor by calling one of the wait methods</div><div class="line"> */</div><div class="line">public final native void notify();</div><div class="line"> </div><div class="line">/**</div><div class="line"> * Wakes up all threads that are waiting on this object&apos;s monitor. A</div><div class="line"> * thread waits on an object&apos;s monitor by calling one of the</div><div class="line"> * wait methods.</div><div class="line"> */</div><div class="line">public final native void notifyAll();</div><div class="line"> </div><div class="line">/**</div><div class="line"> * Causes the current thread to wait until either another thread invokes the</div><div class="line"> * &#123;@link java.lang.Object#notify()&#125; method or the</div><div class="line"> * &#123;@link java.lang.Object#notifyAll()&#125; method for this object, or a</div><div class="line"> * specified amount of time has elapsed.</div><div class="line"> * &lt;p&gt;</div><div class="line"> * The current thread must own this object&apos;s monitor.</div><div class="line"> */</div><div class="line">public final native void wait(long timeout) throws InterruptedException;</div></pre></td></tr></table></figure>
+<p>从这三个方法的文字描述可以知道以下几点信息：</p>
+<p>　　1）wait()、notify()和notifyAll()方法是本地方法，并且为final方法，无法被重写。</p>
+<p>　　2）调用某个对象的wait()方法能让当前线程阻塞，并且当前线程必须拥有此对象的monitor（即锁）</p>
+<p>　　3）调用某个对象的notify()方法能够唤醒一个正在等待这个对象的monitor的线程，如果有多个线程都在等待这个对象的monitor，则只能唤醒其中一个线程；</p>
+<p>　　4）调用notifyAll()方法能够唤醒所有正在等待这个对象的monitor的线程；</p>
+<p>　　有朋友可能会有疑问：为何这三个不是Thread类声明中的方法，而是Object类中声明的方法（当然由于Thread类继承了Object类，所以Thread也可以调用者三个方法）？其实这个问题很简单，由于每个对象都拥有monitor（即锁），所以让当前线程等待某个对象的锁，当然应该通过这个对象来操作了。而不是用当前线程来操作，因为当前线程可能会等待多个线程的锁，如果通过线程来操作，就非常复杂了。</p>
+<p>　　上面已经提到，如果调用某个对象的wait()方法，当前线程必须拥有这个对象的monitor（即锁），因此调用wait()方法必须在同步块或者同步方法中进行（synchronized块或者synchronized方法）。</p>
+<p>　　调用某个对象的wait()方法，相当于让当前线程交出此对象的monitor，然后进入等待状态，等待后续再次获得此对象的锁（Thread类中的sleep方法使当前线程暂停执行一段时间，从而让其他线程有机会继续执行，但它并不释放对象锁）；</p>
+<p>　　notify()方法能够唤醒一个正在等待该对象的monitor的线程，当有多个线程都在等待该对象的monitor的话，则只能唤醒其中一个线程，具体唤醒哪个线程则不得而知。</p>
+<p>　　同样地，调用某个对象的notify()方法，当前线程也必须拥有这个对象的monitor，因此调用notify()方法必须在同步块或者同步方法中进行（synchronized块或者synchronized方法）。</p>
+<p>　　nofityAll()方法能够唤醒所有正在等待该对象的monitor的线程，这一点与notify()方法是不同的。</p>
+<p>　　这里要注意一点：notify()和notifyAll()方法只是唤醒等待该对象的monitor的线程，并不决定哪个线程能够获取到monitor。</p>
+<p>　　举个简单的例子：假如有三个线程Thread1、Thread2和Thread3都在等待对象objectA的monitor，此时Thread4拥有对象objectA的monitor，当在Thread4中调用objectA.notify()方法之后，Thread1、Thread2和Thread3只有一个能被唤醒。注意，被唤醒不等于立刻就获取了objectA的monitor。假若在Thread4中调用objectA.notifyAll()方法，则Thread1、Thread2和Thread3三个线程都会被唤醒，至于哪个线程接下来能够获取到objectA的monitor就具体依赖于操作系统的调度了。</p>
+<p>　　上面尤其要注意一点，一个线程被唤醒不代表立即获取了对象的monitor，只有等调用完notify()或者notifyAll()并退出synchronized块，释放对象锁后，其余线程才可获得锁执行。</p>
+<p>下面看一个例子就明白了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    public static Object object = new Object();</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Thread1 thread1 = new Thread1();</div><div class="line">        Thread2 thread2 = new Thread2();</div><div class="line">         </div><div class="line">        thread1.start();</div><div class="line">         </div><div class="line">        try &#123;</div><div class="line">            Thread.sleep(200);</div><div class="line">        &#125; catch (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        thread2.start();</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    static class Thread1 extends Thread&#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            synchronized (object) &#123;</div><div class="line">                try &#123;</div><div class="line">                    object.wait();</div><div class="line">                &#125; catch (InterruptedException e) &#123;</div><div class="line">                &#125;</div><div class="line">                System.out.println(&quot;线程&quot;+Thread.currentThread().getName()+&quot;获取到了锁&quot;);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    static class Thread2 extends Thread&#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            synchronized (object) &#123;</div><div class="line">                object.notify();</div><div class="line">                System.out.println(&quot;线程&quot;+Thread.currentThread().getName()+&quot;调用了object.notify()&quot;);</div><div class="line">            &#125;</div><div class="line">            System.out.println(&quot;线程&quot;+Thread.currentThread().getName()+&quot;释放了锁&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>无论运行多少次，运行结果必定是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">线程Thread-1调用了object.notify()</div><div class="line">线程Thread-1释放了锁</div><div class="line">线程Thread-0获取到了锁</div></pre></td></tr></table></figure>
+<h3 id="二-Condition"><a href="#二-Condition" class="headerlink" title="二.Condition"></a>二.Condition</h3><p>Condition是在java 1.5中才出现的，它用来替代传统的Object的wait()、notify()实现线程间的协作，相比使用Object的wait()、notify()，使用Condition1的await()、signal()这种方式实现线程间协作更加安全和高效。因此通常来说比较推荐使用Condition，在阻塞队列那一篇博文中就讲述到了，阻塞队列实际上是使用了Condition来模拟线程间协作。</p>
+<ul>
+<li>Condition是个接口，基本的方法就是await()和signal()方法；</li>
+<li>Condition依赖于Lock接口，生成一个Condition的基本代码是lock.newCondition() </li>
+<li>调用Condition的await()和signal()方法，都必须在lock保护之内，就是说必须在lock.lock()和lock.unlock之间才可以使用</li>
+</ul>
+<p>　　Conditon中的await()对应Object的wait()；</p>
+<p>　　Condition中的signal()对应Object的notify()；</p>
+<p>　　Condition中的signalAll()对应Object的notifyAll()。</p>
+<h3 id="三-生产者-消费者模型的实现"><a href="#三-生产者-消费者模型的实现" class="headerlink" title="三.生产者-消费者模型的实现"></a>三.生产者-消费者模型的实现</h3><p>1.使用Object的wait()和notify()实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    private int queueSize = 10;</div><div class="line">    private PriorityQueue&lt;Integer&gt; queue = new PriorityQueue&lt;Integer&gt;(queueSize);</div><div class="line">      </div><div class="line">    public static void main(String[] args)  &#123;</div><div class="line">        Test test = new Test();</div><div class="line">        Producer producer = test.new Producer();</div><div class="line">        Consumer consumer = test.new Consumer();</div><div class="line">          </div><div class="line">        producer.start();</div><div class="line">        consumer.start();</div><div class="line">    &#125;</div><div class="line">      </div><div class="line">    class Consumer extends Thread&#123;</div><div class="line">          </div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            consume();</div><div class="line">        &#125;</div><div class="line">          </div><div class="line">        private void consume() &#123;</div><div class="line">            while(true)&#123;</div><div class="line">                synchronized (queue) &#123;</div><div class="line">                    while(queue.size() == 0)&#123;</div><div class="line">                        try &#123;</div><div class="line">                            System.out.println(&quot;队列空，等待数据&quot;);</div><div class="line">                            queue.wait();</div><div class="line">                        &#125; catch (InterruptedException e) &#123;</div><div class="line">                            e.printStackTrace();</div><div class="line">                            queue.notify();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    queue.poll();          //每次移走队首元素</div><div class="line">                    queue.notify();</div><div class="line">                    System.out.println(&quot;从队列取走一个元素，队列剩余&quot;+queue.size()+&quot;个元素&quot;);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">      </div><div class="line">    class Producer extends Thread&#123;</div><div class="line">          </div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            produce();</div><div class="line">        &#125;</div><div class="line">          </div><div class="line">        private void produce() &#123;</div><div class="line">            while(true)&#123;</div><div class="line">                synchronized (queue) &#123;</div><div class="line">                    while(queue.size() == queueSize)&#123;</div><div class="line">                        try &#123;</div><div class="line">                            System.out.println(&quot;队列满，等待有空余空间&quot;);</div><div class="line">                            queue.wait();</div><div class="line">                        &#125; catch (InterruptedException e) &#123;</div><div class="line">                            e.printStackTrace();</div><div class="line">                            queue.notify();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    queue.offer(1);        //每次插入一个元素</div><div class="line">                    queue.notify();</div><div class="line">                    System.out.println(&quot;向队列取中插入一个元素，队列剩余空间：&quot;+(queueSize-queue.size()));</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2.使用Condition实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div></pre></td><td class="code"><pre><div class="line">public class Test &#123;</div><div class="line">    private int queueSize = 10;</div><div class="line">    private PriorityQueue&lt;Integer&gt; queue = new PriorityQueue&lt;Integer&gt;(queueSize);</div><div class="line">    private Lock lock = new ReentrantLock();</div><div class="line">    private Condition notFull = lock.newCondition();</div><div class="line">    private Condition notEmpty = lock.newCondition();</div><div class="line">     </div><div class="line">    public static void main(String[] args)  &#123;</div><div class="line">        Test test = new Test();</div><div class="line">        Producer producer = test.new Producer();</div><div class="line">        Consumer consumer = test.new Consumer();</div><div class="line">          </div><div class="line">        producer.start();</div><div class="line">        consumer.start();</div><div class="line">    &#125;</div><div class="line">      </div><div class="line">    class Consumer extends Thread&#123;</div><div class="line">          </div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            consume();</div><div class="line">        &#125;</div><div class="line">          </div><div class="line">        private void consume() &#123;</div><div class="line">            while(true)&#123;</div><div class="line">                lock.lock();</div><div class="line">                try &#123;</div><div class="line">                    while(queue.size() == 0)&#123;</div><div class="line">                        try &#123;</div><div class="line">                            System.out.println(&quot;队列空，等待数据&quot;);</div><div class="line">                            notEmpty.await();</div><div class="line">                        &#125; catch (InterruptedException e) &#123;</div><div class="line">                            e.printStackTrace();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    queue.poll();                //每次移走队首元素</div><div class="line">                    notFull.signal();</div><div class="line">                    System.out.println(&quot;从队列取走一个元素，队列剩余&quot;+queue.size()+&quot;个元素&quot;);</div><div class="line">                &#125; finally&#123;</div><div class="line">                    lock.unlock();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">      </div><div class="line">    class Producer extends Thread&#123;</div><div class="line">          </div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            produce();</div><div class="line">        &#125;</div><div class="line">          </div><div class="line">        private void produce() &#123;</div><div class="line">            while(true)&#123;</div><div class="line">                lock.lock();</div><div class="line">                try &#123;</div><div class="line">                    while(queue.size() == queueSize)&#123;</div><div class="line">                        try &#123;</div><div class="line">                            System.out.println(&quot;队列满，等待有空余空间&quot;);</div><div class="line">                            notFull.await();</div><div class="line">                        &#125; catch (InterruptedException e) &#123;</div><div class="line">                            e.printStackTrace();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    queue.offer(1);        //每次插入一个元素</div><div class="line">                    notEmpty.signal();</div><div class="line">                    System.out.println(&quot;向队列取中插入一个元素，队列剩余空间：&quot;+(queueSize-queue.size()));</div><div class="line">                &#125; finally&#123;</div><div class="line">                    lock.unlock();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java并发编程/">Java并发编程</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kollyqaq.github.io/2017/10/31/Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition/" data-title="Java并发编程：线程间协作的两种方式：wait、notify、notifyAll和Condition | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/10/31/Java内部类详解/" title="Java内部类详解">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Java内部类详解</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/10/30/Java并发编程：Thread类的使用/"  title="Java并发编程：Thread类的使用">
+ <strong>下一篇：</strong><br/> 
+ <span>Java并发编程：Thread类的使用
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#一-wait-、notify-和notifyAll"><span class="toc-number">2.</span> <span class="toc-text">一.wait()、notify()和notifyAll()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二-Condition"><span class="toc-number">3.</span> <span class="toc-text">二.Condition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三-生产者-消费者模型的实现"><span class="toc-number">4.</span> <span class="toc-text">三.生产者-消费者模型的实现</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="kollyqaq" data-theme="medium"></div>
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/IntelliJ-IDEA/" title="IntelliJ-IDEA">IntelliJ-IDEA<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java基础/" title="Java基础">Java基础<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发编程/" title="Java并发编程">Java并发编程<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java设计模式/" title="Java设计模式">Java设计模式<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux命令/" title="Linux命令">Linux命令<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Redis/" title="Redis">Redis<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/服务器运维/" title="服务器运维">服务器运维<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/编程规范/" title="编程规范">编程规范<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java关键字/" title="Java关键字">Java关键字<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Redis/" title="Redis">Redis<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java基础/" title="Java基础">Java基础<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com" target="_blank" title="世界上最活跃的开源社区">github</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://spring4all.com" target="_blank" title="学习spring所有技术的社区">spring4all社区</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Kolly. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/6040399147" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/kollyqaq" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/li-jun-chao-96" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="kolly">kolly</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+	//$('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
