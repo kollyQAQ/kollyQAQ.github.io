@@ -1,0 +1,603 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Java中BIO与NIO、AIO的区别 | Stay Hungry,Stay Foolish</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="kolly">
+    
+
+    
+    <meta name="description" content="参考：http://blog.csdn.net/anxpp/article/details/51512200 同步、异步、阻塞、非阻塞的概念 同步 ： 自己亲自出马持银行卡到银行取钱（使用同步IO时，Java自己处理IO读写）； 异步 ： 委托一小弟拿银行卡到银行取钱，然后给你（使用异步IO时，Java将IO读写委托给OS处理，需要将数据缓冲区地址和大小传给OS(银行卡和密码)，OS需要支持异步I">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中BIO与NIO、AIO的区别">
+<meta property="og:url" content="http://kollyqaq.github.io/2017/11/07/Java中BIO与NIO、AIO的区别/index.html">
+<meta property="og:site_name" content="Stay Hungry,Stay Foolish">
+<meta property="og:description" content="参考：http://blog.csdn.net/anxpp/article/details/51512200 同步、异步、阻塞、非阻塞的概念 同步 ： 自己亲自出马持银行卡到银行取钱（使用同步IO时，Java自己处理IO读写）； 异步 ： 委托一小弟拿银行卡到银行取钱，然后给你（使用异步IO时，Java将IO读写委托给OS处理，需要将数据缓冲区地址和大小传给OS(银行卡和密码)，OS需要支持异步I">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.anxpp.com/usr/uploads/2016/05/549520916.png">
+<meta property="og:image" content="http://blog.anxpp.com/usr/uploads/2016/05/614169023.png">
+<meta property="og:updated_time" content="2017-11-12T10:52:48.853Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java中BIO与NIO、AIO的区别">
+<meta name="twitter:description" content="参考：http://blog.csdn.net/anxpp/article/details/51512200 同步、异步、阻塞、非阻塞的概念 同步 ： 自己亲自出马持银行卡到银行取钱（使用同步IO时，Java自己处理IO读写）； 异步 ： 委托一小弟拿银行卡到银行取钱，然后给你（使用异步IO时，Java将IO读写委托给OS处理，需要将数据缓冲区地址和大小传给OS(银行卡和密码)，OS需要支持异步I">
+<meta name="twitter:image" content="http://blog.anxpp.com/usr/uploads/2016/05/549520916.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Stay Hungry,Stay Foolish" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Stay Hungry,Stay Foolish">Stay Hungry,Stay Foolish</a></h1>
+				<h2 class="blog-motto">曾梦想仗剑走天涯，看一看世界的繁华</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">所有文章</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kollyqaq.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/11/07/Java中BIO与NIO、AIO的区别/" title="Java中BIO与NIO、AIO的区别" itemprop="url">Java中BIO与NIO、AIO的区别</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="kolly" target="_blank" itemprop="author">kolly</a>
+		
+  <p class="article-time">
+    <time datetime="2017-11-07T10:07:40.000Z" itemprop="datePublished"> 发表于 2017-11-07</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#同步、异步、阻塞、非阻塞的概念"><span class="toc-number">1.</span> <span class="toc-text">同步、异步、阻塞、非阻塞的概念</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1、BIO编程"><span class="toc-number"></span> <span class="toc-text">1、BIO编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1、传统的BIO编程"><span class="toc-number">1.</span> <span class="toc-text">1.1、传统的BIO编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2、增强的BIO编程"><span class="toc-number">2.</span> <span class="toc-text">1.2、增强的BIO编程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、NIO-编程"><span class="toc-number"></span> <span class="toc-text">2、NIO 编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1、简介"><span class="toc-number">1.</span> <span class="toc-text">2.1、简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2、缓冲区-Buffer"><span class="toc-number">2.</span> <span class="toc-text">2.2、缓冲区 Buffer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3、通道-Channel"><span class="toc-number">3.</span> <span class="toc-text">2.3、通道 Channel</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4、多路复用器-Selector"><span class="toc-number">4.</span> <span class="toc-text">2.4、多路复用器 Selector</span></a></li></ol>
+		
+		</div>
+		
+		<p>参考：<a href="http://blog.csdn.net/anxpp/article/details/51512200" target="_blank" rel="external">http://blog.csdn.net/anxpp/article/details/51512200</a></p>
+<h3 id="同步、异步、阻塞、非阻塞的概念"><a href="#同步、异步、阻塞、非阻塞的概念" class="headerlink" title="同步、异步、阻塞、非阻塞的概念"></a>同步、异步、阻塞、非阻塞的概念</h3><ul>
+<li>同步 ： 自己亲自出马持银行卡到银行取钱（使用同步IO时，Java自己处理IO读写）；</li>
+<li>异步 ： 委托一小弟拿银行卡到银行取钱，然后给你（使用异步IO时，Java将IO读写委托给OS处理，需要将数据缓冲区地址和大小传给OS(银行卡和密码)，OS需要支持异步IO操作API）；</li>
+<li>阻塞 ： ATM排队取款，你只能等待（使用阻塞IO时，Java调用会一直阻塞到读写完成才返回）；</li>
+<li>非阻塞 ： 柜台取款，取个号，然后坐在椅子上做其它事，等号广播会通知你办理，没到号你就不能去，你可以不断问大堂经理排到了没有，大堂经理如果说还没到你就不能去（使用非阻塞IO时，如果不能读写Java调用会马上返回，当IO事件分发器会通知可读写时再继续进行读写，不断循环直到读写完成）</li>
+</ul>
+<h2 id="1、BIO编程"><a href="#1、BIO编程" class="headerlink" title="1、BIO编程"></a>1、BIO编程</h2><h3 id="1-1、传统的BIO编程"><a href="#1-1、传统的BIO编程" class="headerlink" title="1.1、传统的BIO编程"></a>1.1、传统的BIO编程</h3><p>网络编程的基本模型是C/S模型，即两个进程间的通信。</p>
+<p>服务端提供IP和监听端口，客户端通过连接操作想服务端监听的地址发起连接请求，通过三次握手连接，如果连接成功建立，双方就可以通过套接字进行通信。</p>
+<p>传统的同步阻塞模型开发中，ServerSocket负责绑定IP地址，启动监听端口；Socket负责发起连接操作。连接成功后，双方通过输入和输出流进行同步阻塞式通信。 </p>
+<p>简单的描述一下BIO的服务端通信模型：采用BIO通信模型的服务端，通常由一个独立的Acceptor线程负责监听客户端的连接，它接收到客户端连接请求之后为每个客户端创建一个新的线程进行链路处理没处理完成后，通过输出流返回应答给客户端，线程销毁。即典型的一请求一应答通宵模型。</p>
+<p>传统BIO通信模型图：</p>
+<p>​    <img src="http://blog.anxpp.com/usr/uploads/2016/05/549520916.png" alt="01"></p>
+<p>该模型最大的问题就是缺乏弹性伸缩能力，当客户端并发访问量增加后，服务端的线程个数和客户端并发访问数呈1:1的正比关系，Java中的线程也是比较宝贵的系统资源，线程数量快速膨胀后，系统的性能将急剧下降，随着访问量的继续增大，系统最终就<strong>死-掉-了</strong>。</p>
+<p>BIO主要的问题在于每当有一个新的客户端请求接入时，服务端必须创建一个新的线程来处理这条链路，在需要满足高性能、高并发的场景是没法应用的（大量创建新的线程会严重影响服务器性能，甚至罢工）。</p>
+<h3 id="1-2、增强的BIO编程"><a href="#1-2、增强的BIO编程" class="headerlink" title="1.2、增强的BIO编程"></a>1.2、增强的BIO编程</h3><p>为了改进这种一连接一线程的模型，我们可以使用线程池来管理这些线程（需要了解更多请参考前面提供的文章），实现1个或多个线程处理N个客户端的模型（但是底层还是使用的同步阻塞I/O），通常被称为“伪异步I/O模型“。</p>
+<p>伪异步I/O模型图：</p>
+<p>​    <img src="http://blog.anxpp.com/usr/uploads/2016/05/614169023.png" alt="02"></p>
+<p>我们知道，如果使用CachedThreadPool线程池（不限制线程数量，如果不清楚请参考文首提供的文章），其实除了能自动帮我们管理线程（复用），看起来也就像是1:1的客户端：线程数模型，而使用FixedThreadPool我们就有效的控制了线程的最大数量，保证了系统有限的资源的控制，实现了N:M的伪异步I/O模型。</p>
+<p>但是，正因为限制了线程数量，如果发生大量并发请求，超过最大数量的线程就只能等待，直到线程池中的有空闲的线程可以被复用。</p>
+<h2 id="2、NIO-编程"><a href="#2、NIO-编程" class="headerlink" title="2、NIO 编程"></a>2、NIO 编程</h2><p>JDK 1.4中的java.nio.*包中引入新的Java I/O库，其目的是提高速度。实际上，“旧”的I/O包已经使用NIO重新实现过，即使我们不显式的使用NIO编程，也能从中受益。速度的提高在文件I/O和网络I/O中都可能会发生，但本文只讨论后者。</p>
+<h3 id="2-1、简介"><a href="#2-1、简介" class="headerlink" title="2.1、简介"></a>2.1、简介</h3><p>NIO我们一般认为是New I/O（也是官方的叫法），因为它是相对于老的I/O类库新增的（其实在JDK 1.4中就已经被引入了，但这个名词还会继续用很久，即使它们在现在看来已经是“旧”的了，所以也提示我们在命名时，需要好好考虑），做了很大的改变。但民间跟多人称之为Non-block I/O，即非阻塞I/O，因为这样叫，更能体现它的特点。而下文中的NIO，不是指整个新的I/O库，而是非阻塞I/O。</p>
+<p>NIO提供了与传统BIO模型中的Socket和ServerSocket相对应的SocketChannel和ServerSocketChannel两种不同的套接字通道实现。</p>
+<p>新增的着两种通道都支持阻塞和非阻塞两种模式。</p>
+<p>阻塞模式使用就像传统中的支持一样，比较简单，但是性能和可靠性都不好；非阻塞模式正好与之相反。</p>
+<p>对于低负载、低并发的应用程序，可以使用同步阻塞I/O来提升开发速率和更好的维护性；对于高负载、高并发的（网络）应用，应使用NIO的非阻塞模式来开发。</p>
+<p>下面会先对基础知识进行介绍。</p>
+<h3 id="2-2、缓冲区-Buffer"><a href="#2-2、缓冲区-Buffer" class="headerlink" title="2.2、缓冲区 Buffer"></a>2.2、缓冲区 Buffer</h3><p>Buffer是一个对象，包含一些要写入或者读出的数据。</p>
+<p>在NIO库中，所有数据都是用缓冲区处理的。在读取数据时，它是直接读到缓冲区中的；在写入数据时，也是写入到缓冲区中。任何时候访问NIO中的数据，都是通过缓冲区进行操作。</p>
+<p>缓冲区实际上是一个数组，并提供了对数据结构化访问以及维护读写位置等信息。</p>
+<p>具体的缓存区有这些：ByteBuffe、CharBuffer、 ShortBuffer、IntBuffer、LongBuffer、FloatBuffer、DoubleBuffer。他们实现了相同的接口：Buffer。</p>
+<h3 id="2-3、通道-Channel"><a href="#2-3、通道-Channel" class="headerlink" title="2.3、通道 Channel"></a>2.3、通道 Channel</h3><p>我们对数据的读取和写入要通过Channel，它就像水管一样，是一个通道。通道不同于流的地方就是通道是双向的，可以用于读、写和同时读写操作。</p>
+<p>底层的操作系统的通道一般都是全双工的，所以全双工的Channel比流能更好的映射底层操作系统的API。</p>
+<p>Channel主要分两大类：</p>
+<ul>
+<li>​    SelectableChannel：用户网络读写</li>
+<li>​    FileChannel：用于文件操作</li>
+</ul>
+<p>后面代码会涉及的ServerSocketChannel和SocketChannel都是SelectableChannel的子类。</p>
+<h3 id="2-4、多路复用器-Selector"><a href="#2-4、多路复用器-Selector" class="headerlink" title="2.4、多路复用器 Selector"></a>2.4、多路复用器 Selector</h3><p> Selector是Java  NIO 编程的基础。</p>
+<p>Selector提供选择已经就绪的任务的能力：Selector会不断轮询注册在其上的Channel，如果某个Channel上面发生读或者写事件，这个Channel就处于就绪状态，会被Selector轮询出来，然后通过SelectionKey可以获取就绪Channel的集合，进行后续的I/O操作。</p>
+<p>一个Selector可以同时轮询多个Channel，因为JDK使用了epoll()代替传统的select实现，所以没有最大连接句柄1024/2048的限制。所以，只需要一个线程负责Selector的轮询，就可以接入成千上万的客户端。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Java进阶/">Java进阶</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kollyqaq.github.io/2017/11/07/Java中BIO与NIO、AIO的区别/" data-title="Java中BIO与NIO、AIO的区别 | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/11/12/ext/" title="">
+  <strong>上一篇：</strong><br/>
+  <span>
+  (no title)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/11/06/Https原理解析/"  title="Https原理解析">
+ <strong>下一篇：</strong><br/> 
+ <span>Https原理解析
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#同步、异步、阻塞、非阻塞的概念"><span class="toc-number">1.</span> <span class="toc-text">同步、异步、阻塞、非阻塞的概念</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1、BIO编程"><span class="toc-number"></span> <span class="toc-text">1、BIO编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1、传统的BIO编程"><span class="toc-number">1.</span> <span class="toc-text">1.1、传统的BIO编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2、增强的BIO编程"><span class="toc-number">2.</span> <span class="toc-text">1.2、增强的BIO编程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、NIO-编程"><span class="toc-number"></span> <span class="toc-text">2、NIO 编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1、简介"><span class="toc-number">1.</span> <span class="toc-text">2.1、简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2、缓冲区-Buffer"><span class="toc-number">2.</span> <span class="toc-text">2.2、缓冲区 Buffer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3、通道-Channel"><span class="toc-number">3.</span> <span class="toc-text">2.3、通道 Channel</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4、多路复用器-Selector"><span class="toc-number">4.</span> <span class="toc-text">2.4、多路复用器 Selector</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="kollyqaq" data-theme="medium"></div>
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/IntelliJ-IDEA/" title="IntelliJ-IDEA">IntelliJ-IDEA<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java基础/" title="Java基础">Java基础<sup>6</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发编程/" title="Java并发编程">Java并发编程<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java设计模式/" title="Java设计模式">Java设计模式<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java进阶/" title="Java进阶">Java进阶<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux命令/" title="Linux命令">Linux命令<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mysql/" title="Mysql">Mysql<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Redis/" title="Redis">Redis<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/服务器运维/" title="服务器运维">服务器运维<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/编程规范/" title="编程规范">编程规范<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/网络通信/" title="网络通信">网络通信<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>13</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java关键字/" title="Java关键字">Java关键字<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络通信/" title="网络通信">网络通信<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Redis/" title="Redis">Redis<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com" target="_blank" title="世界上最活跃的开源社区">github</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://spring4all.com" target="_blank" title="学习spring所有技术的社区">spring4all社区</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Kolly. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/6040399147" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/kollyqaq" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/li-jun-chao-96" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="kolly">kolly</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+	//$('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

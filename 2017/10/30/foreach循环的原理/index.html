@@ -11,18 +11,18 @@
     
 
     
-    <meta name="description" content="前言在JAVA中，遍历集合和数组一般有以下三种形式： 123456789101112for (int i = 0; i &amp;lt; list.size(); i++) &amp;#123;    System.out.print(list.get(i) + &amp;quot;,&amp;quot;);&amp;#125;Iterator iterator = list.iterator();while (iterator.has">
-<meta name="keywords" content="Java基础">
+    <meta name="description" content="前言在Java中，遍历集合和数组一般有以下三种形式： 123456789101112for (int i = 0; i &amp;lt; list.size(); i++) &amp;#123;    System.out.print(list.get(i) + &amp;quot;,&amp;quot;);&amp;#125;Iterator iterator = list.iterator();while (iterator.has">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="foreach循环的原理">
 <meta property="og:url" content="http://kollyqaq.github.io/2017/10/30/foreach循环的原理/index.html">
 <meta property="og:site_name" content="Stay Hungry,Stay Foolish">
-<meta property="og:description" content="前言在JAVA中，遍历集合和数组一般有以下三种形式： 123456789101112for (int i = 0; i &amp;lt; list.size(); i++) &amp;#123;    System.out.print(list.get(i) + &amp;quot;,&amp;quot;);&amp;#125;Iterator iterator = list.iterator();while (iterator.has">
+<meta property="og:description" content="前言在Java中，遍历集合和数组一般有以下三种形式： 123456789101112for (int i = 0; i &amp;lt; list.size(); i++) &amp;#123;    System.out.print(list.get(i) + &amp;quot;,&amp;quot;);&amp;#125;Iterator iterator = list.iterator();while (iterator.has">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-01T09:52:34.407Z">
+<meta property="og:updated_time" content="2017-11-12T12:24:56.999Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="foreach循环的原理">
-<meta name="twitter:description" content="前言在JAVA中，遍历集合和数组一般有以下三种形式： 123456789101112for (int i = 0; i &amp;lt; list.size(); i++) &amp;#123;    System.out.print(list.get(i) + &amp;quot;,&amp;quot;);&amp;#125;Iterator iterator = list.iterator();while (iterator.has">
+<meta name="twitter:description" content="前言在Java中，遍历集合和数组一般有以下三种形式： 123456789101112for (int i = 0; i &amp;lt; list.size(); i++) &amp;#123;    System.out.print(list.get(i) + &amp;quot;,&amp;quot;);&amp;#125;Iterator iterator = list.iterator();while (iterator.has">
 
     
     <link rel="alternative" href="/atom.xml" title="Stay Hungry,Stay Foolish" type="application/atom+xml">
@@ -92,19 +92,21 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现原理"><span class="toc-number">2.</span> <span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#坑"><span class="toc-number">3.</span> <span class="toc-text">坑</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#遍历集合原理"><span class="toc-number">2.</span> <span class="toc-text">遍历集合原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#遍历数组原理"><span class="toc-number">3.</span> <span class="toc-text">遍历数组原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#坑"><span class="toc-number">4.</span> <span class="toc-text">坑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#foreach与for循环效率对比"><span class="toc-number">5.</span> <span class="toc-text">foreach与for循环效率对比</span></a></li></ol>
 		
 		</div>
 		
-		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在JAVA中，遍历集合和数组一般有以下三种形式：</p>
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在Java中，遍历集合和数组一般有以下三种形式：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">for (int i = 0; i &lt; list.size(); i++) &#123;</div><div class="line">    System.out.print(list.get(i) + &quot;,&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">Iterator iterator = list.iterator();</div><div class="line">while (iterator.hasNext()) &#123;</div><div class="line">    System.out.print(iterator.next() + &quot;,&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">for (Integer i : list) &#123;</div><div class="line">    System.out.print(i + &quot;,&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>第一种是普通的for循环遍历、第二种是使用迭代器进行遍历，第三种我们一般称之为增强for循环（for each）。</p>
-<h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><p>可以看到，第三种形式是JAVA提供的语法糖，这里我们剖洗一下，这种增强for循环底层是如何实现的。</p>
+<p>第一种是普通的for循环遍历、第二种是使用迭代器进行遍历，第三种我们一般称之为增强for循环，也就是foreach循环。</p>
+<h3 id="遍历集合原理"><a href="#遍历集合原理" class="headerlink" title="遍历集合原理"></a>遍历集合原理</h3><p>可以看到，第三种形式是JAVA提供的语法糖，这里我们剖析一下，这种增强for循环底层是如何实现的。</p>
 <p>我们对以下代码进行反编译：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">for (Integer i : list) &#123;</div><div class="line">   System.out.println(i);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>反编译后：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Integer i;</div><div class="line">for(Iterator iterator = list.iterator(); iterator.hasNext(); System.out.println(i))&#123;</div><div class="line">   i = (Integer)iterator.next();        </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>通过反编译，我们看到，<strong>其实JAVA中的增强for循环底层是通过迭代器模式来实现的。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for(Iterator iterator = list.iterator(); iterator.hasNext();)&#123;</div><div class="line">   Integer i = (Integer)iterator.next();     </div><div class="line">   System.out.println(i)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过反编译，我们看到，<strong>其实JAVA中的增强for循环底层是通过迭代器模式来实现的。</strong>从性能来说，只比迭代器遍历多了生成中间变量这一步，因此性能也略微下降了一些</p>
+<h3 id="遍历数组原理"><a href="#遍历数组原理" class="headerlink" title="遍历数组原理"></a>遍历数组原理</h3><p>有人会有疑问了，那数组并没有实现iterable接口为什么可以用foreach遍历呢？</p>
+<p>那是因为遍历数组时，会转换为对数组中的每一个元素的循环引用，相当于for语法循环遍历一样。</p>
 <h3 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h3><p>既然增强for循环通过迭代器实现，那么必然有迭代器的特性。</p>
 <p>在使用迭代器遍历元素的时候，在对集合进行删除的时候一定要注意，使用不当有可能发生<code>ConcurrentModificationException</code>，如以下代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for (Student stu : students) &#123;    </div><div class="line">    if (stu.getId() == 2)     </div><div class="line">        students.remove(stu);    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -114,7 +116,9 @@
 </blockquote>
 <p><strong>所以 Iterator 在工作的时候是不允许被迭代的对象被改变的。但你可以使用 Iterator 本身的方法 remove() 来删除对象，Iterator.remove() 方法会在删除当前迭代对象的同时维护索引的一致性。</strong></p>
 <p>正确的在遍历的同时删除元素的姿势：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Iterator&lt;Student&gt; stuIter = students.iterator();    </div><div class="line">while (stuIter.hasNext()) &#123;    </div><div class="line">    Student student = stuIter.next();    </div><div class="line">    if (student.getId() == 2)&#123;    </div><div class="line">        stuIter.remove();//这里要使用Iterator的remove方法移除当前对象，如果使用List的remove方法，则同样会出现ConcurrentModificationException</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>  
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Iterator&lt;Student&gt; stuIter = students.iterator();    </div><div class="line">while (stuIter.hasNext()) &#123;</div><div class="line">    Student student = stuIter.next();    </div><div class="line">    if (student.getId() == 2)&#123;    </div><div class="line">        stuIter.remove();//这里要使用Iterator的remove方法移除当前对象</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="foreach与for循环效率对比"><a href="#foreach与for循环效率对比" class="headerlink" title="foreach与for循环效率对比"></a>foreach与for循环效率对比</h3><p>需要循环数组结构的数据时，建议使用普通for循环，因为for循环采用下标访问，对于数组结构的数据来说，采用下标访问比较好。<br>需要循环链表结构的数据时，建议使用foreach循环，一定不要使用普通for循环，这种做法很糟糕，数据量大的时候有可能会导致系统崩溃。</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -127,7 +131,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Java基础/">Java基础</a>
+  <span></span> <a href="/tags/Java/">Java</a>
   </div>
 
 </div>
@@ -177,7 +181,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现原理"><span class="toc-number">2.</span> <span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#坑"><span class="toc-number">3.</span> <span class="toc-text">坑</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#遍历集合原理"><span class="toc-number">2.</span> <span class="toc-text">遍历集合原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#遍历数组原理"><span class="toc-number">3.</span> <span class="toc-text">遍历数组原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#坑"><span class="toc-number">4.</span> <span class="toc-text">坑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#foreach与for循环效率对比"><span class="toc-number">5.</span> <span class="toc-text">foreach与for循环效率对比</span></a></li></ol>
  
   </div>
 
@@ -200,7 +204,7 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/IntelliJ-IDEA/" title="IntelliJ-IDEA">IntelliJ-IDEA<sup>1</sup></a></li>
+			<li><a href="/categories/IntelliJ-IDEA/" title="IntelliJ-IDEA">IntelliJ-IDEA<sup>2</sup></a></li>
 		  
 		
 		  
@@ -216,6 +220,10 @@
 		  
 		
 		  
+			<li><a href="/categories/Java进阶/" title="Java进阶">Java进阶<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/Linux命令/" title="Linux命令">Linux命令<sup>1</sup></a></li>
 		  
 		
@@ -224,11 +232,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
+			<li><a href="/categories/Mysql/" title="Mysql">Mysql<sup>2</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Redis/" title="Redis">Redis<sup>2</sup></a></li>
+			<li><a href="/categories/Redis/" title="Redis">Redis<sup>1</sup></a></li>
 		  
 		
 		  
@@ -237,6 +245,10 @@
 		
 		  
 			<li><a href="/categories/编程规范/" title="编程规范">编程规范<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/网络通信/" title="网络通信">网络通信<sup>2</sup></a></li>
 		  
 		
 		</ul>
@@ -249,11 +261,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>10</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>13</sup></a></li>
 			
 		
 			
@@ -261,27 +269,31 @@
 			
 		
 			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络通信/" title="网络通信">网络通信<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Redis/" title="Redis">Redis<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/JAVA/" title="JAVA">JAVA<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>1</sup></a></li>
+				<li><a href="/tags/Redis/" title="Redis">Redis<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Java基础/" title="Java基础">Java基础<sup>1</sup></a></li>
 			
 		
 			
@@ -290,10 +302,6 @@
 		
 			
 				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>1</sup></a></li>
 			
 		
 		</ul>
