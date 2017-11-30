@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="Stay Hungry,Stay Foolish">
 <meta property="og:description" content="连接mysql mysql -h{host} -P{port} -u{user} -p’{password}’  示例：mysql -h127.0.0.1 -P3306 -uroot -p’Root@123’ 其中：host=1270.0.1或者localhost可省略 port=3306可省略 user=root可省略 即：mysql -p‘Root@123’ 查看mysql版本 [root@l">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-30T03:15:16.890Z">
+<meta property="og:updated_time" content="2017-11-30T06:44:37.497Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql常用sql">
 <meta name="twitter:description" content="连接mysql mysql -h{host} -P{port} -u{user} -p’{password}’  示例：mysql -h127.0.0.1 -P3306 -uroot -p’Root@123’ 其中：host=1270.0.1或者localhost可省略 port=3306可省略 user=root可省略 即：mysql -p‘Root@123’ 查看mysql版本 [root@l">
@@ -92,7 +92,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接mysql"><span class="toc-number">1.</span> <span class="toc-text">连接mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看mysql版本"><span class="toc-number">2.</span> <span class="toc-text">查看mysql版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建用户"><span class="toc-number">3.</span> <span class="toc-text">创建用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#权限管理"><span class="toc-number">4.</span> <span class="toc-text">权限管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、GRANT命令使用说明"><span class="toc-number">4.1.</span> <span class="toc-text">1、GRANT命令使用说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、刷新权限"><span class="toc-number">4.2.</span> <span class="toc-text">2、刷新权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、查看权限"><span class="toc-number">4.3.</span> <span class="toc-text">3、查看权限</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建数据库"><span class="toc-number">5.</span> <span class="toc-text">创建数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看数据库的创建语句"><span class="toc-number">6.</span> <span class="toc-text">查看数据库的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建表"><span class="toc-number">7.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看表的创建语句"><span class="toc-number">8.</span> <span class="toc-text">查看表的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建索引"><span class="toc-number">9.</span> <span class="toc-text">创建索引</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接mysql"><span class="toc-number">1.</span> <span class="toc-text">连接mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看mysql版本"><span class="toc-number">2.</span> <span class="toc-text">查看mysql版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建数据库"><span class="toc-number">3.</span> <span class="toc-text">创建数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看数据库的创建语句"><span class="toc-number">4.</span> <span class="toc-text">查看数据库的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建表"><span class="toc-number">5.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看表的创建语句"><span class="toc-number">6.</span> <span class="toc-text">查看表的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建索引"><span class="toc-number">7.</span> <span class="toc-text">创建索引</span></a></li></ol>
 		
 		</div>
 		
@@ -108,28 +108,6 @@
 <p>或者</p>
 <blockquote>
 <p>mysql&gt; status;</p>
-</blockquote>
-<h3 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h3><h3 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h3><h4 id="1、GRANT命令使用说明"><a href="#1、GRANT命令使用说明" class="headerlink" title="1、GRANT命令使用说明"></a>1、GRANT命令使用说明</h4><blockquote>
-<p><code>mysql&gt; grant all privileges on *.* to jack@&#39;localhost&#39; identified by &quot;123456&quot; with grant option;</code></p>
-</blockquote>
-<p>创建一个只允许从本地登录的超级用户jack，并允许将权限赋予别的用户，密码为：123456</p>
-<p>GRANT命令说明：</p>
-<ul>
-<li><code>ALL PRIVILEGES</code> 是表示所有权限，你也可以使用select、update等权限。</li>
-<li><code>ON</code> 用来指定权限针对哪些库和表,<code>*.*</code>  中前面的<code>*</code>号用来指定数据库名，后面的<code>*</code>号用来指定表名。</li>
-<li><code>TO</code> 表示将权限赋予某个用户。</li>
-<li><code>jack@&#39;localhost&#39;</code>表示jack用户，@后面接限制的主机，可以是IP、IP段、域名以及%，<strong>%表示任何地方</strong>。注意：这里%有的版本不包括本地，以前碰到过给某个用户设置了%允许任何地方登录，但是在本地登录不了，这个和版本有关系，遇到这个问题再加一个localhost的用户就可以了。</li>
-<li><code>IDENTIFIED BY</code> 指定用户的登录密码。</li>
-<li><code>WITH GRANT OPTION</code> 这个选项表示该用户可以将自己拥有的权限授权给别人。注意：经常有人在创建操作用户的时候不指定WITH GRANT OPTION选项导致后来该用户不能使用GRANT命令创建用户或者给其它用户授权。</li>
-</ul>
-<p>备注：可以使用GRANT重复给用户添加权限，权限叠加，比如你先给用户添加一个select权限，然后又给用户添加一个insert权限，那么该用户就同时拥有了select和insert权限。</p>
-<h4 id="2、刷新权限"><a href="#2、刷新权限" class="headerlink" title="2、刷新权限"></a>2、刷新权限</h4><p>使用这个命令使权限生效，尤其是你对那些权限表user、db、host等做了update或者delete更新的时候。以前遇到过使用grant后权限没有更新的情况，只要对权限做了更改就使用FLUSH PRIVILEGES命令来刷新权限。</p>
-<blockquote>
-<p>mysql&gt; flush privileges;</p>
-</blockquote>
-<h4 id="3、查看权限"><a href="#3、查看权限" class="headerlink" title="3、查看权限"></a>3、查看权限</h4><p>查看当前用户的权限</p>
-<blockquote>
-<p>mysql&gt; show grants;</p>
 </blockquote>
 <h3 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h3><blockquote>
 <p>CREATE DATABASE [IF NOT EXISTS] DBNAME [CHARACTER SET ‘CHAR_NAME’][COLLATE ‘COLL_NAME’]</p>
@@ -211,7 +189,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接mysql"><span class="toc-number">1.</span> <span class="toc-text">连接mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看mysql版本"><span class="toc-number">2.</span> <span class="toc-text">查看mysql版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建用户"><span class="toc-number">3.</span> <span class="toc-text">创建用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#权限管理"><span class="toc-number">4.</span> <span class="toc-text">权限管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、GRANT命令使用说明"><span class="toc-number">4.1.</span> <span class="toc-text">1、GRANT命令使用说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、刷新权限"><span class="toc-number">4.2.</span> <span class="toc-text">2、刷新权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、查看权限"><span class="toc-number">4.3.</span> <span class="toc-text">3、查看权限</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建数据库"><span class="toc-number">5.</span> <span class="toc-text">创建数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看数据库的创建语句"><span class="toc-number">6.</span> <span class="toc-text">查看数据库的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建表"><span class="toc-number">7.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看表的创建语句"><span class="toc-number">8.</span> <span class="toc-text">查看表的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建索引"><span class="toc-number">9.</span> <span class="toc-text">创建索引</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接mysql"><span class="toc-number">1.</span> <span class="toc-text">连接mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看mysql版本"><span class="toc-number">2.</span> <span class="toc-text">查看mysql版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建数据库"><span class="toc-number">3.</span> <span class="toc-text">创建数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看数据库的创建语句"><span class="toc-number">4.</span> <span class="toc-text">查看数据库的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建表"><span class="toc-number">5.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看表的创建语句"><span class="toc-number">6.</span> <span class="toc-text">查看表的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建索引"><span class="toc-number">7.</span> <span class="toc-text">创建索引</span></a></li></ol>
  
   </div>
 
@@ -254,7 +232,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>4</sup></a></li>
 		  
 		
 		  
@@ -295,7 +273,7 @@
 			
 		
 			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>4</sup></a></li>
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>6</sup></a></li>
 			
 		
 			
@@ -323,11 +301,11 @@
 			
 		
 			
-				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
 			
 		
 			
