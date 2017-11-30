@@ -4,25 +4,25 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Mysql explain用法和性能分析 | Stay Hungry,Stay Foolish</title>
+    <title>Mysql常用sql | Stay Hungry,Stay Foolish</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="kolly">
     
 
     
-    <meta name="description" content="1 .使用explain语句去查看分析结果，如  explain select * from test1 where id=1;  会出现:  id selecttype table type possible_keys key key_len ref rows extra  EXPLAIN列的解释  table：显示这一行的数据是关于哪张表的 type：这是重要的列，显示连接使用了何种类型。从坏">
+    <meta name="description" content="连接mysql mysql -h{host} -P{port} -u{user} -p’{password}’  示例：mysql -h127.0.0.1 -P3306 -uroot -p’Root@123’ 其中：host=1270.0.1或者localhost可省略 port=3306可省略 user=root可省略 即：mysql -p‘Root@123’ 查看mysql版本 [root@l">
 <meta name="keywords" content="Mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mysql explain用法和性能分析">
-<meta property="og:url" content="http://kollyqaq.github.io/2017/11/03/Mysql explain用法和性能分析/index.html">
+<meta property="og:title" content="Mysql常用sql">
+<meta property="og:url" content="http://kollyqaq.github.io/2017/11/28/Mysql常用sql/index.html">
 <meta property="og:site_name" content="Stay Hungry,Stay Foolish">
-<meta property="og:description" content="1 .使用explain语句去查看分析结果，如  explain select * from test1 where id=1;  会出现:  id selecttype table type possible_keys key key_len ref rows extra  EXPLAIN列的解释  table：显示这一行的数据是关于哪张表的 type：这是重要的列，显示连接使用了何种类型。从坏">
+<meta property="og:description" content="连接mysql mysql -h{host} -P{port} -u{user} -p’{password}’  示例：mysql -h127.0.0.1 -P3306 -uroot -p’Root@123’ 其中：host=1270.0.1或者localhost可省略 port=3306可省略 user=root可省略 即：mysql -p‘Root@123’ 查看mysql版本 [root@l">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-06T04:33:47.132Z">
+<meta property="og:updated_time" content="2017-11-30T03:15:16.890Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mysql explain用法和性能分析">
-<meta name="twitter:description" content="1 .使用explain语句去查看分析结果，如  explain select * from test1 where id=1;  会出现:  id selecttype table type possible_keys key key_len ref rows extra  EXPLAIN列的解释  table：显示这一行的数据是关于哪张表的 type：这是重要的列，显示连接使用了何种类型。从坏">
+<meta name="twitter:title" content="Mysql常用sql">
+<meta name="twitter:description" content="连接mysql mysql -h{host} -P{port} -u{user} -p’{password}’  示例：mysql -h127.0.0.1 -P3306 -uroot -p’Root@123’ 其中：host=1270.0.1或者localhost可省略 port=3306可省略 user=root可省略 即：mysql -p‘Root@123’ 查看mysql版本 [root@l">
 
     
     <link rel="alternative" href="/atom.xml" title="Stay Hungry,Stay Foolish" type="application/atom+xml">
@@ -76,14 +76,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/11/03/Mysql explain用法和性能分析/" title="Mysql explain用法和性能分析" itemprop="url">Mysql explain用法和性能分析</a>
+      <a href="/2017/11/28/Mysql常用sql/" title="Mysql常用sql" itemprop="url">Mysql常用sql</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="kolly" target="_blank" itemprop="author">kolly</a>
 		
   <p class="article-time">
-    <time datetime="2017-11-03T07:34:21.000Z" itemprop="datePublished"> 发表于 2017-11-03</time>
+    <time datetime="2017-11-28T02:47:07.000Z" itemprop="datePublished"> 发表于 2017-11-28</time>
     
   </p>
 </header>
@@ -92,64 +92,63 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-使用explain"><span class="toc-number">1.</span> <span class="toc-text">1 .使用explain</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接mysql"><span class="toc-number">1.</span> <span class="toc-text">连接mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看mysql版本"><span class="toc-number">2.</span> <span class="toc-text">查看mysql版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建用户"><span class="toc-number">3.</span> <span class="toc-text">创建用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#权限管理"><span class="toc-number">4.</span> <span class="toc-text">权限管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、GRANT命令使用说明"><span class="toc-number">4.1.</span> <span class="toc-text">1、GRANT命令使用说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、刷新权限"><span class="toc-number">4.2.</span> <span class="toc-text">2、刷新权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、查看权限"><span class="toc-number">4.3.</span> <span class="toc-text">3、查看权限</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建数据库"><span class="toc-number">5.</span> <span class="toc-text">创建数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看数据库的创建语句"><span class="toc-number">6.</span> <span class="toc-text">查看数据库的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建表"><span class="toc-number">7.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看表的创建语句"><span class="toc-number">8.</span> <span class="toc-text">查看表的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建索引"><span class="toc-number">9.</span> <span class="toc-text">创建索引</span></a></li></ol>
 		
 		</div>
 		
-		<h3 id="1-使用explain"><a href="#1-使用explain" class="headerlink" title="1 .使用explain"></a>1 .使用explain</h3><p>语句去查看分析结果，如</p>
-<blockquote>
-<p>explain select * from test1 where id=1;</p>
+		<h3 id="连接mysql"><a href="#连接mysql" class="headerlink" title="连接mysql"></a>连接mysql</h3><blockquote>
+<p>mysql -h{host} -P{port} -u{user} -p’{password}’</p>
 </blockquote>
-<p>会出现:</p>
-<blockquote>
-<p>id selecttype table type possible_keys key key_len ref rows extra</p>
+<p>示例：mysql -h127.0.0.1 -P3306 -uroot -p’Root@123’</p>
+<p>其中：host=1270.0.1或者localhost可省略 port=3306可省略 user=root可省略</p>
+<p>即：mysql -p‘Root@123’</p>
+<h3 id="查看mysql版本"><a href="#查看mysql版本" class="headerlink" title="查看mysql版本"></a>查看mysql版本</h3><blockquote>
+<p>[root@localhost ~]# mysql -V</p>
 </blockquote>
-<p><strong>EXPLAIN列的解释</strong></p>
+<p>或者</p>
+<blockquote>
+<p>mysql&gt; status;</p>
+</blockquote>
+<h3 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h3><h3 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h3><h4 id="1、GRANT命令使用说明"><a href="#1、GRANT命令使用说明" class="headerlink" title="1、GRANT命令使用说明"></a>1、GRANT命令使用说明</h4><blockquote>
+<p><code>mysql&gt; grant all privileges on *.* to jack@&#39;localhost&#39; identified by &quot;123456&quot; with grant option;</code></p>
+</blockquote>
+<p>创建一个只允许从本地登录的超级用户jack，并允许将权限赋予别的用户，密码为：123456</p>
+<p>GRANT命令说明：</p>
 <ul>
-<li>table：显示这一行的数据是关于哪张表的</li>
-<li>type：这是重要的列，显示连接使用了何种类型。从坏到好的连接类型为ALL &lt; index &lt; range &lt; index_merge &lt; fulltext &lt; ref &lt; eq_ref &lt; const &lt; system</li>
-<li>possible_keys：显示可能应用在这张表中的索引。如果为空，没有可能的索引。可以为相关的域从WHERE语句中选择一个合适的语句</li>
-<li>key： 实际使用的索引。如果为NULL，则没有使用索引。很少的情况下，MYSQL会选择优化不足的索引。这种情况下，可以在SELECT语句中使用USE INDEX（indexname）来强制使用一个索引或者用IGNORE INDEX（indexname）来强制MYSQL忽略索引</li>
-<li>key_len：使用的索引的长度。在不损失精确性的情况下，长度越短越好</li>
-<li>ref：显示索引的哪一列被使用了，如果可能的话，是一个常数</li>
-<li>rows：MYSQL认为必须检查的用来返回请求数据的行数</li>
-<li>Extra：关于MYSQL如何解析查询的额外信息。</li>
+<li><code>ALL PRIVILEGES</code> 是表示所有权限，你也可以使用select、update等权限。</li>
+<li><code>ON</code> 用来指定权限针对哪些库和表,<code>*.*</code>  中前面的<code>*</code>号用来指定数据库名，后面的<code>*</code>号用来指定表名。</li>
+<li><code>TO</code> 表示将权限赋予某个用户。</li>
+<li><code>jack@&#39;localhost&#39;</code>表示jack用户，@后面接限制的主机，可以是IP、IP段、域名以及%，<strong>%表示任何地方</strong>。注意：这里%有的版本不包括本地，以前碰到过给某个用户设置了%允许任何地方登录，但是在本地登录不了，这个和版本有关系，遇到这个问题再加一个localhost的用户就可以了。</li>
+<li><code>IDENTIFIED BY</code> 指定用户的登录密码。</li>
+<li><code>WITH GRANT OPTION</code> 这个选项表示该用户可以将自己拥有的权限授权给别人。注意：经常有人在创建操作用户的时候不指定WITH GRANT OPTION选项导致后来该用户不能使用GRANT命令创建用户或者给其它用户授权。</li>
 </ul>
-<p><strong>select_type</strong></p>
-<p>select查询的类型，主要是区别普通查询和联合查询、子查询之类的复杂查询，它有六种情况：</p>
-<ul>
-<li>SIMPLE：简单的select查询，查询中不包含子查询或者UNION</li>
-<li>PRIMARY：查询中包含任何复杂的子部分，最外层查询则被标记为它</li>
-</ul>
-<ul>
-<li>SUBQUERY：在SELECT或WHERE列表中包含了子查询</li>
-<li>DERIVED：在FROM列表中包含的子查询被标记为DERIVED（衍生），MySQL会递归执行这些子查询，把结果放在临时表里</li>
-<li>UNION：若第二个SELECT出现在UNION之后，则被标记为UNION；若UNION包含在FROM子句的子查询中，外层的SELECT将被标记为：DERIVED</li>
-<li>UNION RESULT：从UNION表获取结果的SELECT</li>
-</ul>
-<p><strong>type的解释</strong></p>
-<p>显示的是访问类型，是较为重要的一个指标，结果值坏到好的连接类型为ALL &lt; index &lt; range &lt; index_merge &lt; fulltext &lt; ref &lt; eq_ref &lt; const &lt; system，除了all之外，其他的type都可以使用到索引，除了index_merge之外，其他的type只可以用到一个索引</p>
-<p>一般来说，得保证查询至少达到range级别，最好能达到ref。</p>
-<ul>
-<li>system：表中只有一行数据或者是空表，且只能用于myisam和memory表。如果是Innodb引擎表，type列在这个情况通常都是all或者index</li>
-<li>const：使用唯一索引或者主键，返回记录一定是1行记录的等值where条件时，通常type是const。其他数据库也叫做唯一索引扫描</li>
-</ul>
-<ul>
-<li>eq_ref：出现在要连接多个表的查询计划中，驱动表只返回一行数据，且这行数据是第二个表的主键或者唯一索引，且必须为not null，唯一索引和主键是多列时，只有所有的列都用作比较时才会出现eq_ref</li>
-</ul>
-<ul>
-<li>ref：不像eq_ref那样要求连接顺序，也没有主键和唯一索引的要求，只要使用相等条件检索时就可能出现，常见与辅助索引的等值查找。或者多列主键、唯一索引中，使用第一个列之外的列作为等值查找也会出现，总之，返回数据不唯一的等值查找就可能出现。</li>
-<li>fulltext：全文索引检索，要注意，全文索引的优先级很高，若全文索引和普通索引同时存在时，mysql不管代价，优先选择使用全文索引</li>
-</ul>
-<ul>
-<li>index_merge：表示查询使用了两个以上的索引，最后取交集或者并集，常见and ，or的条件使用了不同的索引，官方排序这个在ref_or_null之后，但是实际上由于要读取多个索引，性能可能大部分时间都不如range</li>
-<li>range：索引范围扫描，常见于使用&gt;,&lt;,is null,between ,in ,like等运算符的查询中。</li>
-</ul>
-<ul>
-<li>index：索引全表扫描，把索引从头到尾扫一遍，常见于使用索引列就可以处理不需要读取数据文件的查询、可以使用索引排序或者分组的查询。</li>
-<li>all：这个就是全表扫描数据文件，然后再在server层进行过滤返回符合要求的记录。</li>
-</ul>
-  
+<p>备注：可以使用GRANT重复给用户添加权限，权限叠加，比如你先给用户添加一个select权限，然后又给用户添加一个insert权限，那么该用户就同时拥有了select和insert权限。</p>
+<h4 id="2、刷新权限"><a href="#2、刷新权限" class="headerlink" title="2、刷新权限"></a>2、刷新权限</h4><p>使用这个命令使权限生效，尤其是你对那些权限表user、db、host等做了update或者delete更新的时候。以前遇到过使用grant后权限没有更新的情况，只要对权限做了更改就使用FLUSH PRIVILEGES命令来刷新权限。</p>
+<blockquote>
+<p>mysql&gt; flush privileges;</p>
+</blockquote>
+<h4 id="3、查看权限"><a href="#3、查看权限" class="headerlink" title="3、查看权限"></a>3、查看权限</h4><p>查看当前用户的权限</p>
+<blockquote>
+<p>mysql&gt; show grants;</p>
+</blockquote>
+<h3 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h3><blockquote>
+<p>CREATE DATABASE [IF NOT EXISTS] DBNAME [CHARACTER SET ‘CHAR_NAME’][COLLATE ‘COLL_NAME’]</p>
+</blockquote>
+<p>示例：CREATE DATABASE IF NOT EXISTS wxpam CHARACTER SET ‘utf8’ COLLATE ‘utf8_unicode_ci’;</p>
+<h3 id="查看数据库的创建语句"><a href="#查看数据库的创建语句" class="headerlink" title="查看数据库的创建语句"></a>查看数据库的创建语句</h3><blockquote>
+<p>SHOW CREATE DATABASE DBNAME;</p>
+</blockquote>
+<p>示例：SHOW CREATE DATABASE wxpam;</p>
+<h3 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h3><blockquote>
+<p>CRTATE TABLE [IF NOT EXISTS] TBNAME(col_name col_definition,…)</p>
+</blockquote>
+<p>示例：</p>
+<p>CREATE TABLE <code>t_user</code> (<br>  <code>id</code> INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,<br>  <code>name</code> VARCHAR(32) NOT NULL,<br>  <code>birthday</code> VARCHAR(10) NOT NULL,<br>  <code>cardNo</code> VARCHAR(64) NOT NULL,<br>  <code>createTime</code> DATETIME DEFAULT CURRENT_TIMESTAMP,<br>  <code>updateTime</code> DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,<br>  PRIMARY KEY (<code>id</code>),<br>  INDEX(<code>cardNo</code>),<br>  UNIQUE KEY <code>COMB_UNIQUE</code> (<code>name</code>,<code>birthday</code>),<br>) ENGINE=INNODB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;</p>
+<h3 id="查看表的创建语句"><a href="#查看表的创建语句" class="headerlink" title="查看表的创建语句"></a>查看表的创建语句</h3><blockquote>
+<p>SHOW CREATE TABLE TABLENAME;</p>
+</blockquote>
+<p>示例：SHOW CREATE TABLE t_user;</p>
+<h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -171,7 +170,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://kollyqaq.github.io/2017/11/03/Mysql explain用法和性能分析/" data-title="Mysql explain用法和性能分析 | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
+	  <div data-url="http://kollyqaq.github.io/2017/11/28/Mysql常用sql/" data-title="Mysql常用sql | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -185,18 +184,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/11/06/TCP-IP、Http、Socket的区别/" title="TCP/IP、Http、Socket的区别?">
+ <a href="/2017/11/28/Mysql权限管理/" title="Mysql权限管理">
   <strong>上一篇：</strong><br/>
   <span>
-  TCP/IP、Http、Socket的区别?</span>
+  Mysql权限管理</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2017/10/31/浅谈Java中的深拷贝和浅拷贝/"  title="浅谈Java中的深拷贝和浅拷贝">
+<a href="/2017/11/27/IntelliJ Idea使用技巧——设置终端为gitbash/"  title="Idea使用技巧——设置终端为gitbash">
  <strong>下一篇：</strong><br/> 
- <span>浅谈Java中的深拷贝和浅拷贝
+ <span>Idea使用技巧——设置终端为gitbash
 </span>
 </a>
 </div>
@@ -212,7 +211,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-使用explain"><span class="toc-number">1.</span> <span class="toc-text">1 .使用explain</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接mysql"><span class="toc-number">1.</span> <span class="toc-text">连接mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看mysql版本"><span class="toc-number">2.</span> <span class="toc-text">查看mysql版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建用户"><span class="toc-number">3.</span> <span class="toc-text">创建用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#权限管理"><span class="toc-number">4.</span> <span class="toc-text">权限管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、GRANT命令使用说明"><span class="toc-number">4.1.</span> <span class="toc-text">1、GRANT命令使用说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、刷新权限"><span class="toc-number">4.2.</span> <span class="toc-text">2、刷新权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、查看权限"><span class="toc-number">4.3.</span> <span class="toc-text">3、查看权限</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建数据库"><span class="toc-number">5.</span> <span class="toc-text">创建数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看数据库的创建语句"><span class="toc-number">6.</span> <span class="toc-text">查看数据库的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建表"><span class="toc-number">7.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看表的创建语句"><span class="toc-number">8.</span> <span class="toc-text">查看表的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建索引"><span class="toc-number">9.</span> <span class="toc-text">创建索引</span></a></li></ol>
  
   </div>
 
