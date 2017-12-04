@@ -4,25 +4,25 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Mysql常用sql | Stay Hungry,Stay Foolish</title>
+    <title>Java导出数据到Excel | Stay Hungry,Stay Foolish</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="kolly">
     
 
     
-    <meta name="description" content="连接mysql mysql -h{host} -P{port} -u{user} -p’{password}’  示例：mysql -h127.0.0.1 -P3306 -uroot -p’Root@123’ 其中：host=1270.0.1或者localhost可省略 port=3306可省略 user=root可省略 即：mysql -p‘Root@123’ 查看mysql版本 [root@l">
-<meta name="keywords" content="Mysql">
+    <meta name="description" content="第一步：导入pom依赖1234567891011121314151617181920&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;org.apache.poi&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;poi&amp;lt;/artifactId&amp;gt;	&amp;lt;version&amp;gt;3.9&amp;lt;/version&amp;gt;&amp;lt;/dependency&amp;gt">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mysql常用sql">
-<meta property="og:url" content="http://kollyqaq.github.io/2017/11/28/Mysql常用sql/index.html">
+<meta property="og:title" content="Java导出数据到Excel">
+<meta property="og:url" content="http://kollyqaq.github.io/2017/12/04/Java导出数据到Excel/index.html">
 <meta property="og:site_name" content="Stay Hungry,Stay Foolish">
-<meta property="og:description" content="连接mysql mysql -h{host} -P{port} -u{user} -p’{password}’  示例：mysql -h127.0.0.1 -P3306 -uroot -p’Root@123’ 其中：host=1270.0.1或者localhost可省略 port=3306可省略 user=root可省略 即：mysql -p‘Root@123’ 查看mysql版本 [root@l">
+<meta property="og:description" content="第一步：导入pom依赖1234567891011121314151617181920&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;org.apache.poi&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;poi&amp;lt;/artifactId&amp;gt;	&amp;lt;version&amp;gt;3.9&amp;lt;/version&amp;gt;&amp;lt;/dependency&amp;gt">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-30T06:44:37.497Z">
+<meta property="og:updated_time" content="2017-12-04T07:09:10.250Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mysql常用sql">
-<meta name="twitter:description" content="连接mysql mysql -h{host} -P{port} -u{user} -p’{password}’  示例：mysql -h127.0.0.1 -P3306 -uroot -p’Root@123’ 其中：host=1270.0.1或者localhost可省略 port=3306可省略 user=root可省略 即：mysql -p‘Root@123’ 查看mysql版本 [root@l">
+<meta name="twitter:title" content="Java导出数据到Excel">
+<meta name="twitter:description" content="第一步：导入pom依赖1234567891011121314151617181920&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;org.apache.poi&amp;lt;/groupId&amp;gt;	&amp;lt;artifactId&amp;gt;poi&amp;lt;/artifactId&amp;gt;	&amp;lt;version&amp;gt;3.9&amp;lt;/version&amp;gt;&amp;lt;/dependency&amp;gt">
 
     
     <link rel="alternative" href="/atom.xml" title="Stay Hungry,Stay Foolish" type="application/atom+xml">
@@ -76,14 +76,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/11/28/Mysql常用sql/" title="Mysql常用sql" itemprop="url">Mysql常用sql</a>
+      <a href="/2017/12/04/Java导出数据到Excel/" title="Java导出数据到Excel" itemprop="url">Java导出数据到Excel</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="kolly" target="_blank" itemprop="author">kolly</a>
 		
   <p class="article-time">
-    <time datetime="2017-11-28T02:47:07.000Z" itemprop="datePublished"> 发表于 2017-11-28</time>
+    <time datetime="2017-12-04T06:49:16.000Z" itemprop="datePublished"> 发表于 2017-12-04</time>
     
   </p>
 </header>
@@ -92,54 +92,55 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接mysql"><span class="toc-number">1.</span> <span class="toc-text">连接mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看mysql版本"><span class="toc-number">2.</span> <span class="toc-text">查看mysql版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建数据库"><span class="toc-number">3.</span> <span class="toc-text">创建数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看数据库的创建语句"><span class="toc-number">4.</span> <span class="toc-text">查看数据库的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建表"><span class="toc-number">5.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看表的创建语句"><span class="toc-number">6.</span> <span class="toc-text">查看表的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建索引"><span class="toc-number">7.</span> <span class="toc-text">创建索引</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一步：导入pom依赖"><span class="toc-number">1.</span> <span class="toc-text">第一步：导入pom依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二步：填写excel模版"><span class="toc-number">2.</span> <span class="toc-text">第二步：填写excel模版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三步：java实现"><span class="toc-number">3.</span> <span class="toc-text">第三步：java实现</span></a></li></ol>
 		
 		</div>
 		
-		<h3 id="连接mysql"><a href="#连接mysql" class="headerlink" title="连接mysql"></a>连接mysql</h3><blockquote>
-<p>mysql -h{host} -P{port} -u{user} -p’{password}’</p>
-</blockquote>
-<p>示例：mysql -h127.0.0.1 -P3306 -uroot -p’Root@123’</p>
-<p>其中：host=1270.0.1或者localhost可省略 port=3306可省略 user=root可省略</p>
-<p>即：mysql -p‘Root@123’</p>
-<h3 id="查看mysql版本"><a href="#查看mysql版本" class="headerlink" title="查看mysql版本"></a>查看mysql版本</h3><blockquote>
-<p>[root@localhost ~]# mysql -V</p>
-</blockquote>
-<p>或者</p>
-<blockquote>
-<p>mysql&gt; status;</p>
-</blockquote>
-<h3 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h3><blockquote>
-<p>CREATE DATABASE [IF NOT EXISTS] DBNAME [CHARACTER SET ‘CHAR_NAME’][COLLATE ‘COLL_NAME’]</p>
-</blockquote>
-<p>示例：CREATE DATABASE IF NOT EXISTS wxpam CHARACTER SET ‘utf8’ COLLATE ‘utf8_unicode_ci’;</p>
-<h3 id="查看数据库的创建语句"><a href="#查看数据库的创建语句" class="headerlink" title="查看数据库的创建语句"></a>查看数据库的创建语句</h3><blockquote>
-<p>SHOW CREATE DATABASE DBNAME;</p>
-</blockquote>
-<p>示例：SHOW CREATE DATABASE wxpam;</p>
-<h3 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h3><blockquote>
-<p>CRTATE TABLE [IF NOT EXISTS] TBNAME(col_name col_definition,…)</p>
-</blockquote>
-<p>示例：</p>
-<p>CREATE TABLE <code>t_user</code> (<br>  <code>id</code> INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,<br>  <code>name</code> VARCHAR(32) NOT NULL,<br>  <code>birthday</code> VARCHAR(10) NOT NULL,<br>  <code>cardNo</code> VARCHAR(64) NOT NULL,<br>  <code>createTime</code> DATETIME DEFAULT CURRENT_TIMESTAMP,<br>  <code>updateTime</code> DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,<br>  PRIMARY KEY (<code>id</code>),<br>  INDEX(<code>cardNo</code>),<br>  UNIQUE KEY <code>COMB_UNIQUE</code> (<code>name</code>,<code>birthday</code>),<br>) ENGINE=INNODB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;</p>
-<h3 id="查看表的创建语句"><a href="#查看表的创建语句" class="headerlink" title="查看表的创建语句"></a>查看表的创建语句</h3><blockquote>
-<p>SHOW CREATE TABLE TABLENAME;</p>
-</blockquote>
-<p>示例：SHOW CREATE TABLE t_user;</p>
-<h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3>  
+		<h3 id="第一步：导入pom依赖"><a href="#第一步：导入pom依赖" class="headerlink" title="第一步：导入pom依赖"></a>第一步：导入pom依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">	&lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;poi&lt;/artifactId&gt;</div><div class="line">	&lt;version&gt;3.9&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">	&lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;poi-ooxml&lt;/artifactId&gt;</div><div class="line">	&lt;version&gt;3.9&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">	&lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;poi-ooxml-schemas&lt;/artifactId&gt;</div><div class="line">	&lt;version&gt;3.9&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">	&lt;groupId&gt;net.sf.jxls&lt;/groupId&gt;</div><div class="line">	&lt;artifactId&gt;jxls-core&lt;/artifactId&gt;</div><div class="line">	&lt;version&gt;1.0.6&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<h3 id="第二步：填写excel模版"><a href="#第二步：填写excel模版" class="headerlink" title="第二步：填写excel模版"></a>第二步：填写excel模版</h3><p>resources下新建templates目录，目录下新建WxpamWinnerList.xls文件，文件内容如下</p>
+<table>
+<thead>
+<tr>
+<th>中奖者</th>
+<th>奖品名称</th>
+<th>奖品描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;jx:forEach items=&quot;${drawRecords}&quot; var=&quot;drawRecord&quot;&gt;</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>${drawRecord.winnerName}</code></td>
+<td><code>${drawRecord.prizeName}</code></td>
+<td><code>${drawRecord.prizeDesc}</code></td>
+</tr>
+<tr>
+<td><code>&lt;/jx:forEach&gt;</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="第三步：java实现"><a href="#第三步：java实现" class="headerlink" title="第三步：java实现"></a>第三步：java实现</h3><p><code>DrawRecord</code>是一个pojo，属性有winnerName，prizeName，prizeDesc</p>
+<p><code>QueryParam</code>是一个hashmap</p>
+<p><code>drawPrizeService.getAllDrawRecord()</code>是查询中奖列表结果的业务逻辑实现，就是撸个DB，这里不贴出来了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 下载中奖名单</div><div class="line"> *</div><div class="line"> * @param response</div><div class="line"> * @throws IOException</div><div class="line"> */</div><div class="line">@RequestMapping(method = RequestMethod.GET, value = &quot;/downloadWinnerList&quot;)</div><div class="line">public void downloadWinnerList(HttpServletResponse response) throws IOException &#123;</div><div class="line"></div><div class="line">	logger.info(&quot;DrawController.downloadWinnerList&quot;);</div><div class="line">	response.setContentType(&quot;application/vnd.ms-excel&quot;);</div><div class="line"></div><div class="line">	//业务逻辑：中奖纪录列表</div><div class="line">	List&lt;DrawRecord&gt; drawRecords = drawPrizeService.getAllDrawRecord();</div><div class="line"></div><div class="line">	XLSTransformer transformer = new XLSTransformer();</div><div class="line">	try &#123;</div><div class="line">		Workbook wb = transformer.transformXLS(DrawController.class.getClassLoader().getResourceAsStream(&quot;templates/WxpamWinnerList.xls&quot;),QueryParam.create(&quot;drawRecords&quot;, drawRecords));</div><div class="line">		wb.write(response.getOutputStream());</div><div class="line">	&#125; catch (Exception e) &#123;</div><div class="line">		logger.error(&quot;Error occurs during downloadWinnerList.&quot;, e);</div><div class="line">		response.getOutputStream().write(&quot;Error&quot;.getBytes());</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	response.getOutputStream().flush();</div><div class="line">	response.getOutputStream().close();</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Mysql/">Mysql</a>
+  <a class="article-category-link" href="/categories/Java/">Java</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Mysql/">Mysql</a>
+  <span></span> <a href="/tags/Java/">Java</a>
   </div>
 
 </div>
@@ -148,7 +149,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://kollyqaq.github.io/2017/11/28/Mysql常用sql/" data-title="Mysql常用sql | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
+	  <div data-url="http://kollyqaq.github.io/2017/12/04/Java导出数据到Excel/" data-title="Java导出数据到Excel | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -161,19 +162,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/11/28/Mysql权限管理/" title="Mysql权限管理">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Mysql权限管理</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/11/27/IntelliJ Idea使用技巧——设置终端为gitbash/"  title="Idea使用技巧——设置终端为gitbash">
+<a href="/2017/11/30/Linux系统命令/"  title="Linux系统命令">
  <strong>下一篇：</strong><br/> 
- <span>Idea使用技巧——设置终端为gitbash
+ <span>Linux系统命令
 </span>
 </a>
 </div>
@@ -189,7 +182,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#连接mysql"><span class="toc-number">1.</span> <span class="toc-text">连接mysql</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看mysql版本"><span class="toc-number">2.</span> <span class="toc-text">查看mysql版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建数据库"><span class="toc-number">3.</span> <span class="toc-text">创建数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看数据库的创建语句"><span class="toc-number">4.</span> <span class="toc-text">查看数据库的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建表"><span class="toc-number">5.</span> <span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看表的创建语句"><span class="toc-number">6.</span> <span class="toc-text">查看表的创建语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建索引"><span class="toc-number">7.</span> <span class="toc-text">创建索引</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一步：导入pom依赖"><span class="toc-number">1.</span> <span class="toc-text">第一步：导入pom依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二步：填写excel模版"><span class="toc-number">2.</span> <span class="toc-text">第二步：填写excel模版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三步：java实现"><span class="toc-number">3.</span> <span class="toc-text">第三步：java实现</span></a></li></ol>
  
   </div>
 
