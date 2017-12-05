@@ -1,0 +1,623 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Linux下Nginx的配置文件详解 | Stay Hungry,Stay Foolish</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="kolly">
+    
+
+    
+    <meta name="description" content="全局设置123456789101112131415#运行用户user nginx;  #启动进程数,通常设置成和cpu的数量相等worker_processes  auto;#全局错误日志及PID文件error_log  /var/log/nginx/error.log;pid        /var/run/nginx.pid;#工作模式及连接数上限events &amp;#123;    use">
+<meta name="keywords" content="Linux,Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下Nginx的配置文件详解">
+<meta property="og:url" content="http://kollyqaq.github.io/2017/12/04/Linux下Nginx的配置文件详解/index.html">
+<meta property="og:site_name" content="Stay Hungry,Stay Foolish">
+<meta property="og:description" content="全局设置123456789101112131415#运行用户user nginx;  #启动进程数,通常设置成和cpu的数量相等worker_processes  auto;#全局错误日志及PID文件error_log  /var/log/nginx/error.log;pid        /var/run/nginx.pid;#工作模式及连接数上限events &amp;#123;    use">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-05T11:36:59.683Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux下Nginx的配置文件详解">
+<meta name="twitter:description" content="全局设置123456789101112131415#运行用户user nginx;  #启动进程数,通常设置成和cpu的数量相等worker_processes  auto;#全局错误日志及PID文件error_log  /var/log/nginx/error.log;pid        /var/run/nginx.pid;#工作模式及连接数上限events &amp;#123;    use">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Stay Hungry,Stay Foolish" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Stay Hungry,Stay Foolish">Stay Hungry,Stay Foolish</a></h1>
+				<h2 class="blog-motto">曾梦想仗剑走天涯，看一看世界的繁华</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">所有文章</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kollyqaq.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/12/04/Linux下Nginx的配置文件详解/" title="Linux下Nginx的配置文件详解" itemprop="url">Linux下Nginx的配置文件详解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="kolly" target="_blank" itemprop="author">kolly</a>
+		
+  <p class="article-time">
+    <time datetime="2017-12-04T10:14:17.000Z" itemprop="datePublished"> 发表于 2017-12-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#全局设置"><span class="toc-number">1.</span> <span class="toc-text">全局设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#http服务器设置"><span class="toc-number">2.</span> <span class="toc-text">http服务器设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#upstream配置"><span class="toc-number">3.</span> <span class="toc-text">upstream配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#server配置"><span class="toc-number">4.</span> <span class="toc-text">server配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#location配置语法"><span class="toc-number">5.</span> <span class="toc-text">location配置语法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#常用示例"><span class="toc-number">5.1.</span> <span class="toc-text">常用示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#根据请求参数过滤请求-args-arg-xxx"><span class="toc-number">5.2.</span> <span class="toc-text">根据请求参数过滤请求(\$args,\$arg_xxx)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#根据请求uri过滤请求-request-uri"><span class="toc-number">5.3.</span> <span class="toc-text">根据请求uri过滤请求(\$request_uri)</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h3 id="全局设置"><a href="#全局设置" class="headerlink" title="全局设置"></a>全局设置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#运行用户</div><div class="line">user nginx;  </div><div class="line"></div><div class="line">#启动进程数,通常设置成和cpu的数量相等</div><div class="line">worker_processes  auto;</div><div class="line"></div><div class="line">#全局错误日志及PID文件</div><div class="line">error_log  /var/log/nginx/error.log;</div><div class="line">pid        /var/run/nginx.pid;</div><div class="line"></div><div class="line">#工作模式及连接数上限</div><div class="line">events &#123;</div><div class="line">    use   epoll;   #epoll是多路复用IO(I/O Multiplexing)中的一种方式,可以大大提高nginx的性能</div><div class="line">    worker_connections  1024;#单个后台worker process进程的最大并发链接数</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="http服务器设置"><a href="#http服务器设置" class="headerlink" title="http服务器设置"></a>http服务器设置</h3><p>设定http服务器，利用它的反向代理功能提供负载均衡支持</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">http &#123;</div><div class="line">    #日志输出内容与格式</div><div class="line">    log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</div><div class="line">                      &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</div><div class="line">                      &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;</div><div class="line">    #日志输出目录</div><div class="line">    access_log  /var/log/nginx/access.log  main;</div><div class="line"></div><div class="line">    #sendfile 指令指定 nginx 是否调用 sendfile 函数（zero copy 方式）来输出文件，对于普通应用，必须设为 on,如果用来进行下载等应用磁盘IO重负载应用，可设置为 off，以平衡磁盘与网络I/O处理速度，降低系统的uptime.</div><div class="line">    sendfile            on;</div><div class="line">    </div><div class="line">    tcp_nopush          on;</div><div class="line">    tcp_nodelay         on;</div><div class="line">    </div><div class="line">    #连接超时时间</div><div class="line">    keepalive_timeout   65;</div><div class="line">    </div><div class="line">    types_hash_max_size 2048;</div><div class="line"></div><div class="line">    #设定mime类型,类型由mime.type文件定义</div><div class="line">    include             /etc/nginx/mime.types;</div><div class="line">    default_type        application/octet-stream;</div><div class="line">    </div><div class="line">    include /etc/nginx/conf.d/*.conf;</div><div class="line">    </div><div class="line">    upstream &#123;</div><div class="line">    	#见upstream配置</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    server &#123;</div><div class="line">    	#见server配置</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="upstream配置"><a href="#upstream配置" class="headerlink" title="upstream配置"></a>upstream配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">upstream mysvr &#123;</div><div class="line">    #设定负载均衡的服务器列表</div><div class="line">    #weigth参数表示权值，权值越高被分配到的几率越大,如果权重都相同，weight可以都不设置</div><div class="line">    server 192.168.8.1:80 weight=5;</div><div class="line">    server 192.168.8.2:80 weight=1;</div><div class="line">    server 192.168.8.3:80 weight=6;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="server配置"><a href="#server配置" class="headerlink" title="server配置"></a>server配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    </div><div class="line">    listen         80;			#侦听80端口</div><div class="line">    listen         443 ssl;		 #侦听443端口</div><div class="line">    server_name    www.xxx.com;	  #定义使用www.xx.com访问</div><div class="line">    </div><div class="line">    #https证书</div><div class="line">    ssl_certificate /etc/ssl/certs/www.xxx.com_bundle.crt;</div><div class="line">    ssl_certificate_key /etc/ssl/certs/www.xxx.com.key;</div><div class="line"></div><div class="line">    error_page 404 /html/404.html;</div><div class="line">    error_page 500 502 503 504 /html/50x.html;</div><div class="line">    </div><div class="line">    #设置主页</div><div class="line">    location = / &#123;</div><div class="line">        root /data/static/html;</div><div class="line">        index index.html;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    #静态文件，nginx自己处理</div><div class="line">    location ^~ /(html|js|css|jpg|png|txt|json)/ &#123;</div><div class="line">        root /data/static/;</div><div class="line">        #过期30天，静态文件不怎么更新，过期可以设大一点，如果频繁更新，则可以设置得小一点。</div><div class="line">        expires 30d;</div><div class="line">        #expires 15s;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    #api转发到后端服务器</div><div class="line">    location /  &#123;</div><div class="line">        proxy_pass    http://mysvr/;   #mysvr是上面配置的upstream</div><div class="line">        </div><div class="line">        #以下是一些反向代理的配置可删除.</div><div class="line">        #后端的Web服务器可以通过X-Forwarded-For获取用户真实IP</div><div class="line">        proxy_set_header Host $host;</div><div class="line">        proxy_set_header X-Real-IP $remote_addr;</div><div class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">        client_max_body_size 10m;    #允许客户端请求的最大单文件字节数</div><div class="line">        client_body_buffer_size 128k;    #缓冲区代理缓冲用户端请求的最大字节数，</div><div class="line">        proxy_connect_timeout 90;    #nginx跟后端服务器连接超时时间(代理连接超时)</div><div class="line">        proxy_send_timeout 90;    #后端服务器数据回传时间(代理发送超时)</div><div class="line">        proxy_read_timeout 90;    #连接成功后，后端服务器响应时间(代理接收超时)</div><div class="line">        proxy_buffer_size 4k;    #设置代理服务器（nginx）保存用户头信息的缓冲区大小</div><div class="line">        proxy_buffers 4 32k;  #proxy_buffers缓冲区，网页平均在32k以下的话，这样设置</div><div class="line">        proxy_busy_buffers_size 64k;  #高负荷下缓冲大小（proxy_buffers*2）</div><div class="line">        proxy_temp_file_write_size 64k;  #设定缓存文件夹大小，大于这个值，将从upstream服务器传</div><div class="line">        proxy_redirect off;</div><div class="line">        proxy_intercept_errors on;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="location配置语法"><a href="#location配置语法" class="headerlink" title="location配置语法"></a>location配置语法</h3><p>语法规则： <code>location [=|~|~*|^~] /uri/ { … }</code></p>
+<ul>
+<li><code>=</code> 开头表示精确匹配</li>
+<li><code>^~</code> 开头表示uri以某个常规字符串开头，理解为匹配 url路径即可。nginx不对url做编码，因此请求为/static/20%/aa，可以被规则^~ /static/ /aa匹配到（注意是空格）。</li>
+<li><code>~</code> 开头表示区分大小写的正则匹配</li>
+<li><code>~*</code> 开头表示不区分大小写的正则匹配</li>
+<li><code>!~</code>和<code>!~*</code>分别为区分大小写不匹配及不区分大小写不匹配 的正则</li>
+<li><code>/</code> 通用匹配，任何请求都会匹配到。</li>
+</ul>
+<p>多个location配置的情况下匹配顺序为（参考资料而来，还未实际验证，试试就知道了，不必拘泥，仅供参考）：</p>
+<p>首先匹配 =，其次匹配^~, 其次是按文件中顺序的正则匹配，最后是交给 / 通用匹配。当有匹配成功时候，停止匹配，按当前匹配规则处理请求。</p>
+<p>例子，有如下匹配规则：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">location = / &#123;</div><div class="line">   #规则A</div><div class="line">&#125;</div><div class="line">location = /login &#123;</div><div class="line">   #规则B</div><div class="line">&#125;</div><div class="line">location ^~ /static/ &#123;</div><div class="line">   #规则C</div><div class="line">&#125;</div><div class="line">location ~ \.(gif|jpg|png|js|css)$ &#123;</div><div class="line">   #规则D</div><div class="line">&#125;</div><div class="line">location ~* \.png$ &#123;</div><div class="line">   #规则E</div><div class="line">&#125;</div><div class="line">location !~ \.xhtml$ &#123;</div><div class="line">   #规则F</div><div class="line">&#125;</div><div class="line">location !~* \.xhtml$ &#123;</div><div class="line">   #规则G</div><div class="line">&#125;</div><div class="line">location / &#123;</div><div class="line">   #规则H</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>那么产生的效果如下：</p>
+<p>访问根目录/， 比如<a href="http://localhost/" target="_blank" rel="external">http://localhost/</a> 将匹配规则A</p>
+<p>访问 <a href="http://localhost/login" target="_blank" rel="external">http://localhost/login</a> 将匹配规则B，<a href="http://localhost/register" target="_blank" rel="external">http://localhost/register</a> 则匹配规则H</p>
+<p>访问 <a href="http://localhost/static/a.html" target="_blank" rel="external">http://localhost/static/a.html</a> 将匹配规则C</p>
+<p>访问 <a href="http://localhost/a.gif" target="_blank" rel="external">http://localhost/a.gif</a>, <a href="http://localhost/b.jpg" target="_blank" rel="external">http://localhost/b.jpg</a> 将匹配规则D和规则E，但是规则D顺序优先，规则E不起作用， 而 <a href="http://localhost/static/c.png" target="_blank" rel="external">http://localhost/static/c.png</a> 则优先匹配到 规则C</p>
+<p>访问 <a href="http://localhost/a.PNG" target="_blank" rel="external">http://localhost/a.PNG</a> 则匹配规则E， 而不会匹配规则D，因为规则E不区分大小写。</p>
+<p>访问 <a href="http://localhost/a.xhtml" target="_blank" rel="external">http://localhost/a.xhtml</a> 不会匹配规则F和规则G，<a href="http://localhost/a.XHTML不会匹配规则G，因为不区分大小写。规则F，规则G属于排除法，符合匹配规则但是不会匹配到，所以想想看实际应用中哪里会用到。" target="_blank" rel="external">http://localhost/a.XHTML不会匹配规则G，因为不区分大小写。规则F，规则G属于排除法，符合匹配规则但是不会匹配到，所以想想看实际应用中哪里会用到。</a></p>
+<p>访问 <a href="http://localhost/category/id/1111" target="_blank" rel="external">http://localhost/category/id/1111</a> 则最终匹配到规则H，因为以上规则都不匹配，这个时候应该是nginx转发请求给后端应用服务器，比如FastCGI（php），tomcat（jsp），nginx作为方向代理服务器存在。</p>
+<p>所以实际使用中，个人觉得至少有三个匹配规则定义，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">#直接匹配网站根，通过域名访问网站首页比较频繁，使用这个会加速处理，官网如是说。</div><div class="line">#这里是直接转发给后端应用服务器了，也可以是一个静态首页</div><div class="line"># 第一个必选规则</div><div class="line">location = / &#123;</div><div class="line">    proxy_pass http://tomcat:8080/index</div><div class="line">&#125;</div><div class="line"></div><div class="line"># 第二个必选规则是处理静态文件请求，这是nginx作为http服务器的强项</div><div class="line"># 有两种配置模式，目录匹配或后缀匹配,任选其一或搭配使用</div><div class="line">location ^~ /static/ &#123;</div><div class="line">    root /webroot/static/;</div><div class="line">&#125;</div><div class="line">location ~* \.(gif|jpg|jpeg|png|css|js|ico)$ &#123;</div><div class="line">    root /webroot/res/;</div><div class="line">&#125;</div><div class="line"></div><div class="line">#第三个规则就是通用规则，用来转发动态请求到后端应用服务器</div><div class="line">#非静态文件请求就默认是动态请求，自己根据实际把握</div><div class="line">#毕竟目前的一些框架的流行，带.php,.jsp后缀的情况很少了</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">    proxy_pass http://tomcat:8080/</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>nginx的其他配置信息介绍</strong></p>
+<p>三、ReWrite语法</p>
+<p><code>last</code> – 基本上都用这个Flag。<br><code>break</code> – 中止Rewirte，不在继续匹配<br><code>redirect</code> – 返回临时重定向的HTTP状态302<br><code>permanent</code> – 返回永久重定向的HTTP状态301</p>
+<p>1、下面是可以用来判断的表达式：</p>
+<p><code>-f</code>和<code>!-f</code>用来判断是否存在文件<br><code>-d</code>和<code>!-d</code>用来判断是否存在目录<br><code>-e</code>和<code>!-e</code>用来判断是否存在文件或目录<br><code>-x</code>和<code>!-x</code>用来判断文件是否可执行</p>
+<p>2、下面是可以用作判断的全局变量</p>
+<p>例：<a href="http://localhost:88/test1/test2/test.php" target="_blank" rel="external">http://localhost:88/test1/test2/test.php</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$host：localhost</div><div class="line">$server_port：88</div><div class="line">$request_uri：http://localhost:88/test1/test2/test.php</div><div class="line">$document_uri：/test1/test2/test.php</div><div class="line">$document_root：D:\nginx/html</div><div class="line">$request_filename：D:\nginx/html/test1/test2/test.php</div></pre></td></tr></table></figure>
+<p>四、Redirect语法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen 80;</div><div class="line">    server_name start.igrow.cn;</div><div class="line">    index index.html index.php;</div><div class="line">    root html;</div><div class="line">    if ($http_host !~ &quot;^star\.igrow\.cn$&quot; &#123;</div><div class="line">        rewrite ^(.*) http://star.igrow.cn$1 redirect;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>五、防盗链</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">location ~* \.(gif|jpg|swf)$ &#123;</div><div class="line">    valid_referers none blocked start.igrow.cn sta.igrow.cn;</div><div class="line">    if ($invalid_referer) &#123;</div><div class="line">        rewrite ^/ http://$host/logo.png;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>六、根据文件类型设置过期时间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">location ~* \.(js|css|jpg|jpeg|gif|png|swf)$ &#123;</div><div class="line">    if (-f $request_filename) &#123;</div><div class="line">        expires 1h;</div><div class="line">        break;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>七、禁止访问某个目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">location ~* \.(txt|doc)$&#123;</div><div class="line">root /data/www/wwwroot/linuxtone/test;</div><div class="line">deny all;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>附：一些可用的全局变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">$args</div><div class="line">$content_length</div><div class="line">$content_type</div><div class="line">$document_root</div><div class="line">$document_uri</div><div class="line">$host</div><div class="line">$http_user_agent</div><div class="line">$http_cookie</div><div class="line">$limit_rate</div><div class="line">$request_body_file</div><div class="line">$request_method</div><div class="line">$remote_addr</div><div class="line">$remote_port</div><div class="line">$remote_user</div><div class="line">$request_filename</div><div class="line">$request_uri</div><div class="line">$query</div></pre></td></tr></table></figure>
+<h4 id="常用示例"><a href="#常用示例" class="headerlink" title="常用示例"></a>常用示例</h4><h4 id="根据请求参数过滤请求-args-arg-xxx"><a href="#根据请求参数过滤请求-args-arg-xxx" class="headerlink" title="根据请求参数过滤请求(\$args,\$arg_xxx)"></a>根据请求参数过滤请求(\$args,\$arg_xxx)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">location = /rushBuy &#123;</div><div class="line">        proxy_pass    http://127.0.0.1:9000/;</div><div class="line">        proxy_set_header X-Real-IP $remote_addr;</div><div class="line">        proxy_set_header Host $host;</div><div class="line">        proxy_intercept_errors on;</div><div class="line">        if ($arg_timestamp ~* &apos;\d*[0|2|4|6|8]$&apos;)&#123;</div><div class="line">            add_header Content-Type &apos;application/json;charset=UTF-8&apos;;</div><div class="line">            return 200 &apos;&#123;&quot;errCode&quot;: &quot;-1&quot;,&quot;msg&quot;: &quot;抢购失败&quot;&#125;&apos;;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上述配置会拦截所有请求为<code>url：/rushBuy?userId=xxx&amp;goodsId=xxx&amp;timestamp=xxx</code>中timestamp为偶数的请求直接返回固定值，这样可以限制一半的流量进入后台服务器，在秒杀场景限流使用。</p>
+<h4 id="根据请求uri过滤请求-request-uri"><a href="#根据请求uri过滤请求-request-uri" class="headerlink" title="根据请求uri过滤请求(\$request_uri)"></a>根据请求uri过滤请求(\$request_uri)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">location ^~ /client/stat &#123;</div><div class="line">		proxy_pass	http:127.0.0.1:9000/;</div><div class="line">		proxy_set_header X-Real-IP $remote_addr;</div><div class="line">        proxy_set_header Host $host;</div><div class="line">        proxy_intercept_errors on;</div><div class="line">        if ($request_uri ~* &apos;/gmreport&apos;)&#123;</div><div class="line">            return 200;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Nginx/">Nginx</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Nginx/">Nginx</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kollyqaq.github.io/2017/12/04/Linux下Nginx的配置文件详解/" data-title="Linux下Nginx的配置文件详解 | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/12/05/Nginx报错403 forbidden几个解决方法/" title="Nginx报错403 forbidden几个解决方法">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Nginx报错403 forbidden几个解决方法</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/12/04/数据结构与算法之算法时间复杂度详解/"  title="数据结构与算法之算法时间复杂度详解">
+ <strong>下一篇：</strong><br/> 
+ <span>数据结构与算法之算法时间复杂度详解
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#全局设置"><span class="toc-number">1.</span> <span class="toc-text">全局设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#http服务器设置"><span class="toc-number">2.</span> <span class="toc-text">http服务器设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#upstream配置"><span class="toc-number">3.</span> <span class="toc-text">upstream配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#server配置"><span class="toc-number">4.</span> <span class="toc-text">server配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#location配置语法"><span class="toc-number">5.</span> <span class="toc-text">location配置语法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#常用示例"><span class="toc-number">5.1.</span> <span class="toc-text">常用示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#根据请求参数过滤请求-args-arg-xxx"><span class="toc-number">5.2.</span> <span class="toc-text">根据请求参数过滤请求(\$args,\$arg_xxx)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#根据请求uri过滤请求-request-uri"><span class="toc-number">5.3.</span> <span class="toc-text">根据请求uri过滤请求(\$request_uri)</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="kollyqaq" data-theme="medium"></div>
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/IntelliJ-IDEA/" title="IntelliJ-IDEA">IntelliJ-IDEA<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java/" title="Java">Java<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java基础/" title="Java基础">Java基础<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java并发编程/" title="Java并发编程">Java并发编程<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java设计模式/" title="Java设计模式">Java设计模式<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Java进阶/" title="Java进阶">Java进阶<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux/" title="Linux">Linux<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Linux命令/" title="Linux命令">Linux命令<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mysql/" title="Mysql">Mysql<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Nginx/" title="Nginx">Nginx<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/数据结构与算法/" title="数据结构与算法">数据结构与算法<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/服务器运维/" title="服务器运维">服务器运维<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/编程规范/" title="编程规范">编程规范<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/网络通信/" title="网络通信">网络通信<sup>2</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>13</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Nginx/" title="Nginx">Nginx<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java关键字/" title="Java关键字">Java关键字<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Mysql/" title="Mysql">Mysql<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/IDEA/" title="IDEA">IDEA<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/网络通信/" title="网络通信">网络通信<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MarkDown/" title="MarkDown">MarkDown<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Redis/" title="Redis">Redis<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数据库/" title="数据库">数据库<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/设计模式/" title="设计模式">设计模式<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/算法/" title="算法">算法<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://github.com" target="_blank" title="世界上最活跃的开源社区">github</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="https://coderq.com" target="_blank" title="一个面向程序员交流分享的新一代社区">码农圈</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://spring4all.com" target="_blank" title="学习spring所有技术的社区">spring4all社区</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Kolly. <br/>
+			This is my blog,believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/6040399147" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/kollyqaq" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		<a href="http://www.zhihu.com/people/li-jun-chao-96" target="_blank" class="icon-zhihu" title="知乎"></a>
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="kolly">kolly</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+	//$('#toc.toc-aside').css('display', 'block').addClass('fadeIn'); //这个是我新加的，修改点
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

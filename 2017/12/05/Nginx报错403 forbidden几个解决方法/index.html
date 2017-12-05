@@ -4,25 +4,25 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>通过rsync+inotify实现多服务器文件的实时同步 | Stay Hungry,Stay Foolish</title>
+    <title>Nginx报错403 forbidden几个解决方法 | Stay Hungry,Stay Foolish</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="kolly">
     
 
     
-    <meta name="description" content="需求背景公司有八台nginx服务器用来做静态文件服务器和http请求转发，所以当需要修改nginx配置文件或者部署静态文件的时候，需要分别修改八台机器上的文件，费时费力。 最终目的对其中某一个机器的某些文件夹做监控，只要其中的内容有发生修改，其余机器马上同步这些修改到自己的机器上 实现工具rsync+inotify 实现步骤 主服务器A安装rsync 1$ yum install rsync  写">
-<meta name="keywords" content="Linux,Nginx">
+    <meta name="description" content="引起nginx 403 forbidden通常是三种情况：一是缺少主页文件，二是权限问题，三是SELinux状态。1、缺少index.html或index.php配置，检查是否配置了indexserver {​    listen 80;​    server_name localhost;​    index index.php index.html;​    root / opt/www;}">
+<meta name="keywords" content="Nginx">
 <meta property="og:type" content="article">
-<meta property="og:title" content="通过rsync+inotify实现多服务器文件的实时同步">
-<meta property="og:url" content="http://kollyqaq.github.io/2017/06/14/通过rsync+inotify实现多服务器文件的实时同步/index.html">
+<meta property="og:title" content="Nginx报错403 forbidden几个解决方法">
+<meta property="og:url" content="http://kollyqaq.github.io/2017/12/05/Nginx报错403 forbidden几个解决方法/index.html">
 <meta property="og:site_name" content="Stay Hungry,Stay Foolish">
-<meta property="og:description" content="需求背景公司有八台nginx服务器用来做静态文件服务器和http请求转发，所以当需要修改nginx配置文件或者部署静态文件的时候，需要分别修改八台机器上的文件，费时费力。 最终目的对其中某一个机器的某些文件夹做监控，只要其中的内容有发生修改，其余机器马上同步这些修改到自己的机器上 实现工具rsync+inotify 实现步骤 主服务器A安装rsync 1$ yum install rsync  写">
+<meta property="og:description" content="引起nginx 403 forbidden通常是三种情况：一是缺少主页文件，二是权限问题，三是SELinux状态。1、缺少index.html或index.php配置，检查是否配置了indexserver {​    listen 80;​    server_name localhost;​    index index.php index.html;​    root / opt/www;}">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-10-27T08:14:27.196Z">
+<meta property="og:updated_time" content="2017-12-05T08:03:55.008Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="通过rsync+inotify实现多服务器文件的实时同步">
-<meta name="twitter:description" content="需求背景公司有八台nginx服务器用来做静态文件服务器和http请求转发，所以当需要修改nginx配置文件或者部署静态文件的时候，需要分别修改八台机器上的文件，费时费力。 最终目的对其中某一个机器的某些文件夹做监控，只要其中的内容有发生修改，其余机器马上同步这些修改到自己的机器上 实现工具rsync+inotify 实现步骤 主服务器A安装rsync 1$ yum install rsync  写">
+<meta name="twitter:title" content="Nginx报错403 forbidden几个解决方法">
+<meta name="twitter:description" content="引起nginx 403 forbidden通常是三种情况：一是缺少主页文件，二是权限问题，三是SELinux状态。1、缺少index.html或index.php配置，检查是否配置了indexserver {​    listen 80;​    server_name localhost;​    index index.php index.html;​    root / opt/www;}">
 
     
     <link rel="alternative" href="/atom.xml" title="Stay Hungry,Stay Foolish" type="application/atom+xml">
@@ -76,14 +76,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/06/14/通过rsync+inotify实现多服务器文件的实时同步/" title="通过rsync+inotify实现多服务器文件的实时同步" itemprop="url">通过rsync+inotify实现多服务器文件的实时同步</a>
+      <a href="/2017/12/05/Nginx报错403 forbidden几个解决方法/" title="Nginx报错403 forbidden几个解决方法" itemprop="url">Nginx报错403 forbidden几个解决方法</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="kolly" target="_blank" itemprop="author">kolly</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-14T02:11:50.000Z" itemprop="datePublished"> 发表于 2017-06-14</time>
+    <time datetime="2017-12-05T07:04:36.000Z" itemprop="datePublished"> 发表于 2017-12-05</time>
     
   </p>
 </header>
@@ -92,51 +92,16 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#需求背景"><span class="toc-number">1.</span> <span class="toc-text">需求背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最终目的"><span class="toc-number">2.</span> <span class="toc-text">最终目的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现工具"><span class="toc-number">3.</span> <span class="toc-text">实现工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现步骤"><span class="toc-number">4.</span> <span class="toc-text">实现步骤</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#引起nginx-403-forbidden通常是三种情况：一是缺少主页文件，二是权限问题，三是SELinux状态。"><span class="toc-number">1.</span> <span class="toc-text">引起nginx 403 forbidden通常是三种情况：一是缺少主页文件，二是权限问题，三是SELinux状态。</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、缺少index-html或index-php配置，检查是否配置了index"><span class="toc-number">1.1.</span> <span class="toc-text">1、缺少index.html或index.php配置，检查是否配置了index</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、nginx配置的用户和静态文件的用户不匹配"><span class="toc-number">1.2.</span> <span class="toc-text">2、nginx配置的用户和静态文件的用户不匹配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、selinux没有关闭的原因（我排除了1和2的原因还是发现403，最后发现是这个原因导致的）"><span class="toc-number">1.3.</span> <span class="toc-text">3、selinux没有关闭的原因（我排除了1和2的原因还是发现403，最后发现是这个原因导致的）</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		<h3 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h3><p>公司有八台nginx服务器用来做静态文件服务器和http请求转发，所以当需要修改nginx配置文件或者部署静态文件的时候，需要分别修改八台机器上的文件，费时费力。</p>
-<h3 id="最终目的"><a href="#最终目的" class="headerlink" title="最终目的"></a>最终目的</h3><p>对其中某一个机器的某些文件夹做监控，只要其中的内容有发生修改，其余机器马上同步这些修改到自己的机器上</p>
-<h3 id="实现工具"><a href="#实现工具" class="headerlink" title="实现工具"></a>实现工具</h3><p>rsync+inotify</p>
-<h3 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h3><ol>
-<li><p>主服务器A安装rsync</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum install rsync</div></pre></td></tr></table></figure>
-</li>
-<li><p>写配置文件，需要自己建文件夹和文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd /etc/rsync.d</div><div class="line">$ touch rsyncd.secret</div></pre></td></tr></table></figure>
-<p>rsyncd.secret文件内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">admin123   //后面其他服务器要同步此服务器文件需要用到的密码</div></pre></td></tr></table></figure>
-</li>
-<li><p>安装inotify工具</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install inotify-tools</div></pre></td></tr></table></figure>
-</li>
-<li><p>编写实现同步的脚本,这个脚本的作用就是通过inotify监控本服务器某个文件目录的变化，进而触发其他host进行rsync同步操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd /etc/inotify</div><div class="line">$ touch inotify.sh</div></pre></td></tr></table></figure>
-<p>inotify.sh文件内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line">    host=&quot;10.104.xx.xxx 10.104.xx.xxx 10.104.xx.xxx&quot;</div><div class="line">    src=/data/web/html</div><div class="line">    dst=htmlFile</div><div class="line">    user=root</div><div class="line">    pass_file=/etc/rsync.d/rsyncd.secrets</div><div class="line"></div><div class="line">    /usr/bin/inotifywait -mrq --timefmt &apos;%d/%m/%y %H:%M&apos; --format &apos;%T %w%f&apos; -e  modify,delete,create,attrib $src | while read files</div><div class="line">         do</div><div class="line">         for hostip in $host</div><div class="line">             do</div><div class="line">             /usr/bin/rsync -vzrtopg --delete --progress --password-file=$pass_file $src $user@$hostip::$dst    </div><div class="line">             done</div><div class="line">         echo &quot;$&#123;files&#125; was rsynced&quot; &gt;&gt;/tmp/rsync.log 2&gt;&amp;1</div><div class="line">         done</div></pre></td></tr></table></figure>
-</li>
-<li><p>同步服务器B、C、D安装rsync</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum install rsync</div></pre></td></tr></table></figure>
-</li>
-<li><p>写配置文件，需要自己建文件夹和文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ cd /etc/rsync.d</div><div class="line">$ touch rsyncd.conf rsyncd.secret rsyncd.motd</div></pre></td></tr></table></figure>
-<p>rsyncd.conf是配置文件，内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">uid = root</div><div class="line">gid = root</div><div class="line">use chroot = yes</div><div class="line"></div><div class="line">max connections = 100</div><div class="line"></div><div class="line">pid file = /var/run/rsyncd.pid</div><div class="line">log file = /var/log/rsyncd.log</div><div class="line">motd file = /etc/rsync.d/rsyncd.motd</div><div class="line"></div><div class="line">[htmlFile]</div><div class="line">path = /data </div><div class="line">comment = Rsync html file</div><div class="line">uid = root</div><div class="line">gid = root</div><div class="line">auth users = root</div><div class="line">secrets file = /etc/rsync.d/rsyncd.secrets</div><div class="line">read only = yes</div><div class="line">list = yes</div><div class="line">ignore errors</div><div class="line">read only = no</div><div class="line">write only = no</div><div class="line">hosts allow = xx.xxx.xx.xx (主服务器A的host)</div></pre></td></tr></table></figure>
-<p>rsyncd.secret是密码文件，内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root:admin123</div></pre></td></tr></table></figure>
-<p>rsyncd.motd是服务器描述文件，内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">++++++++++++++++++++++++++++++++++++</div><div class="line">This is Server B, Welcome！</div><div class="line">+++++++++++++++++++++++++++++++++++++</div></pre></td></tr></table></figure>
-</li>
-<li><p>将rsyncd.secrets这个密码文件的文件属性设为root拥有, 且权限要设为600, 否则无法备份成功</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ chmod 600 rsyncd.secrets</div></pre></td></tr></table></figure>
-</li>
-<li><p>启动rsync服务器(daemon参数方式，是让rsync以服务器模式运行)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/bin/rsync --daemon  --config=/etc/rsync.d/rsyncd.conf</div></pre></td></tr></table></figure>
-</li>
-<li><p>设置开机启动rsync服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo  “/usr/bin/rsync --daemon  --config=/etc/rsync.d/rsyncd.conf &gt;/dev/null &amp;”&gt;&gt;/etc/rc.local</div></pre></td></tr></table></figure></li>
-</ol>
+		<h3 id="引起nginx-403-forbidden通常是三种情况：一是缺少主页文件，二是权限问题，三是SELinux状态。"><a href="#引起nginx-403-forbidden通常是三种情况：一是缺少主页文件，二是权限问题，三是SELinux状态。" class="headerlink" title="引起nginx 403 forbidden通常是三种情况：一是缺少主页文件，二是权限问题，三是SELinux状态。"></a>引起nginx 403 forbidden通常是三种情况：一是缺少主页文件，二是权限问题，三是SELinux状态。</h3><h4 id="1、缺少index-html或index-php配置，检查是否配置了index"><a href="#1、缺少index-html或index-php配置，检查是否配置了index" class="headerlink" title="1、缺少index.html或index.php配置，检查是否配置了index"></a>1、缺少index.html或index.php配置，检查是否配置了index</h4><p>server {<br>​    listen 80;<br>​    server_name localhost;<br>​    index index.php index.html;<br>​    root / opt/www;<br>}</p>
+<h4 id="2、nginx配置的用户和静态文件的用户不匹配"><a href="#2、nginx配置的用户和静态文件的用户不匹配" class="headerlink" title="2、nginx配置的用户和静态文件的用户不匹配"></a>2、nginx配置的用户和静态文件的用户不匹配</h4><p>进入nginx.conf文件看看第一行的user是什么，然后看看对应的静态目录的组和用户是什么，nginx安装后默认user是nginx，如果你的静态目录用户和组都是root，那权限肯定是有问题的，即使你的目录设置权限为777。</p>
+<h4 id="3、selinux没有关闭的原因（我排除了1和2的原因还是发现403，最后发现是这个原因导致的）"><a href="#3、selinux没有关闭的原因（我排除了1和2的原因还是发现403，最后发现是这个原因导致的）" class="headerlink" title="3、selinux没有关闭的原因（我排除了1和2的原因还是发现403，最后发现是这个原因导致的）"></a>3、selinux没有关闭的原因（我排除了1和2的原因还是发现403，最后发现是这个原因导致的）</h4><p>查看本机selinux开启状态，可以用getenforce命令查看。</p>
+<p>临时关闭selinux方法：setenforce 0</p>
+<p>永久关闭selinux方法：/etc/selinux/config，将SELINUX=enforcing改为SELINUX=disabled 此方法需要reboot（重启）系统</p>
+<p>注意：更改后要reload下或者restart下</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -144,13 +109,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/服务器运维/">服务器运维</a>
+  <a class="article-category-link" href="/categories/Nginx/">Nginx</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Nginx/">Nginx</a>
+  <span></span> <a href="/tags/Nginx/">Nginx</a>
   </div>
 
 </div>
@@ -159,7 +124,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://kollyqaq.github.io/2017/06/14/通过rsync+inotify实现多服务器文件的实时同步/" data-title="通过rsync+inotify实现多服务器文件的实时同步 | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
+	  <div data-url="http://kollyqaq.github.io/2017/12/05/Nginx报错403 forbidden几个解决方法/" data-title="Nginx报错403 forbidden几个解决方法 | Stay Hungry,Stay Foolish" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -172,19 +137,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/10/15/Java关键字解读之synchronized/" title="Java关键字解读之synchronized">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Java关键字解读之synchronized</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/05/14/利用df和du命令查看系统内存占用/"  title="利用linux的df和du命令查看文件和目录的内存占用">
+<a href="/2017/12/04/Linux下Nginx的配置文件详解/"  title="Linux下Nginx的配置文件详解">
  <strong>下一篇：</strong><br/> 
- <span>利用linux的df和du命令查看文件和目录的内存占用
+ <span>Linux下Nginx的配置文件详解
 </span>
 </a>
 </div>
@@ -200,7 +157,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#需求背景"><span class="toc-number">1.</span> <span class="toc-text">需求背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最终目的"><span class="toc-number">2.</span> <span class="toc-text">最终目的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现工具"><span class="toc-number">3.</span> <span class="toc-text">实现工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实现步骤"><span class="toc-number">4.</span> <span class="toc-text">实现步骤</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#引起nginx-403-forbidden通常是三种情况：一是缺少主页文件，二是权限问题，三是SELinux状态。"><span class="toc-number">1.</span> <span class="toc-text">引起nginx 403 forbidden通常是三种情况：一是缺少主页文件，二是权限问题，三是SELinux状态。</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、缺少index-html或index-php配置，检查是否配置了index"><span class="toc-number">1.1.</span> <span class="toc-text">1、缺少index.html或index.php配置，检查是否配置了index</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、nginx配置的用户和静态文件的用户不匹配"><span class="toc-number">1.2.</span> <span class="toc-text">2、nginx配置的用户和静态文件的用户不匹配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、selinux没有关闭的原因（我排除了1和2的原因还是发现403，最后发现是这个原因导致的）"><span class="toc-number">1.3.</span> <span class="toc-text">3、selinux没有关闭的原因（我排除了1和2的原因还是发现403，最后发现是这个原因导致的）</span></a></li></ol></li></ol>
  
   </div>
 
